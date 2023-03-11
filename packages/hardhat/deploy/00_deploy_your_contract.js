@@ -1,6 +1,9 @@
 // deploy/00_deploy_your_contract.js
 
-const { ethers } = require("hardhat");
+const { run, ethers } = require("@nomiclabs/buidler");
+const { deploy } = require("@scaffold-eth/hardhat");
+const { readArtifact } = require("@nomiclabs/buidler/plugins");
+const path = require("path");
 
 const localChainId = "31337";
 
@@ -13,25 +16,46 @@ const localChainId = "31337";
 //   );
 
 module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
+  // Compile the contracts
+  await run("compile");
+
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  await deploy("UserAuthorization", {
-    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
-    from: deployer,
-    // args: [ "Hello", ethers.utils.parseEther("1.5") ],
-    log: true,
-    // waitConfirmations: 5,
+  // Deploy the SculptureLibrary contract
+  const SculptureLibrary = await deploy("SculptureLibrary", []);
+
+  // Read the ABI of the deployed library contract
+  const sculptureLibraryArtifact = await readArtifact(
+    "./artifacts/contracts/SculptureLibrary.sol/SculptureLibrary.json"
+  );
+  const sculptureLibraryInterface = sculptureLibraryArtifact.abi;
+
+  // Deploy the UserAuthorization contract
+  const UserAuthorization = await ethers.getContractFactory("UserAuthorization");
+  const userAuthorizationInstance = await UserAuthorization.deploy();
+
+  // Wait for the UserAuthorization contract to be deployed
+  await userAuthorizationInstance.deployed();
+
+  console.log(`UserAuthorization deployed to: ${userAuthorizationInstance.address}`);
+
+  // Deploy the SculptureFactory contract
+  const SculptureFactory = await deploy("SculptureFactory", [
+    userAuthorizationInstance.address // Pass the address of the UserAuthorization contract
+  ], {
+    libraries: {
+      // Specify the library contract address and its interface
+      SculptureLibrary: {
+        address: SculptureLibrary.address,
+        abi: sculptureLibraryInterface
+      }
+    }
   });
 
-  await deploy("SculptureFactory", {
-    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
-    from: deployer,
-    // args: [ "Hello", ethers.utils.parseEther("1.5") ],
-    log: true,
-    // waitConfirmations: 5,
-  });
+  console.log(`SculptureLibrary deployed to: ${SculptureLibrary.address}`);
+  console.log(`SculptureFactory deployed to: ${SculptureFactory.address}`);
 
   // Getting a previously deployed contract
   // const YourContract = await ethers.getContract("YourContract", deployer);
