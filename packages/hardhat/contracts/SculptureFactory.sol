@@ -2,8 +2,8 @@
 pragma solidity ^0.8.0;
 
 import "hardhat/console.sol";
-import "SculptureLibrary.sol";
-import "UserAuthorization.sol";
+import "./SculptureLibrary.sol";
+import "./UserAuthorization.sol";
 
 contract SculptureFactory {
 
