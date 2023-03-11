@@ -1,8 +1,6 @@
 // deploy/00_deploy_your_contract.js
 
-const { run, ethers } = require("@nomiclabs/buidler");
-const { deploy } = require("@scaffold-eth/hardhat");
-const { readArtifact } = require("@nomiclabs/buidler/plugins");
+const { ethers } = require("hardhat");
 const path = require("path");
 
 const localChainId = "31337";
