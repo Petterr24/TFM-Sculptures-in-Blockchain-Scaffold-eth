@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "hardhat/console.sol";
+
 // Smart Contract to store the privileges of those users that can create new Smart Contracts
 contract UserAuthorization {
     // Singleton to allow only creating one Instance of this Smart Contract
     address private s_UserAuthorization;
-    
+
     // Count the number of admin users
     uint256 numOfAdmins;
 
@@ -28,7 +30,7 @@ contract UserAuthorization {
     constructor() {
         // Check if an instance of this Smart Contract already exists
         require(s_UserAuthorization == address(0), "The Instance of this Smart Contract already exists");
-        
+
         // Set the Instance address to the address of the contract
         s_UserAuthorization = address(this);
 

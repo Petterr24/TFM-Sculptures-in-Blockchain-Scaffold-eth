@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "../SculptureLibrary/SculptureLibrary.sol";
-import "../UserAuthorization/UserAuthorization.sol";
+import "hardhat/console.sol";
+import "SculptureLibrary.sol";
+import "UserAuthorization.sol";
 
 contract SculptureFactory {
 
@@ -138,7 +139,7 @@ contract Sculpture {
         string editionExecutor;
         string editionNumber;
     }
-    
+
     event SculptureUpdated(uint256 timestamp, address authorizedModifier, UpdatedSculptureData updatedData);
 
     // TODO: add the owner
@@ -204,13 +205,11 @@ contract Sculpture {
 
         if (_edition !=  editionData.edition) {
             editionData.edition = _edition;
-            
             if (_edition) {
                 updatedData.edition = "Yes";
             } else {
                 updatedData.edition = "No";
             }
-            
         }
 
         if (bytes(_editionExecutor).length > 0) {
