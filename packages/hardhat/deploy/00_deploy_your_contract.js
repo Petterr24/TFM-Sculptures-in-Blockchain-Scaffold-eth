@@ -26,22 +26,25 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   //const library = await libraryFactory.deploy();
   //await library.deployed();
 
+  console.log(`Deployer: ${deployer}`);
+
   // Deploy the UserAuthorization contract
-  const UserAuthorization = await ethers.getContractFactory("UserAuthorization");
-  const userAuthorizationInstance = await UserAuthorization.deploy();
-
-  // Wait for the UserAuthorization contract to be deployed
-  await userAuthorizationInstance.deployed();
-
-  console.log(`UserAuthorization deployed to: ${userAuthorizationInstance.address}`);
+  const userAuthorizationInstance = await deploy("UserAuthorization", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
+    // args: [ "Hello", ethers.utils.parseEther("1.5") ],
+    log: true,
+    //waitConfirmations: 5,
+  });
 
   // Deploy the SculptureFactory
-  const SculptureFactory = await ethers.getContractFactory("SculptureFactory");
-  const SculptureFactoryInstance = await SculptureFactory.deploy(userAuthorizationInstance.address);
-  await SculptureFactoryInstance.deployed();
-
-  //console.log(`SculptureLibrary deployed to: ${library.address}`);
-  console.log(`SculptureFactory deployed to: ${SculptureFactoryInstance.address}`);
+  await deploy("SculptureFactory", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
+    args: [ userAuthorizationInstance.address ],
+    log: true,
+    //waitConfirmations: 5,
+  });
 
   // Getting a previously deployed contract
   // const YourContract = await ethers.getContract("YourContract", deployer);
