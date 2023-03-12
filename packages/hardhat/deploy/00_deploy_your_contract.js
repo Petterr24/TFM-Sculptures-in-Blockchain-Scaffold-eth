@@ -21,14 +21,10 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  // Deploy the SculptureLibrary contract
-  const SculptureLibrary = await deploy("SculptureLibrary", []);
-
-  // Read the ABI of the deployed library contract
-  const sculptureLibraryArtifact = await readArtifact(
-    "./artifacts/contracts/SculptureLibrary.sol/SculptureLibrary.json"
-  );
-  const sculptureLibraryInterface = sculptureLibraryArtifact.abi;
+  // Deploy the SculptureLibrary. Check if necessary
+  //const libraryFactory = await ethers.getContractFactory("SculptureLibrary");
+  //const library = await libraryFactory.deploy();
+  //await library.deployed();
 
   // Deploy the UserAuthorization contract
   const UserAuthorization = await ethers.getContractFactory("UserAuthorization");
@@ -39,21 +35,13 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
 
   console.log(`UserAuthorization deployed to: ${userAuthorizationInstance.address}`);
 
-  // Deploy the SculptureFactory contract
-  const SculptureFactory = await deploy("SculptureFactory", [
-    userAuthorizationInstance.address // Pass the address of the UserAuthorization contract
-  ], {
-    libraries: {
-      // Specify the library contract address and its interface
-      SculptureLibrary: {
-        address: SculptureLibrary.address,
-        abi: sculptureLibraryInterface
-      }
-    }
-  });
+  // Deploy the SculptureFactory
+  const SculptureFactory = await ethers.getContractFactory("SculptureFactory");
+  const SculptureFactoryInstance = await SculptureFactory.deploy(userAuthorizationInstance.address);
+  await SculptureFactoryInstance.deployed();
 
-  console.log(`SculptureLibrary deployed to: ${SculptureLibrary.address}`);
-  console.log(`SculptureFactory deployed to: ${SculptureFactory.address}`);
+  //console.log(`SculptureLibrary deployed to: ${library.address}`);
+  console.log(`SculptureFactory deployed to: ${SculptureFactoryInstance.address}`);
 
   // Getting a previously deployed contract
   // const YourContract = await ethers.getContract("YourContract", deployer);
