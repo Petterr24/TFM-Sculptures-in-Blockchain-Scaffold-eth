@@ -20,13 +20,13 @@ export default function UserAuthorizationUI({
   const [status, setStatus] = useState("");
 
   async function authorizeUser() {
-    if (!address || !privilegeLevel) {
+    if (!userAddress || !privilegeLevel) {
       setStatus("Please enter an address and privilege level");
       return;
     }
 
     try {
-      const transaction = await tx(writeContracts.UserAuthorization.authorizeUser(address, privilegeLevel));
+      const transaction = await tx(writeContracts.UserAuthorization.authorizeUser(userAddress, privilegeLevel));
       await transaction.wait();
       setStatus("User authorized");
     } catch (err) {
