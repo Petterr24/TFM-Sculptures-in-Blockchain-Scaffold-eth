@@ -50,7 +50,6 @@ contract UserAuthorization {
     // Event for logging privilege modifications
     event NewUserPrivilege(
         address indexed userAddress,
-        string oldPrivilegeLevel,
         string newPrivilegeLevel
     );
 
@@ -107,7 +106,7 @@ contract UserAuthorization {
         }
 
         // Emits the event for logging the user authorization
-        emit NewUserPrivilege(_userAddress, getPrivilegeAsString(_oldPrivilegeLevel), getPrivilegeAsString(_newPrivilegeLevel));
+        emit NewUserPrivilege(_userAddress, getPrivilegeAsString(_newPrivilegeLevel));
     }
 
     // Removes an Authorized User
