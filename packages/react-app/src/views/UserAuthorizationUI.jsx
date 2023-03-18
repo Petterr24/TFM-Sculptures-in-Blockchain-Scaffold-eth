@@ -28,7 +28,7 @@ export default function UserAuthorizationUI({
     }
 
     try {
-      const transaction = await tx(writeContracts.UserAuthorization.authorizeUser(userAddress, privilegeLevel));
+      const transaction = await tx(writeContracts.UserAuthorization.authorizeUser(userAddress, newPrivilegeLevel));
       await transaction.wait();
       setNewUserStatus("User authorized");
     } catch (err) {
@@ -49,7 +49,7 @@ export default function UserAuthorizationUI({
       setNewPrivilegeStatus("User privilege changed");
     } catch (err) {
       console.error(err);
-      setStatus("Failed to change user privilege");
+      setNewPrivilegeStatus("Failed to change user privilege");
     }
   }
 
