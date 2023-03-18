@@ -55,7 +55,7 @@ contract UserAuthorization {
 
     // Event for logging user deletion
     event UserRemoved(
-        address indexed userAddress
+        address indexed userAddress,
         string info
     );
 
