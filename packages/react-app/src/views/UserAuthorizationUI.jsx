@@ -95,7 +95,7 @@ export default function UserAuthorizationUI({
       */}
       <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64 }}>
         <Divider />
-        <h2>User Authorization</h2>
+        <h2 style={{ fontWeight: 'bold', fontSize: '28px' }}>User Authorization</h2>
         <Divider />
         <label>SmartContract Address:</label>
         <Address
@@ -116,18 +116,18 @@ export default function UserAuthorizationUI({
               }}
           />
         </div>
-        <div>
-          <label>Privilege Level:</label>
-          <Select value={privilegeLevel} onChange={setPrivilegeLevel}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <label style={{ marginTop: 10 }}>Privilege Level:</label>
+          <Select style={{ marginTop: 5 }} value={privilegeLevel} onChange={setPrivilegeLevel}>
             {privileges.map((option) => (
-              <Option key={option.value} value={option.value}>
+              <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
               </Option>
             ))}
           </Select>
         </div>
         <Button 
-          style={{ marginTop: 8 }}
+          style={{ marginTop: 10 }}
           onClick={() => {
             authorizeUser();
             setUserAddress("");
@@ -135,7 +135,7 @@ export default function UserAuthorizationUI({
           }}>
           Authorize User
         </Button>
-        <p>Transcation status: {newUserStatus}</p>
+        <p style={{ marginTop: 8 }}>Transcation status: {newUserStatus}</p>
         <Divider/>
         {/*
           ⚙️ Section: Change user privilege
@@ -149,28 +149,28 @@ export default function UserAuthorizationUI({
               }}
           />
         </div>
-        <div>
-          <label>Old Privilege Level:</label>
-          <Select value={oldPrivilegeLevel} onChange={setOldPrivilegeLevel}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <label style={{ marginTop: 10 }}>Old Privilege Level:</label>
+          <Select style={{ marginTop: 5 }} value={oldPrivilegeLevel} onChange={setOldPrivilegeLevel}>
             {privileges.map((option) => (
-              <Option key={option.value} value={option.value}>
+              <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
               </Option>
             ))}
           </Select>
         </div>
-        <div>
-          <label>New Privilege Level:</label>
-          <Select value={newPrivilegeLevel} onChange={setNewPrivilegeLevel}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <label style={{ marginTop: 10 }}>New Privilege Level:</label>
+          <Select style={{ marginTop: 5 }} value={newPrivilegeLevel} onChange={setNewPrivilegeLevel}>
             {privileges.map((option) => (
-              <Option key={option.value} value={option.value}>
+              <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
               </Option>
             ))}
           </Select>
         </div>
         <Button 
-          style={{ marginTop: 8 }}
+          style={{ marginTop: 10 }}
           onClick={() => {
             changeUserPrivilege();
             setExistingUserAddress("");
@@ -179,7 +179,7 @@ export default function UserAuthorizationUI({
           }}>
           Change user privilege
         </Button>
-        <p>Transcation status: {newPrivilegeStatus}</p>
+        <p style={{ marginTop: 8 }}>Transcation status: {newPrivilegeStatus}</p>
         <Divider/>
         {/*
           ⚙️ Section: Remove authorized user
@@ -194,14 +194,14 @@ export default function UserAuthorizationUI({
           />
         </div>
         <Button 
-          style={{ marginTop: 8 }}
+          style={{ marginTop: 10 }}
           onClick={() => {
             removeAuthorizedUser();
             setUserAddressToRemove("");
           }}>
           Remove authorized user
         </Button>
-        <p>Transcation status: {removedUserStatus}</p>
+        <p style={{ marginTop: 8 }}>Transcation status: {removedUserStatus}</p>
         <Divider />
         User Address:
         <Address address={address} ensProvider={mainnetProvider} fontSize={16} />
