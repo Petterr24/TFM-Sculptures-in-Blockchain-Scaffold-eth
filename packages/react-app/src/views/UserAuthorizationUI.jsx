@@ -16,22 +16,40 @@ export default function UserAuthorizationUI({
   writeContracts,
 }) {
   const [userAddress, setUserAddress] = useState("");
-  const [privilegeLevel, setPrivilegeLevel] = useState("");
-  const [status, setStatus] = useState("");
+  const [newPrivilegeLevel, setNewPrivilegeLevel] = useState("");
+  const [oldPrivilegeLevel, setOldPrivilegeLevel] = useState("");
+  const [newUserStatus, setNewUserStatus] = useState("");
+  const [newPrivilegeStatus, setNewPrivilegeStatus] = useState("");
 
   async function authorizeUser() {
-    if (!userAddress || !privilegeLevel) {
-      setStatus("Please enter an address and privilege level");
+    if (!userAddress || !newPrivilegeLevel) {
+      setNewUserStatus("Please enter an address and privilege level");
       return;
     }
 
     try {
       const transaction = await tx(writeContracts.UserAuthorization.authorizeUser(userAddress, privilegeLevel));
       await transaction.wait();
-      setStatus("User authorized");
+      setNewUserStatus("User authorized");
     } catch (err) {
       console.error(err);
-      setStatus("Failed to authorize user");
+      setNewUserStatus("Failed to authorize user");
+    }
+  }
+
+  async function changeUserPrivilege() {
+    if (!address || !oldPrivilegeLevel || !newPrivilegeLevel) {
+      setNewPrivilegeStatus("Please enter an address and the privilege levels");
+      return;
+    }
+
+    try {
+      const transaction = await await tx(writeContracts.UserAuthorization.changeUserPrivilege(userAddress, oldPrivilegeLevel, newPrivilegeLevel));
+      await transaction.wait();
+      setNewPrivilegeStatus("User privilege changed");
+    } catch (err) {
+      console.error(err);
+      setStatus("Failed to change user privilege");
     }
   }
 
@@ -50,6 +68,9 @@ export default function UserAuthorizationUI({
           ensProvider={mainnetProvider}
           fontSize={16}
         />
+        {/*
+          ⚙️ Section: New User Authorization
+        */}
         <Divider/>
         <div>
           <label>User Address:</label>
@@ -63,9 +84,9 @@ export default function UserAuthorizationUI({
         <div>
           <label>Privilege Level:</label>
           <Input
-            value={privilegeLevel}
+            value={newPrivilegeLevel}
             onChange={e => {
-              setPrivilegeLevel(e.target.value);
+              setNewPrivilegeLevel(e.target.value);
             }}
           />
         </div>
@@ -74,12 +95,53 @@ export default function UserAuthorizationUI({
           onClick={() => {
             authorizeUser();
             setUserAddress("");
-            setPrivilegeLevel("");
+            setNewPrivilegeLevel("");
           }}>
           Authorize User
         </Button>
-        <Divider />
-        <p>{status}</p>
+        <p>Transcation status: {newUserStatus}</p>
+        {/*
+          ⚙️ Section: Change user privilege
+        */}
+        <Divider/>
+        <div>
+          <label>User Address:</label>
+          <Input
+              value={userAddress}
+              onChange={e => {
+                setUserAddress(e.target.value);
+              }}
+          />
+        </div>
+        <div>
+          <label>Old Privilege Level:</label>
+          <Input
+            value={oldPrivilegeLevel}
+            onChange={e => {
+              setOldPrivilegeLevel(e.target.value);
+            }}
+          />
+        </div>
+        <div>
+          <label>New Privilege Level:</label>
+          <Input
+            value={newPrivilegeLevel}
+            onChange={e => {
+              setNewPrivilegeLevel(e.target.value);
+            }}
+          />
+        </div>
+        <Button 
+          style={{ marginTop: 8 }}
+          onClick={() => {
+            changeUserPrivilege();
+            setUserAddress("");
+            setOldPrivilegeLevel("");
+            setNewPrivilegeLevel("");
+          }}>
+          Change user privilege
+        </Button>
+        <p>Transcation status: {newPrivilegeStatus}</p>
         <Divider />
         User Address:
         <Address address={address} ensProvider={mainnetProvider} fontSize={16} />
