@@ -45,30 +45,33 @@ export default function UserAuthorizationUI({
         <h2>User Authorization:</h2>
         <Divider />
         <label>SmartContract Address:</label>
-        Address:
         <Address
           address={readContracts && readContracts.UserAuthorization ? readContracts.UserAuthorization.address : null}
           ensProvider={mainnetProvider}
           fontSize={16}
         />
-        <Divider />v
+        <Divider/>
         <div>
-        <label>User Address:</label>
-        <input
-          type="text"
-          value={userAddress}
-          onChange={(e) => setUserAddress(e.target.value)}
-        />
+          <label>User Address:</label>
+          <Input
+              onChange={e => {
+                setUserAddress(e.target.value);
+              }}
+          />
         </div>
         <div>
           <label>Privilege Level:</label>
-          <input
-            type="text"
-            value={privilegeLevel}
-            onChange={(e) => setPrivilegeLevel(e.target.value)}
+          <Input
+            onChange={e => {
+              setPrivilegeLevel(e.target.value);
+            }}
           />
         </div>
-        <button onClick={authorizeUser}>Authorize User</button>
+        <Button 
+          style={{ marginTop: 8 }}
+          onClick={authorizeUser}>
+          Authorize User
+        </Button>
         <Divider />
         User Address:
         <Address address={address} ensProvider={mainnetProvider} fontSize={16} />
@@ -83,6 +86,7 @@ export default function UserAuthorizationUI({
         Events
       */}
       <Events
+        title="Authorized Users"
         contracts={readContracts}
         contractName="UserAuthorization"
         eventName="UserAuthorized"
@@ -91,6 +95,7 @@ export default function UserAuthorizationUI({
         startBlock={1}
       />
       <Events
+        title="New User Privilege"
         contracts={readContracts}
         contractName="UserAuthorization"
         eventName="NewUserPrivilege"
@@ -99,6 +104,7 @@ export default function UserAuthorizationUI({
         startBlock={1}
       />
       <Events
+        title="Removed User"
         contracts={readContracts}
         contractName="UserAuthorization"
         eventName="UserRemoved"

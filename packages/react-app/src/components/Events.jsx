@@ -19,13 +19,13 @@ import Address from "./Address";
   />
 **/
 
-export default function Events({ contracts, contractName, eventName, localProvider, mainnetProvider, startBlock }) {
+export default function Events({ title, contracts, contractName, eventName, localProvider, mainnetProvider, startBlock }) {
   // 📟 Listen for broadcast events
   const events = useEventListener(contracts, contractName, eventName, localProvider, startBlock);
 
   return (
     <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-      <h2>Events:</h2>
+      <h2>{title} Events:</h2>
       <List
         bordered
         dataSource={events}
