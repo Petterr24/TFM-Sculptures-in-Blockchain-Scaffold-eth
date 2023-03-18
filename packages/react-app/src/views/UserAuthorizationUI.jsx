@@ -17,6 +17,7 @@ export default function UserAuthorizationUI({
 }) {
   const [userAddress, setUserAddress] = useState("");
   const [privilegeLevel, setPrivilegeLevel] = useState("");
+  const [status, setStatus] = useState("");
 
   async function authorizeUser() {
     if (!address || !privilegeLevel) {
@@ -105,6 +106,7 @@ export default function UserAuthorizationUI({
         mainnetProvider={mainnetProvider}
         startBlock={1}
       />
+      <p>{status}</p>
     </div>
   );
 }
