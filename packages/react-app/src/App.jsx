@@ -29,7 +29,7 @@ import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { getRPCPollTime, Transactor, Web3ModalSetup } from "./helpers";
-import { Home, ExampleUI, Hints, Subgraph } from "./views";
+import { Home, UserAuthorizationUI, Hints, Subgraph } from "./views";
 import { useStaticJsonRPC, useGasPrice } from "./hooks";
 
 const { ethers } = require("ethers");
@@ -313,8 +313,8 @@ function App(props) {
         <Menu.Item key="/hints">
           <Link to="/hints">Hints</Link>
         </Menu.Item>
-        <Menu.Item key="/exampleui">
-          <Link to="/exampleui">ExampleUI</Link>
+        <Menu.Item key="/userauthorizationui">
+          <Link to="/userauthorizationui">UserAuthorizationUI</Link>
         </Menu.Item>
         <Menu.Item key="/mainnetdai">
           <Link to="/mainnetdai">Mainnet DAI</Link>
@@ -363,8 +363,8 @@ function App(props) {
             price={price}
           />
         </Route>
-        <Route path="/exampleui">
-          <ExampleUI
+        <Route path="/userauthorizationui">
+          <UserAuthorizationUI
             address={address}
             userSigner={userSigner}
             mainnetProvider={mainnetProvider}
@@ -374,7 +374,6 @@ function App(props) {
             tx={tx}
             writeContracts={writeContracts}
             readContracts={readContracts}
-            purpose={purpose}
           />
         </Route>
         <Route path="/mainnetdai">
