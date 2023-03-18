@@ -26,6 +26,10 @@ export default function UserAuthorizationUI({
   const [oldPrivilegeLevel, setOldPrivilegeLevel] = useState("");
   const [newPrivilegeStatus, setNewPrivilegeStatus] = useState("");
 
+  // States used to remove an authorized user
+  const [userAddressToRemove, setUserAddressToRemove] = useState("");
+  const [removedUserStatus, setRemovedUserStatus] = useState("");
+
   async function authorizeUser() {
     if (!userAddress || !privilegeLevel) {
       setNewUserStatus("Please enter an address and privilege level");
@@ -49,12 +53,28 @@ export default function UserAuthorizationUI({
     }
 
     try {
-      const transaction = await await tx(writeContracts.UserAuthorization.changeUserPrivilege(existingUserAddress, oldPrivilegeLevel, newPrivilegeLevel));
+      const transaction = await tx(writeContracts.UserAuthorization.changeUserPrivilege(existingUserAddress, oldPrivilegeLevel, newPrivilegeLevel));
       await transaction.wait();
       setNewPrivilegeStatus("User privilege changed");
     } catch (err) {
       console.error(err);
       setNewPrivilegeStatus("Failed to change user privilege");
+    }
+  }
+
+  async function removeAuthorizedUser() {
+    if (!userAddressToRemove) {
+      setRemovedUserStatus("Please enter an address");
+      return;
+    }
+
+    try {
+      const transaction = await tx(writeContracts.UserAuthorization.removeAuthorizedUser(userAddressToRemove));
+      await transaction.wait();
+      setRemovedUserStatus("Authorized user removed");
+    } catch (err) {
+      console.error(err);
+      setRemovedUserStatus("Failed to remove an authorized user");
     }
   }
 
@@ -65,7 +85,7 @@ export default function UserAuthorizationUI({
       */}
       <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64 }}>
         <Divider />
-        <h2>User Authorization:</h2>
+        <h2>User Authorization</h2>
         <Divider />
         <label>SmartContract Address:</label>
         <Address
@@ -73,10 +93,10 @@ export default function UserAuthorizationUI({
           ensProvider={mainnetProvider}
           fontSize={16}
         />
+        <Divider/>
         {/*
           ⚙️ Section: New User Authorization
         */}
-        <Divider/>
         <div>
           <label>User Address:</label>
           <Input
@@ -105,10 +125,10 @@ export default function UserAuthorizationUI({
           Authorize User
         </Button>
         <p>Transcation status: {newUserStatus}</p>
+        <Divider/>
         {/*
           ⚙️ Section: Change user privilege
         */}
-        <Divider/>
         <div>
           <label>User Address:</label>
           <Input
@@ -147,6 +167,28 @@ export default function UserAuthorizationUI({
           Change user privilege
         </Button>
         <p>Transcation status: {newPrivilegeStatus}</p>
+        <Divider/>
+        {/*
+          ⚙️ Section: Remove authorized user
+        */}
+        <div>
+          <label>User Address:</label>
+          <Input
+              value={userAddressToRemove}
+              onChange={e => {
+                setUserAddressToRemove(e.target.value);
+              }}
+          />
+        </div>
+        <Button 
+          style={{ marginTop: 8 }}
+          onClick={() => {
+            removeAuthorizedUser();
+            setUserAddressToRemove("");
+          }}>
+          Remove authorized user
+        </Button>
+        <p>Transcation status: {removedUserStatus}</p>
         <Divider />
         User Address:
         <Address address={address} ensProvider={mainnetProvider} fontSize={16} />
