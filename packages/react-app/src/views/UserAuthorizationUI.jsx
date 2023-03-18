@@ -15,7 +15,7 @@ export default function UserAuthorizationUI({
   readContracts,
   writeContracts,
 }) {
-  const [address, setAddress] = useState("");
+  const [userAddress, setUserAddress] = useState("");
   const [privilegeLevel, setPrivilegeLevel] = useState("");
 
   async function authorizeUser() {
@@ -52,11 +52,11 @@ export default function UserAuthorizationUI({
         />
         <Divider />v
         <div>
-        <label>Address:</label>
+        <label>User Address:</label>
         <input
           type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          value={userAddress}
+          onChange={(e) => setUserAddress(e.target.value)}
         />
         </div>
         <div>
