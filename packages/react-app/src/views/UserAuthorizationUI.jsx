@@ -1,4 +1,4 @@
-import { Button, Card, DatePicker, Divider, Input, Progress, Slider, Spin, Switch } from "antd";
+import { Button, Card, DatePicker, Divider, Input, Select, Progress, Slider, Spin, Switch } from "antd";
 import React, { useState } from "react";
 import { utils } from "ethers";
 import { SyncOutlined } from "@ant-design/icons";
@@ -15,15 +15,25 @@ export default function UserAuthorizationUI({
   readContracts,
   writeContracts,
 }) {
+
+  // Privileges options
+  const privileges = [
+    { value: null, label: 'Select the privilege', disabled: true },
+    { value: 0, label: 'NONE' },
+    { value: 1, label: 'USER' },
+    { value: 2, label: 'ADMIN' },
+  ]
+  const { Option } = Select;
+
   // States used to authorize a new user
   const [userAddress, setUserAddress] = useState("");
-  const [privilegeLevel, setPrivilegeLevel] = useState("");
+  const [privilegeLevel, setPrivilegeLevel] = useState(null);
   const [newUserStatus, setNewUserStatus] = useState("");
 
   // States used to change the privilege of any existing user
   const [existingUserAddress, setExistingUserAddress] = useState("");
-  const [newPrivilegeLevel, setNewPrivilegeLevel] = useState("");
-  const [oldPrivilegeLevel, setOldPrivilegeLevel] = useState("");
+  const [newPrivilegeLevel, setNewPrivilegeLevel] = useState(null);
+  const [oldPrivilegeLevel, setOldPrivilegeLevel] = useState(null);
   const [newPrivilegeStatus, setNewPrivilegeStatus] = useState("");
 
   // States used to remove an authorized user
@@ -108,19 +118,20 @@ export default function UserAuthorizationUI({
         </div>
         <div>
           <label>Privilege Level:</label>
-          <Input
-            value={privilegeLevel}
-            onChange={e => {
-              setPrivilegeLevel(e.target.value);
-            }}
-          />
+          <Select value={privilegeLevel} onChange={setPrivilegeLevel}>
+            {privileges.map((option) => (
+              <Option key={option.value} value={option.value}>
+                {option.label}
+              </Option>
+            ))}
+          </Select>
         </div>
         <Button 
           style={{ marginTop: 8 }}
           onClick={() => {
             authorizeUser();
             setUserAddress("");
-            setPrivilegeLevel("");
+            setPrivilegeLevel(null);
           }}>
           Authorize User
         </Button>
@@ -140,29 +151,31 @@ export default function UserAuthorizationUI({
         </div>
         <div>
           <label>Old Privilege Level:</label>
-          <Input
-            value={oldPrivilegeLevel}
-            onChange={e => {
-              setOldPrivilegeLevel(e.target.value);
-            }}
-          />
+          <Select value={oldPrivilegeLevel} onChange={setOldPrivilegeLevel}>
+            {privileges.map((option) => (
+              <Option key={option.value} value={option.value}>
+                {option.label}
+              </Option>
+            ))}
+          </Select>
         </div>
         <div>
           <label>New Privilege Level:</label>
-          <Input
-            value={newPrivilegeLevel}
-            onChange={e => {
-              setNewPrivilegeLevel(e.target.value);
-            }}
-          />
+          <Select value={newPrivilegeLevel} onChange={setNewPrivilegeLevel}>
+            {privileges.map((option) => (
+              <Option key={option.value} value={option.value}>
+                {option.label}
+              </Option>
+            ))}
+          </Select>
         </div>
         <Button 
           style={{ marginTop: 8 }}
           onClick={() => {
             changeUserPrivilege();
             setExistingUserAddress("");
-            setOldPrivilegeLevel("");
-            setNewPrivilegeLevel("");
+            setOldPrivilegeLevel(null);
+            setNewPrivilegeLevel(null);
           }}>
           Change user privilege
         </Button>
