@@ -6,6 +6,7 @@ import "hardhat/console.sol";
 library SculptureLibrary {
 
     enum CategorizationLabel { 
+        NONE,
         AUTHORIZED_UNIQUE_WORK, 
         AUTHORIZED_UNIQUE_WORK_VARIATION, 
         AUTHORIZED_WORK, 
@@ -41,9 +42,9 @@ library SculptureLibrary {
     }
 
     struct EditionData {
-        bool edition;
+        uint256 edition;
         string editionExecutor;
-        string editionNumber;
+        uint256 editionNumber;
     }
 
     struct ConservationData {

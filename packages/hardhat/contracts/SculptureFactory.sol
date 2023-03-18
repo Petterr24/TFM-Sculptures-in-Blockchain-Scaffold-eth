@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 import "./SculptureLibrary.sol";
 import "./UserAuthorization.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract SculptureFactory {
 
@@ -22,6 +23,8 @@ contract SculptureFactory {
         SculptureLibrary.EditionData editionData,
         SculptureLibrary.ConservationData conservationData
     );
+
+    event SculptureAddress(address sculpture);
 
     constructor(address _userAuthorizationAddress) {
         // Checks if an instance of this Smart Contract already exists
@@ -43,20 +46,26 @@ contract SculptureFactory {
         SculptureLibrary.EditionData memory _editionData,
         SculptureLibrary.ConservationData memory _conservationData,
         string memory _sculptureOwner
-    ) public payable returns (Sculpture) {
+    ) external payable returns (address) {
+        // This function can only be used by the root Factory SC
+        require(s_SculptureFactory == address(this));
+        
         // Checks if the user is an Admin user
         require(userAuthorizationInstance.isAuthorizedToCreate(msg.sender) == true, "Your are not authorized to create a record.");
 
         require(parseSculptureData(_persistentData, _miscData, _editionData, _conservationData, _sculptureOwner) == true);
 
-        Sculpture newSculpture = new Sculpture{value: msg.value}(_persistentData, _miscData, _editionData, _conservationData, _sculptureOwner, address(userAuthorizationInstance), address(this));
-        address newSculptureAddress = address(newSculpture);
+        address newSculptureAddress = address(new Sculpture{value: msg.value}(_persistentData, _miscData, _editionData, _conservationData, _sculptureOwner, address(userAuthorizationInstance), address(this)));
+
+        // Emit the new Sculpture address
+        emit SculptureAddress(newSculptureAddress);
+
+        // Emit the structure of this new Scultpure
+        emit SculptureCreated(_persistentData, _miscData, _editionData, _conservationData);
 
         sculptures.push(newSculptureAddress);
 
-        emit SculptureCreated(_persistentData, _miscData, _editionData, _conservationData);
-
-        return newSculpture;
+        return newSculptureAddress;
     }
 
     function isSculptureFactory(address addr) public view returns (bool) {
@@ -79,7 +88,6 @@ contract SculptureFactory {
         require(SculptureLibrary.checkMaxStringLength(_miscData.location) == true, "The Location field exceeds the maximum string length!");
         require(SculptureLibrary.isCategorizationLabelValid(_miscData.categorizationLabel) == true, "The Categorizatoin Label is not a valid value!");
         require(SculptureLibrary.checkMaxStringLength(_editionData.editionExecutor) == true, "The Edition Excutor field exceeds the maximum string length!");
-        require(SculptureLibrary.checkMaxStringLength(_editionData.editionNumber) == true, "The Edition Number field exceeds the maximum string length!");
         require(SculptureLibrary.isConservationLabelValid(_conservationData.conservationLabel) == true, "The Conservation Label is not a valid value!");
         require(SculptureLibrary.checkMaxStringLength(_sculptureOwner) == true, "The Sculpture Owner field exceeds the maximum string length!");
 
@@ -97,8 +105,12 @@ contract Sculpture {
     // UNIX Time of the last unit modification
     uint256 public lastChangeTimestamp;
 
-    // Sculpture data
+    // Strings library from OpenZeppelin
+    using Strings for uint256;
+
+    // The owner must be encrypted in the REST API before sending so that it is protected against miners
     string private sculptureOwner;
+    // Sculpture data
     SculptureLibrary.PersistentData public persistentData;
     SculptureLibrary.MiscellaneousData public miscData;
     SculptureLibrary.EditionData public editionData;
@@ -138,28 +150,28 @@ contract Sculpture {
         string edition;
         string editionExecutor;
         string editionNumber;
+        string sculptureOwner;
     }
 
     event SculptureUpdated(uint256 timestamp, address authorizedModifier, UpdatedSculptureData updatedData);
 
-    // TODO: add the owner
     function updateSculpture(
         string memory _date,
         string memory _technique,
         string memory _dimensions,
         string memory _location,
         uint8 _categorizationLabel,
-        bool _edition,
+        uint256 _edition,
         string memory _editionExecutor,
-        string memory _editionNumber
+        uint256 _editionNumber,
+        string memory _sculptureOwner
     ) public {
         // Checks if the user has privileges to update the data
         require(userAuthorizationInstance.isAuthorizedToUpdate(msg.sender) == true, "Your are not authorized to update a record.");
 
-        //TODO: parse the data to see if it is correct
-
         // Initializes the updated data struct
         UpdatedSculptureData memory updatedData = UpdatedSculptureData(
+            "Not updated",
             "Not updated",
             "Not updated",
             "Not updated",
@@ -198,18 +210,15 @@ contract Sculpture {
             updatedData.location = _location;
         }
 
-        if (SculptureLibrary.isCategorizationLabelValid(_categorizationLabel)) {
+        if ((_categorizationLabel != uint8(SculptureLibrary.CategorizationLabel.NONE)) && SculptureLibrary.isCategorizationLabelValid(_categorizationLabel)) {
             miscData.categorizationLabel = _categorizationLabel;
             updatedData.categorizationLabel = SculptureLibrary.getCategorizationLabelAsString(_categorizationLabel);
         }
 
+        // TODO: check what would happen when this value is not provided
         if (_edition !=  editionData.edition) {
             editionData.edition = _edition;
-            if (_edition) {
-                updatedData.edition = "Yes";
-            } else {
-                updatedData.edition = "No";
-            }
+            updatedData.edition = _edition.toString();
         }
 
         if (bytes(_editionExecutor).length > 0) {
@@ -219,11 +228,18 @@ contract Sculpture {
             updatedData.editionExecutor = _editionExecutor;
         }
 
-        if (bytes(_editionNumber).length > 0) {
-            require(SculptureLibrary.checkMaxStringLength(_editionNumber) == true, "The Edition Number field exceeds the maximum string length!");
-
+        // TODO: check what would happen when this value is not provided
+        if (_editionNumber !=  editionData.editionNumber) {
             editionData.editionNumber = _editionNumber;
-            updatedData.editionNumber = _editionNumber;
+            updatedData.editionNumber = _editionNumber.toString();
+        }
+
+        if (bytes(_sculptureOwner).length > 0) {
+            require(SculptureLibrary.checkMaxStringLength(_sculptureOwner) == true, "The Sculpture Owner field exceeds the maximum string length!");
+
+            sculptureOwner = _sculptureOwner;
+            // Avoid displaying the Sclupture Owner for confidentiality purposes. Just to notify that this value has been updated
+            updatedData.sculptureOwner = "Updated";
         }
 
         lastChangeTimestamp = block.timestamp;
