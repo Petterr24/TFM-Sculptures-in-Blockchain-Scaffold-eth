@@ -54,6 +54,7 @@ export default function UserAuthorizationUI({
         <div>
           <label>User Address:</label>
           <Input
+              value={userAddress}
               onChange={e => {
                 setUserAddress(e.target.value);
               }}
@@ -62,6 +63,7 @@ export default function UserAuthorizationUI({
         <div>
           <label>Privilege Level:</label>
           <Input
+            value={privilegeLevel}
             onChange={e => {
               setPrivilegeLevel(e.target.value);
             }}
@@ -69,9 +71,15 @@ export default function UserAuthorizationUI({
         </div>
         <Button 
           style={{ marginTop: 8 }}
-          onClick={authorizeUser}>
+          onClick={() => {
+            authorizeUser();
+            setUserAddress("");
+            setPrivilegeLevel("");
+          }}>
           Authorize User
         </Button>
+        <Divider />
+        <p>{status}</p>
         <Divider />
         User Address:
         <Address address={address} ensProvider={mainnetProvider} fontSize={16} />
@@ -112,7 +120,6 @@ export default function UserAuthorizationUI({
         mainnetProvider={mainnetProvider}
         startBlock={1}
       />
-      <p>{status}</p>
     </div>
   );
 }
