@@ -15,20 +15,24 @@ export default function UserAuthorizationUI({
   readContracts,
   writeContracts,
 }) {
+  // States used to authorize a new user
   const [userAddress, setUserAddress] = useState("");
+  const [privilegeLevel, setPrivilegeLevel] = useState("");
+  const [newUserStatus, setNewUserStatus] = useState("");
+
+  // States used to change the privilege of any existing user
   const [newPrivilegeLevel, setNewPrivilegeLevel] = useState("");
   const [oldPrivilegeLevel, setOldPrivilegeLevel] = useState("");
-  const [newUserStatus, setNewUserStatus] = useState("");
   const [newPrivilegeStatus, setNewPrivilegeStatus] = useState("");
 
   async function authorizeUser() {
-    if (!userAddress || !newPrivilegeLevel) {
+    if (!userAddress || !privilegeLevel) {
       setNewUserStatus("Please enter an address and privilege level");
       return;
     }
 
     try {
-      const transaction = await tx(writeContracts.UserAuthorization.authorizeUser(userAddress, newPrivilegeLevel));
+      const transaction = await tx(writeContracts.UserAuthorization.authorizeUser(userAddress, privilegeLevel));
       await transaction.wait();
       setNewUserStatus("User authorized");
     } catch (err) {
@@ -84,9 +88,9 @@ export default function UserAuthorizationUI({
         <div>
           <label>Privilege Level:</label>
           <Input
-            value={newPrivilegeLevel}
+            value={privilegeLevel}
             onChange={e => {
-              setNewPrivilegeLevel(e.target.value);
+              setPrivilegeLevel(e.target.value);
             }}
           />
         </div>
@@ -95,7 +99,7 @@ export default function UserAuthorizationUI({
           onClick={() => {
             authorizeUser();
             setUserAddress("");
-            setNewPrivilegeLevel("");
+            setPrivilegeLevel("");
           }}>
           Authorize User
         </Button>
