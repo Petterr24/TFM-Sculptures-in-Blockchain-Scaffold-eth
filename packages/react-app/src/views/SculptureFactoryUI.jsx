@@ -338,24 +338,27 @@ export default function SculptureFactoryUI({
         <Button 
           style={{ marginTop: 10 }}
           onClick={() => {
-            if (createSculpture()) {
-              setSculptureId("");
-              setSculptureName("");
-              setArtist("");
-              setCriticalCatalogNumber("");
-              setDate("");
-              setTechnique("");
-              setDimensions("");
-              setLocation("");
-              setcategorizationCategory(null);
-              setEdition(0);
-              setEditionExecutor("");
-              setEditionNumber(0);
-              setIsConservation(null);
-              setConservationCategory(null);
-              setCreationStatus("");
-              setSculptureOwner("");
-            }
+            createSculpture().then(result => {
+              if (result) {
+                setSculptureId("");
+                setSculptureName("");
+                setArtist("");
+                setCriticalCatalogNumber("");
+                setDate("");
+                setTechnique("");
+                setDimensions("");
+                setLocation("");
+                setcategorizationCategory(null);
+                setEdition(0);
+                setEditionExecutor("");
+                setEditionNumber(0);
+                setIsConservation(null);
+                setConservationCategory(null);
+                setSculptureOwner("");
+              }
+            }).catch(error => {
+              console.log(error);
+            })
           }}>
           Create Sculpture
         </Button>
