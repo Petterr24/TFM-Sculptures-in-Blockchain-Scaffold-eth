@@ -167,12 +167,12 @@ export default function SculptureFactoryUI({
     try {
       const transaction = await tx(writeContracts.SculptureFactory.createSculpture(persistentData, miscellaneousData, editionData, conservationData, sculptureOwner));
       await transaction.wait();
-      setNewUserStatus("Sculpture record created successfully");
+      setCreationStatus("Sculpture record created successfully");
 
       return true;
     } catch (err) {
       console.error(err);
-      setNewUserStatus("Failed to create a Sculpture record");
+      setCreationStatus("Failed to create a Sculpture record");
 
       return false;
     }
