@@ -14,6 +14,7 @@ export default function SculptureUI({
   tx,
   readContracts,
   writeContracts,
+  sculptureRecords,
 }) {
 
   // Categorization label options
@@ -150,12 +151,12 @@ export default function SculptureUI({
   }
 
   async function getSculptureData() {
-    const sculptureRecords = await tx(readContracts.SculptureFactory.getSculptures());
+    const sculptureRecordsAddresses = await tx(readContracts.SculptureFactory.getSculptures());
 
-    for (let i = 0; i < sculptureRecords.length; i++) {
-      if (sculptureRecords[i] === sculptureAddress) {
-        for (const contractName in readContracts) {
-          const contractInstance = readContracts[contractName];
+    for (let i = 0; i < sculptureRecordsAddresses.length; i++) {
+      if (sculptureRecordsAddresses[i] === sculptureAddress) {
+        for (const contractName in sculptureRecords) {
+          const contractInstance = sculptureRecords[contractName];
           if (contractInstance && contractInstance.address === sculptureAddress) {
             setVerifiedSculptureAddress(sculptureAddress);
             const [persistentData, miscellaneousData, editionData, conservationData] = await tx(contractInstance.getSculptureData());

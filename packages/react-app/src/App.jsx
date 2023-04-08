@@ -1,4 +1,5 @@
 import { Button, Col, Menu, Row } from "antd";
+import SculptureArtifact from "./contracts/Sculpture.json";
 
 import "antd/dist/antd.css";
 import {
@@ -176,24 +177,22 @@ function App(props) {
   );
 
   // Sets the new Sculptures
-  const [sculptureRecords, setSculptureRecords] = useState([]);
+  const [sculptureRecords, setSculptureRecords] = useState({});
   // listen for the NewSculpture event
-  useEffect(async () => {
+  useEffect(() => {
     if (readContracts && readContracts.SculptureFactory) {
-      readContracts.SculptureFactory.on("NewSculpture", async (sculptureAddress) => {
-        // Add new contract address to the sculptures array
-        setSculptureRecords([...sculptureRecords, sculptureAddress]);
-        const abi = await web3.eth.getContractAbi(contractAddress);
+      readContracts.SculptureFactory.on("NewSculpture", (sculptureAddress) => {
+        const provider = new ethers.providers.JsonRpcProvider();
 
         // Add new contract to readContracts object
-        const newReadContracts = { ...readContracts };
-        newReadContracts[`Sculpture${sculptureRecords.length + 1}`] = new ethers.Contract(
+        const newSculptureContracts = { ...sculptureRecords };
+        newSculptureContracts[`Sculpture${sculptureRecords.length + 1}`] = new ethers.Contract(
           sculptureAddress,
-          abi,
-          library.getSigner()
+          SculptureArtifact.abi,
+          provider.getSigner()
         );
 
-        readContracts = newReadContracts;
+        setSculptureRecords(newSculptureContracts);
       });
     }
   }, [readContracts, sculptureRecords, setSculptureRecords]);
@@ -426,6 +425,7 @@ function App(props) {
             tx={tx}
             writeContracts={writeContracts}
             readContracts={readContracts}
+            sculptureRecords={sculptureRecords}
           />
         </Route>
         <Route path="/mainnetdai">
