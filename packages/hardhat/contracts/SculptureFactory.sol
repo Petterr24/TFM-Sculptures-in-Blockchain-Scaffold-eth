@@ -120,7 +120,7 @@ contract Sculpture {
         userAuthorizationInstance = UserAuthorization(_userAuthorizationAddress);
         sculptureFactoryInstance = SculptureFactory(_sculptureFactoryAddress);
 
-        require(userAuthorizationInstance.isUserAuthorization(_userAuthorizationAddress) == true, "This address does not belong to the UserAuthorization SC!");
+        require(userAuthorizationInstance.isUserAuthorizationSC(_userAuthorizationAddress) == true, "This address does not belong to the UserAuthorization SC!");
         require(sculptureFactoryInstance.isSculptureFactory(_sculptureFactoryAddress) == true, "This address does not belong to the SculptureFactory SC!");
 
         persistentData = _persistentData;
