@@ -226,6 +226,7 @@ export default function SculptureUI({
               if (result) {
                 setSculptureAddress("");
               } else {
+                setVerifiedSculptureAddress("");
                 setSculptureName("");
                 setArtist("");
                 setCriticalCatalogNumber("");
