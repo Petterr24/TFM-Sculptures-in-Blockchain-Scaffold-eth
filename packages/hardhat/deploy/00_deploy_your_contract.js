@@ -21,8 +21,8 @@ const foldersToRemove = [
 //   );
 
 module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
-  // Use a loop to call fs.rmdir() for each folder
-  foldersToRemove.forEach(folderPath => {
+  // Use a loop to call fs.rmdir() for each folder. Not necessary for now. Keep it just in case
+  /*foldersToRemove.forEach(folderPath => {
     fs.rmdir(path.join(__dirname, '..', folderPath), { recursive: true }, (err) => {
       if (err) {
         console.error(err);
@@ -30,7 +30,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
         console.log(`Folder ${folderPath} has been successfully removed!`);
       }
     });
-  });
+  });*/
 
   // Compile the contracts
   await run("compile");

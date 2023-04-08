@@ -78,7 +78,6 @@ contract SculptureFactory {
         SculptureLibrary.ConservationData memory _conservationData,
         string memory _sculptureOwner
     ) private pure returns (bool) {
-        require(SculptureLibrary.checkMaxStringLength(_persistentData.sculptureId) == true, "The Sculpture ID field exceeds the maximum string length!");
         require(SculptureLibrary.checkMaxStringLength(_persistentData.name) == true, "The Sculpture name field exceeds the maximum string length!");
         require(SculptureLibrary.checkMaxStringLength(_persistentData.artist) == true, "The Artits field exceeds the maximum string length!");
         require(SculptureLibrary.checkMaxStringLength(_persistentData.criticalCatalogNumber) == true, "The Critical Catalog Number field exceeds the maximum string length!");
