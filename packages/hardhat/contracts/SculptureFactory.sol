@@ -17,10 +17,7 @@ contract SculptureFactory {
     // UserAuthorization instance
     UserAuthorization userAuthorizationInstance;
 
-    event NewSculpture(
-        address sculpture,
-        string infoCreator,
-        address creator);
+    event NewSculpture(address sculpture);
 
     constructor(address _userAuthorizationAddress) {
         // Checks if an instance of this Smart Contract already exists
@@ -54,7 +51,7 @@ contract SculptureFactory {
         address newSculptureAddress = address(new Sculpture{value: msg.value}(_persistentData, _miscData, _editionData, _conservationData, _sculptureOwner, address(userAuthorizationInstance), address(this)));
 
         // Emit the new Sculpture address
-        emit NewSculpture(newSculptureAddress, "by:", msg.sender);
+        emit NewSculpture(newSculptureAddress);
 
         sculptures.push(newSculptureAddress);
 
