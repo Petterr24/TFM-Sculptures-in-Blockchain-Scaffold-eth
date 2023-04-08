@@ -81,44 +81,47 @@ export default function SculptureUI({
   // Sculpture owner
   const [sculptureOwner, setSculptureOwner] = useState("");
 
+  // Update Sculpture Status
+  const [updateDataStatus, setUpdateDataStatus] = useState("");
+
   async function updateSculpture() {
     if (!date) {
-      setCreationStatus("Please introduce the Date");
+      setUpdateDataStatus("Please introduce the Date");
       return false;
     }
 
     if (!technique) {
-      setCreationStatus("Please introduce the Technique");
+      setUpdateDataStatus("Please introduce the Technique");
       return false;
     }
 
     if (!dimensions) {
-      setCreationStatus("Please introduce the Sculpture dimensions");
+      setUpdateDataStatus("Please introduce the Sculpture dimensions");
       return false;
     }
 
     if (!location) {
-      setCreationStatus("Please introduce the Location");
+      setUpdateDataStatus("Please introduce the Location");
       return false;
     }
 
     if (categorizationCategory == null) {
-      setCreationStatus("Please choose any of the Categorization Labels");
+      setUpdateDataStatus("Please choose any of the Categorization Labels");
       return false;
     }
 
     if (isConservation == null) {
-      setCreationStatus("Please choose any of the conservation options");
+      setUpdateDataStatus("Please choose any of the conservation options");
       return false;
     }
 
     if ((isConservation == true) && (conservationCategory == null)) {
-      setCreationStatus("Please choose any of the conservation label");
+      setUpdateDataStatus("Please choose any of the conservation label");
       return false;
     }
 
     if (!sculptureOwner) {
-      setCreationStatus("Please introduce the Sculpture Owner");
+      setUpdateDataStatus("Please introduce the Sculpture Owner");
       return false;
     }
 
@@ -135,12 +138,12 @@ export default function SculptureUI({
         sculptureOwner));
 
       await transaction.wait();
-      setCreationStatus("Sculpture record updated successfully");
+      setUpdateDataStatus("Sculpture record updated successfully");
 
       return true;
     } catch (err) {
       console.error(err);
-      setCreationStatus("Failed to updated a Sculpture record");
+      setUpdateDataStatus("Failed to updated a Sculpture record");
 
       return false;
     }
