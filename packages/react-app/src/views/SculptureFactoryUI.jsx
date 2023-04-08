@@ -132,30 +132,30 @@ export default function SculptureFactoryUI({
       return false;
     }
 
-    const persistentData = {
+    const persistentData = [
       sculptureName,
       artist,
       criticalCatalogNumber
-    }
+    ]
 
-    const miscellaneousData = {
+    const miscellaneousData = [
       date,
       technique,
       dimensions,
       location,
       categorizationCategory
-    }
+    ]
 
-    const editionData = {
+    const editionData = [
       edition,
       editionExecutor,
       editionNumber 
-    }
+    ]
 
-    const conservationData = {
+    const conservationData = [
       isConservation,
       conservationCategory
-    }
+    ]
 
     try {
       const transaction = await tx(writeContracts.SculptureFactory.createSculpture(persistentData, miscellaneousData, editionData, conservationData, sculptureOwner));
