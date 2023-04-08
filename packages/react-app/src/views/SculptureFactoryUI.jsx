@@ -50,7 +50,6 @@ export default function SculptureFactoryUI({
   const { Option } = Select;
 
   // Persisten data
-  const [sculptureId, setSculptureId] = useState("");
   const [sculptureName, setSculptureName] = useState("");
   const [artist, setArtist] = useState("");
   const [criticalCatalogNumber, setCriticalCatalogNumber] = useState("");
@@ -78,11 +77,6 @@ export default function SculptureFactoryUI({
   const [sculptureOwner, setSculptureOwner] = useState("");
 
   async function createSculpture() {
-    if (!sculptureId) {
-      setCreationStatus("Please introduce the Sculpture Id");
-      return false;
-    }
-
     if (!sculptureName) {
       setCreationStatus("Please introduce the Sculpture Name");
       return false;
@@ -139,7 +133,6 @@ export default function SculptureFactoryUI({
     }
 
     const persistentData = {
-      sculptureId,
       sculptureName,
       artist,
       criticalCatalogNumber
@@ -197,15 +190,6 @@ export default function SculptureFactoryUI({
         {/*
           ⚙️ Section: Create new Sculpture
         */}
-        <div>
-          <label>Sculpture ID:</label>
-          <Input
-              value={sculptureId}
-              onChange={e => {
-                setSculptureId(e.target.value);
-              }}
-          />
-        </div>
         <div>
           <label>Name of the Sculpture:</label>
           <Input
@@ -340,7 +324,6 @@ export default function SculptureFactoryUI({
           onClick={() => {
             createSculpture().then(result => {
               if (result) {
-                setSculptureId("");
                 setSculptureName("");
                 setArtist("");
                 setCriticalCatalogNumber("");
