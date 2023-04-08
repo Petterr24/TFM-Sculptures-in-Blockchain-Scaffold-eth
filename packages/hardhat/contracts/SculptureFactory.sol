@@ -18,7 +18,6 @@ contract SculptureFactory {
     UserAuthorization userAuthorizationInstance;
 
     event NewSculpture(
-        string infoSculpture,
         address sculpture,
         string infoCreator,
         address creator);
@@ -55,7 +54,7 @@ contract SculptureFactory {
         address newSculptureAddress = address(new Sculpture{value: msg.value}(_persistentData, _miscData, _editionData, _conservationData, _sculptureOwner, address(userAuthorizationInstance), address(this)));
 
         // Emit the new Sculpture address
-        emit NewSculpture("SculptureAddress:", newSculptureAddress, "--> created by:", msg.sender);
+        emit NewSculpture(newSculptureAddress, "by:", msg.sender);
 
         sculptures.push(newSculptureAddress);
 
