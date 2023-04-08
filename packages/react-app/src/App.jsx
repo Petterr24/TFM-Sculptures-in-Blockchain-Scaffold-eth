@@ -1,5 +1,4 @@
 import { Button, Col, Menu, Row } from "antd";
-import SculptureArtifact from "./contracts/Sculpture.json";
 
 import "antd/dist/antd.css";
 import {
@@ -179,17 +178,18 @@ function App(props) {
   // Sets the new Sculptures
   const [sculptureRecords, setSculptureRecords] = useState([]);
   // listen for the NewSculpture event
-  useEffect(() => {
+  useEffect(async () => {
     if (readContracts && readContracts.SculptureFactory) {
-      readContracts.SculptureFactory.on("NewSculpture", (sculptureAddress) => {
+      readContracts.SculptureFactory.on("NewSculpture", async (sculptureAddress) => {
         // Add new contract address to the sculptures array
         setSculptureRecords([...sculptureRecords, sculptureAddress]);
+        const abi = await web3.eth.getContractAbi(contractAddress);
 
         // Add new contract to readContracts object
         const newReadContracts = { ...readContracts };
         newReadContracts[`Sculpture${sculptureRecords.length + 1}`] = new ethers.Contract(
           sculptureAddress,
-          SculptureArtifact.abi,
+          abi,
           library.getSigner()
         );
 
