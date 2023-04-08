@@ -29,7 +29,7 @@ import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { getRPCPollTime, Transactor, Web3ModalSetup } from "./helpers";
-import { Home, UserAuthorizationUI, SculptureFactoryUI, Hints, Subgraph } from "./views";
+import { Home, UserAuthorizationUI, SculptureFactoryUI, SculptureUI, Hints, Subgraph } from "./views";
 import { useStaticJsonRPC, useGasPrice } from "./hooks";
 
 const { ethers } = require("ethers");
@@ -316,6 +316,9 @@ function App(props) {
         <Menu.Item key="/sculpturefactory">
           <Link to="/sculpturefactory">SculptureFactoryUI</Link>
         </Menu.Item>
+        <Menu.Item key="/sculpture">
+          <Link to="/sculpture">SculptureUI</Link>
+        </Menu.Item>
         <Menu.Item key="/mainnetdai">
           <Link to="/mainnetdai">Mainnet DAI</Link>
         </Menu.Item>
@@ -378,6 +381,19 @@ function App(props) {
         </Route>
         <Route path="/sculpturefactory">
           <SculptureFactoryUI
+            address={address}
+            userSigner={userSigner}
+            mainnetProvider={mainnetProvider}
+            localProvider={localProvider}
+            yourLocalBalance={yourLocalBalance}
+            price={price}
+            tx={tx}
+            writeContracts={writeContracts}
+            readContracts={readContracts}
+          />
+        </Route>
+        <Route path="/sculpture">
+          <SculptureUI
             address={address}
             userSigner={userSigner}
             mainnetProvider={mainnetProvider}

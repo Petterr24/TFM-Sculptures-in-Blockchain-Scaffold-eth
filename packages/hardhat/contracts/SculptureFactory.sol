@@ -62,6 +62,10 @@ contract SculptureFactory {
         return addr == address(this);
     }
 
+    function getSculptures() public view returns (address[] memory) {
+        return sculptures;
+    }
+
     function parseSculptureData(SculptureLibrary.PersistentData memory _persistentData,
         SculptureLibrary.MiscellaneousData memory _miscData,
         SculptureLibrary.EditionData memory _editionData,
@@ -141,7 +145,16 @@ contract Sculpture {
         string editionNumber;
         string sculptureOwner;
     }
-    
+
+    function getSculptureData() public view returns (
+        SculptureLibrary.PersistentData memory,
+        SculptureLibrary.MiscellaneousData memory,
+        SculptureLibrary.EditionData memory,
+        SculptureLibrary.ConservationData memory
+    ) {
+        return [persistentData, miscData, editionData, conservationData];
+    }
+
     event SculptureUpdated(uint256 timestamp, address authorizedModifier, UpdatedSculptureData updatedData);
 
     function updateSculpture(

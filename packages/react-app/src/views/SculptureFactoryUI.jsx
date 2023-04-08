@@ -182,7 +182,7 @@ export default function SculptureFactoryUI({
         <Divider />
         <label>SmartContract Address:</label>
         <Address
-          address={readContracts && readContracts.UserAuthorization ? readContracts.UserAuthorization.address : null}
+          address={readContracts && readContracts.SculptureFactory ? readContracts.SculptureFactory.address : null}
           ensProvider={mainnetProvider}
           fontSize={16}
         />
