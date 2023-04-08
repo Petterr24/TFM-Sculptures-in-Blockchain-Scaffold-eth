@@ -360,19 +360,10 @@ export default function SculptureFactoryUI({
         Events
       */}
       <Events
-        title="New Sculptures"
+        title="New Sculpture"
         contracts={readContracts}
         contractName="SculptureFactory"
-        eventName="SculptureCreated"
-        localProvider={localProvider}
-        mainnetProvider={mainnetProvider}
-        startBlock={1}
-      />
-      <Events
-        title="New Sculpture Addresses"
-        contracts={readContracts}
-        contractName="SculptureFactory"
-        eventName="SculptureAddress"
+        eventName="NewSculpture"
         localProvider={localProvider}
         mainnetProvider={mainnetProvider}
         startBlock={1}

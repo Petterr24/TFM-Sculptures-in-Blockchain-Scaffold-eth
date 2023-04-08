@@ -17,14 +17,11 @@ contract SculptureFactory {
     // UserAuthorization instance
     UserAuthorization userAuthorizationInstance;
 
-    event SculptureCreated(
-        SculptureLibrary.PersistentData persistentData,
-        SculptureLibrary.MiscellaneousData miscData,
-        SculptureLibrary.EditionData editionData,
-        SculptureLibrary.ConservationData conservationData
-    );
-
-    event SculptureAddress(address sculpture);
+    event NewSculpture(
+        string infoSculpture,
+        address sculpture,
+        string infoCreator,
+        address creator);
 
     constructor(address _userAuthorizationAddress) {
         // Checks if an instance of this Smart Contract already exists
@@ -58,10 +55,7 @@ contract SculptureFactory {
         address newSculptureAddress = address(new Sculpture{value: msg.value}(_persistentData, _miscData, _editionData, _conservationData, _sculptureOwner, address(userAuthorizationInstance), address(this)));
 
         // Emit the new Sculpture address
-        emit SculptureAddress(newSculptureAddress);
-
-        // Emit the structure of this new Scultpure
-        emit SculptureCreated(_persistentData, _miscData, _editionData, _conservationData);
+        emit NewSculpture("SculptureAddress:", newSculptureAddress, "--> created by:", msg.sender);
 
         sculptures.push(newSculptureAddress);
 
