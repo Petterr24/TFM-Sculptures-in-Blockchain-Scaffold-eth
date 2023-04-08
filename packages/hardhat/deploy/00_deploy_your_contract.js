@@ -64,6 +64,11 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     //waitConfirmations: 5,
   });
 
+  // Creating a copy of the Sculpture json file (ABI)
+  const sourcePath = path.join(__dirname, '../artifacts/contracts/SculptureFactory.sol/Sculpture.json');
+  const destPath = path.join(__dirname, '../../react-app/src/contracts/Sculpture.json');
+  fs.copyFileSync(sourcePath, destPath);
+
   // Getting a previously deployed contract
   // const YourContract = await ethers.getContract("YourContract", deployer);
   /*  await YourContract.setPurpose("Hello");
