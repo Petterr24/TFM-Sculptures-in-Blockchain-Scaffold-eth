@@ -1,4 +1,5 @@
 import { Button, Col, Menu, Row } from "antd";
+import SculptureArtifact from "./contracts/Sculpture.json";
 
 import "antd/dist/antd.css";
 import {
@@ -174,6 +175,28 @@ function App(props) {
     ["0x34aA3F359A9D614239015126635CE7732c18fDF3"],
     mainnetProviderPollingTime,
   );
+
+  // Sets the new Sculptures
+  const [sculptureRecords, setSculptureRecords] = useState([]);
+  // listen for the NewSculpture event
+  useEffect(() => {
+    if (readContracts && readContracts.SculptureFactory) {
+      readContracts.SculptureFactory.on("NewSculpture", (sculptureAddress) => {
+        // Add new contract address to the sculptures array
+        setSculptureRecords([...sculptureRecords, sculptureAddress]);
+
+        // Add new contract to readContracts object
+        const newReadContracts = { ...readContracts };
+        newReadContracts[`Sculpture${sculptureRecords.length + 1}`] = new ethers.Contract(
+          sculptureAddress,
+          SculptureArtifact.abi,
+          library.getSigner()
+        );
+
+        readContracts = newReadContracts;
+      });
+    }
+  }, [readContracts, sculptureRecords, setSculptureRecords]);
 
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
