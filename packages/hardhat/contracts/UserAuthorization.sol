@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
-
 // Smart Contract to store the privileges of those users that can create new Smart Contracts
 contract UserAuthorization {
     // Singleton to allow only creating one Instance of this Smart Contract

@@ -1,11 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
-
 library SculptureLibrary {
 
-    enum CategorizationLabel { 
+    enum CategorizationLabel {
         NONE,
         AUTHORIZED_UNIQUE_WORK, 
         AUTHORIZED_UNIQUE_WORK_VARIATION, 
@@ -19,7 +17,7 @@ library SculptureLibrary {
         AUTHORIZED_TECHNICAL_COPY, 
         AUTHORIZED_DIGITAL_COPY 
     }
-
+    
     enum ConservationLabel {
         AUTHORIZED_RECONSTRUCTION,
         AUTHORIZED_RESTORATION,

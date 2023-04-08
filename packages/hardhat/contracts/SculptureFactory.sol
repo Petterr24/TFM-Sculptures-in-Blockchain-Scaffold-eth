@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
-import "./SculptureLibrary.sol";
-import "./UserAuthorization.sol";
+import "../SculptureLibrary/SculptureLibrary.sol";
+import "../UserAuthorization/UserAuthorization.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract SculptureFactory {
@@ -152,7 +151,7 @@ contract Sculpture {
         string editionNumber;
         string sculptureOwner;
     }
-
+    
     event SculptureUpdated(uint256 timestamp, address authorizedModifier, UpdatedSculptureData updatedData);
 
     function updateSculpture(
