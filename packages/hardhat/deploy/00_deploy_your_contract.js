@@ -2,6 +2,7 @@
 
 const { ethers } = require("hardhat");
 const path = require("path");
+const fs = require("fs");
 
 const localChainId = "31337";
 
