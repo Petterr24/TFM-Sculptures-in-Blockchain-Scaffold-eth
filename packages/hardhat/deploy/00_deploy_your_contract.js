@@ -5,6 +5,13 @@ const path = require("path");
 
 const localChainId = "31337";
 
+// Specify the paths to the folders you want to remove
+const foldersToRemove = [
+  '../artifacts',
+  '../cache',
+  '../deployments',
+];
+
 // const sleep = (ms) =>
 //   new Promise((r) =>
 //     setTimeout(() => {
@@ -14,6 +21,17 @@ const localChainId = "31337";
 //   );
 
 module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
+  // Use a loop to call fs.rmdir() for each folder
+  foldersToRemove.forEach(folderPath => {
+    fs.rmdir(folderPath, { recursive: true }, (err) => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log(`Folder ${folderPath} has been successfully removed!`);
+      }
+    });
+  });
+
   // Compile the contracts
   await run("compile");
 
