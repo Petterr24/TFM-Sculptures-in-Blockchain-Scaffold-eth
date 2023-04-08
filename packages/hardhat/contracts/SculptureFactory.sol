@@ -152,7 +152,7 @@ contract Sculpture {
         SculptureLibrary.EditionData memory,
         SculptureLibrary.ConservationData memory
     ) {
-        return [persistentData, miscData, editionData, conservationData];
+        return (persistentData, miscData, editionData, conservationData);
     }
 
     event SculptureUpdated(uint256 timestamp, address authorizedModifier, UpdatedSculptureData updatedData);
