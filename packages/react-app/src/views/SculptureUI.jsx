@@ -17,6 +17,27 @@ export default function SculptureUI({
   sculptureRecords,
 }) {
 
+  // Offsets to identify each dataset from those obtained from the Sculpture Record
+  const PERSISTENT_DATA = 0;
+  const MISCELLANEOUS_DATA = 1;
+  const EDITION_DATA = 2;
+  const CONSERVATION_DATA = 2;
+
+  //Offsets to identify each field in each dataset
+  const PERSISTENT_SCULPTURE_NAME = 0;
+  const PERSISTENT_ARTIST = 1;
+  const PERSISTENT_CRITICAL_CATALOG_NUMBER = 2;
+  const MISC_DATE = 0;
+  const MISC_TECHNIQUE = 1;
+  const MISC_DIMENSIONS = 2;
+  const MISC_LOCATION = 3;
+  const MISC_CATEGORIZATION_LABEL = 4;
+  const EDITION_EDITION = 0;
+  const EDITION_EDITION_EXECUTOR = 1;
+  const EDITION_EDITION_NUMBER = 2;
+  const CONSV_CONSERVATION = 0;
+  const CONSV_CONSERVATION_LABEL = 1;
+
   // Categorization label options
   const categorizationLabel = [
     { value: null, label: 'Select the categorization label', disabled: true },
@@ -159,24 +180,22 @@ export default function SculptureUI({
           const contractInstance = sculptureRecords[contractName];
           if (contractInstance && contractInstance.address === sculptureAddress) {
             setVerifiedSculptureAddress(sculptureAddress);
-            const [persistentData, miscellaneousData, editionData, conservationData] = await tx(contractInstance.getSculptureData());
+            const data = await tx(contractInstance.getSculptureData());
 
             // Update the state variables with the parsed data
-            setSculptureName(persistentData[0]);
-            setArtist(persistentData[1]);
-            setCriticalCatalogNumber(persistentData[2]);
-            setDate(miscellaneousData[0]);
-            setTechnique(miscellaneousData[1]);
-            setDimensions(miscellaneousData[2]);
-            setLocation(miscellaneousData[3]);
-            setCategorizationCategory(miscellaneousData[4]);
-
-            setEdition(editionData[0]);
-            setEditionExecutor(editionData[1]);
-            setEditionNumber(editionData[2]);
-
-            setIsConservation(conservationData[0]);
-            setConservationCategory(conservationData[1]);
+            setSculptureName(data[PERSISTENT_DATA][PERSISTENT_SCULPTURE_NAME]);
+            setArtist(data[PERSISTENT_DATA][PERSISTENT_ARTIST]);
+            setCriticalCatalogNumber(data[PERSISTENT_DATA][PERSISTENT_CRITICAL_CATALOG_NUMBER]);
+            setDate(data[MISCELLANEOUS_DATA][MISC_DATE]);
+            setTechnique(data[MISCELLANEOUS_DATA][MISC_TECHNIQUE]);
+            setDimensions(data[MISCELLANEOUS_DATA][MISC_DIMENSIONS]);
+            setLocation(data[MISCELLANEOUS_DATA][MISC_LOCATION]);
+            setCategorizationCategory(data[MISCELLANEOUS_DATA][MISC_CATEGORIZATION_LABEL]);
+            setEdition(data[EDITION_DATA][EDITION_EDITION]);
+            setEditionExecutor(data[EDITION_DATA][EDITION_EDITION_EXECUTOR]);
+            setEditionNumber(data[EDITION_DATA][EDITION_EDITION_NUMBER]);
+            setIsConservation(data[CONSERVATION_DATA][CONSV_CONSERVATION]);
+            setConservationCategory(data[CONSERVATION_DATA][CONSV_CONSERVATION_LABEL]);
 
             setGetDataStatus("Sculpture Data recovered successfully!");
 
