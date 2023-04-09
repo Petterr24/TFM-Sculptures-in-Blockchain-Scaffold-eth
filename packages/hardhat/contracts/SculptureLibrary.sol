@@ -57,7 +57,7 @@ library SculptureLibrary {
     }
 
     function isConservationLabelValid(uint8 label) internal pure returns (bool) {
-        return (label >= uint8(ConservationLabel.AUTHORIZED_RECONSTRUCTION) && label <= uint8(ConservationLabel.AUTHORIZED_EPHEMERAL_WORK));
+        return (label >= uint8(ConservationLabel.NONE) && label <= uint8(ConservationLabel.AUTHORIZED_EPHEMERAL_WORK));
     }
 
     function getCategorizationLabelAsString(uint8 _enum) internal pure returns (string memory) {

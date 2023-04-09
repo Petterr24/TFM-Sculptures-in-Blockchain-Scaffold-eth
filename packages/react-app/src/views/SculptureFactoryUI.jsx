@@ -19,7 +19,6 @@ export default function SculptureFactoryUI({
   // Categorization label options
   const categorizationLabel = [
     { value: null, label: 'Select the categorization label', disabled: true },
-    { value: 0, label: 'NONE' },
     { value: 1, label: 'AUTHORIZED UNIQUE WORK' },
     { value: 2, label: 'AUTHORIZED UNIQUE WORK VARIATION' },
     { value: 3, label: 'AUTHORIZED WORK' },
@@ -36,9 +35,10 @@ export default function SculptureFactoryUI({
   // Categorization label options
   const conservationLabel = [
     { value: null, label: 'Select the conservation label', disabled: true },
-    { value: 0, label: 'AUTHORIZED RECONSTRUCTION' },
-    { value: 1, label: 'AUTHORIZED RESTORATION' },
-    { value: 2, label: 'AUTHORIZED EPHEMERAL WORK' }
+    { value: 0, label: 'NONE' },
+    { value: 1, label: 'AUTHORIZED RECONSTRUCTION' },
+    { value: 2, label: 'AUTHORIZED RESTORATION' },
+    { value: 3, label: 'AUTHORIZED EPHEMERAL WORK' }
   ]
 
   // Conservation options
@@ -79,56 +79,74 @@ export default function SculptureFactoryUI({
   async function createSculpture() {
     if (!sculptureName) {
       setCreationStatus("Please introduce the Sculpture Name");
+
       return false;
     }
 
     if (!artist) {
       setCreationStatus("Please introduce the Artist Name");
+
       return false;
     }
 
     if (!criticalCatalogNumber) {
       setCreationStatus("Please introduce the critical catalog number");
+
       return false;
     }
 
     if (!date) {
       setCreationStatus("Please introduce the Date");
+
       return false;
     }
 
     if (!technique) {
       setCreationStatus("Please introduce the Technique");
+
       return false;
     }
 
     if (!dimensions) {
       setCreationStatus("Please introduce the Sculpture dimensions");
+
       return false;
     }
 
     if (!location) {
       setCreationStatus("Please introduce the Location");
+
       return false;
     }
 
     if (categorizationCategory == null) {
       setCreationStatus("Please choose any of the Categorization Labels");
+
       return false;
     }
 
     if (isConservation == null) {
       setCreationStatus("Please choose any of the conservation options");
+
       return false;
     }
 
-    if ((isConservation == true) && (conservationCategory == null)) {
-      setCreationStatus("Please choose any of the conservation label");
+    if (isConservation && ((conservationCategory == null) || (conservationCategory == 0))) {
+      setCreationStatus("Please choose any of the conservation label. NONE is not a valid option if conservation option is 'YES'");
+
       return false;
+    } else if (!isConservation && conservationCategory != null && conservationCategory != 0) {
+      setCreationStatus("You cannot choose a conservation label if you select the conservation option as 'NO'");
+
+      return false;
+    } else {
+      // Sets the NONE option to not send a null object to the SC
+      setConservationCategory(0);
     }
 
     if (!sculptureOwner) {
       setCreationStatus("Please introduce the Sculpture Owner");
+
       return false;
     }
 
