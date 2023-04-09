@@ -76,6 +76,20 @@ export default function SculptureFactoryUI({
   // Sculpture owner
   const [sculptureOwner, setSculptureOwner] = useState("");
 
+  // Some input fields
+  const fields = [
+    { name: 'Sculpture Name', value: sculptureName },
+    { name: 'Artist Name', value: artist },
+    { name: 'Critical Catalog Number', value: criticalCatalogNumber },
+    { name: 'Date', value: date },
+    { name: 'Technique', value: technique },
+    { name: 'Sculpture Dimensions', value: dimensions },
+    { name: 'Location', value: location },
+    { name: 'Categorization Labels', value: categorizationCategory },
+    { name: 'Conservation options', value: isConservation },
+    { name: 'Sculpture owner', value: sculptureOwner }
+  ];
+
   function isValidDate(value) {
     const regexFormat1 = /^\d{4}$/; // Regex pattern to match the data format like "1990"
     const regexFormat2 = /^(c\.)?\d{4}$/; // Regex pattern to match the date format like "c.1990"
@@ -87,63 +101,34 @@ export default function SculptureFactoryUI({
     return false;
   }
 
+  function checkMaxLength(str) {
+    return str.length <= 64;
+  }
+
   async function createSculpture() {
-    if (!sculptureName) {
-      setCreationStatus("Please introduce the Sculpture Name");
+    // Check that the following fields are provided
+    for (const field of fields) {
+      if ((field.name != 'Conservation options') && (!field.value)) {
+        if ((field.name == 'Categorization Labels') || (field.name == 'Conservation options')) {
+          setCreationStatus(`Please choose any of the ${field.name}`);
+        } else {
+          setCreationStatus(`Please introduce the ${field.name}`);
+        }
 
-      return false;
-    }
+        return false;
+      } else if ((field.name == 'Conservation options') && (field.value == null)) {
+        setCreationStatus(`Please introduce the ${field.name}`);
+      }
 
-    if (!artist) {
-      setCreationStatus("Please introduce the Artist Name");
-
-      return false;
-    }
-
-    if (!criticalCatalogNumber) {
-      setCreationStatus("Please introduce the critical catalog number");
-
-      return false;
-    }
-
-    if (!date) {
-      setCreationStatus("Please introduce the Date");
-
-      return false;
-    } else {
-      if (!isValidDate(date)) {
-        setCreationStatus("Invalid date format. Please provide a valid year in the format '1990' or 'c.1990'");
+      if (!checkMaxLength(field.value.toString())) {
+        setCreationStatus(`The ${field.name} field exceeds the maximum string length`);
 
         return false;
       }
     }
 
-    if (!technique) {
-      setCreationStatus("Please introduce the Technique");
-
-      return false;
-    }
-
-    if (!dimensions) {
-      setCreationStatus("Please introduce the Sculpture dimensions");
-
-      return false;
-    }
-
-    if (!location) {
-      setCreationStatus("Please introduce the Location");
-
-      return false;
-    }
-
-    if (categorizationCategory == null) {
-      setCreationStatus("Please choose any of the Categorization Labels");
-
-      return false;
-    }
-
-    if (isConservation == null) {
-      setCreationStatus("Please choose any of the conservation options");
+    if (!isValidDate(date)) {
+      setCreationStatus("Invalid date format. Please provide a valid year in the format '1990' or 'c.1990'");
 
       return false;
     }
@@ -159,12 +144,6 @@ export default function SculptureFactoryUI({
     } else {
       // Sets the NONE option to not send a null object to the SC
       setConservationCategory(0);
-    }
-
-    if (!sculptureOwner) {
-      setCreationStatus("Please introduce the Sculpture Owner");
-
-      return false;
     }
 
     const persistentData = [

@@ -124,7 +124,7 @@ library SculptureLibrary {
         return true;
     }
 
-    function checkMaxStringLength(string memory _str) internal pure returns (bool) {      
+    function checkMaxStringLength(string memory _str) internal pure returns (bool) {
         // Maximum string length accepted to be stored in the SC
         return bytes(_str).length <= 64;
     }
