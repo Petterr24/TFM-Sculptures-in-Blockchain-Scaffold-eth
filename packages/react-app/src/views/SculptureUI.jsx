@@ -17,6 +17,9 @@ export default function SculptureUI({
   sculptureRecords,
 }) {
 
+  // Sculpture address
+  const [sculptureInstance, setSculptureInstance] = useState(null);
+
   // Offsets to identify each dataset from those obtained from the Sculpture Record
   const PERSISTENT_DATA = 0;
   const MISCELLANEOUS_DATA = 1;
@@ -176,7 +179,7 @@ export default function SculptureUI({
     // TODO: Once the doubt are solved. If necessary implement the conservation data update (including in SCs, not supported)
     // TODO: There is no restrictions for Edition fields depending on the categorization labels
     try {
-      const transaction = await tx(writeContracts.Sculpture.updateSculpture(
+      const transaction = await tx(sculptureInstance.updateSculpture(
         dateUpdate,
         techniqueUpdate,
         dimensionsUpdate,
@@ -211,6 +214,7 @@ export default function SculptureUI({
           const contractInstance = sculptureRecords[contractName];
           if (contractInstance && contractInstance.address === sculptureAddress) {
             setVerifiedSculptureAddress(sculptureAddress);
+            setSculptureInstance(contractInstance);
             const data = await tx(contractInstance.getSculptureData());
 
             // Update the state variables with the parsed data
