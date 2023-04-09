@@ -153,6 +153,10 @@ export default function SculptureUI({
     { name: 'Sculpture owner', oldValue: sculptureOwner, newValue: sculptureOwnerUpdate }
   ];
 
+  function checkMaxLength(str) {
+    return str.length <= 64;
+  }
+
   async function updateSculpture() {
     // Check that the following fields are provided
     for (const field of fields) {
@@ -163,7 +167,7 @@ export default function SculptureUI({
       }
 
       if (!checkMaxLength(field.value.toString())) {
-        setCreationStatus(`The ${field.name} field exceeds the maximum string length of 64 characters`);
+        setUpdateDataStatus(`The ${field.name} field exceeds the maximum string length of 64 characters`);
 
         return false;
       }
