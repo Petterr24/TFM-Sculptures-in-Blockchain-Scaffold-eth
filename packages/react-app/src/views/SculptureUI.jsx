@@ -302,6 +302,9 @@ export default function SculptureUI({
         <p style={{ marginTop: 8 }}><strong>Transaction status:</strong> {getDataStatus}</p>
         <Divider />
         <Divider />
+        <Divider style={{ fontWeight: 'bold', fontSize: '20px' }}>Sculpture Data</Divider>
+        <Divider />
+        <Divider />
         <p style={{ marginTop: 8 }}><strong>Sculpture name:</strong> {sculptureName}</p>
         <p style={{ marginTop: 8 }}><strong>Artist:</strong> {artist}</p>
         <p style={{ marginTop: 8 }}><strong>Critical catalog number:</strong> {criticalCatalogNumber}</p>
@@ -319,6 +322,8 @@ export default function SculptureUI({
         <p style={{ marginTop: 8 }}><strong>Conservation:</strong> {conservationOption ? conservationOption.label : '-'}</p>
         <p style={{ marginTop: 8 }}><strong>Conservation Label:</strong> {conservationCategoryOption ? conservationCategoryOption.label : '-'}</p>
         <Divider />
+        <Divider />
+        <Divider style={{ fontWeight: 'bold', fontSize: '20px' }}>Update Sculpture:</Divider>
         <Divider />
         <Divider />
         {/*
