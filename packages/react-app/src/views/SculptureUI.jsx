@@ -268,25 +268,25 @@ export default function SculptureUI({
           Get Sculpture Record
         </Button>
         <Divider />
-        <p style={{ marginTop: 8 }}>Data: {getDataStatus}</p>
+        <p style={{ marginTop: 8 }}><strong>Output:</strong> {getDataStatus}</p>
         <Divider />
         <Divider />
-        <p style={{ marginTop: 8 }}>Sculpture name: {sculptureName}</p>
-        <p style={{ marginTop: 8 }}>Artist: {artist}</p>
-        <p style={{ marginTop: 8 }}>Critical catalog number: {criticalCatalogNumber}</p>
+        <p style={{ marginTop: 8 }}><strong>Sculpture name:</strong> {sculptureName}</p>
+        <p style={{ marginTop: 8 }}><strong>Artist:</strong> {artist}</p>
+        <p style={{ marginTop: 8 }}><strong>Critical catalog number:</strong> {criticalCatalogNumber}</p>
         <Divider />
-        <p style={{ marginTop: 8 }}>Date: {date}</p>
-        <p style={{ marginTop: 8 }}>Technique: {technique}</p>
-        <p style={{ marginTop: 8 }}>Dimensions: {dimensions}</p>
-        <p style={{ marginTop: 8 }}>Location: {location}</p>
-        <p style={{ marginTop: 8 }}>Categorization Category: {categorizationCategory}</p>
+        <p style={{ marginTop: 8 }}><strong>Date:</strong> {date}</p>
+        <p style={{ marginTop: 8 }}><strong>Technique:</strong> {technique}</p>
+        <p style={{ marginTop: 8 }}><strong>Dimensions:</strong> {dimensions}</p>
+        <p style={{ marginTop: 8 }}><strong>Location:</strong> {location}</p>
+        <p style={{ marginTop: 8 }}><strong>Categorization Category:</strong> {categorizationCategory}</p>
         <Divider />
-        <p style={{ marginTop: 8 }}>Edition: {edition}</p>
-        <p style={{ marginTop: 8 }}>Edition Executor: {editionExecutor}</p>
-        <p style={{ marginTop: 8 }}>Edition Number: {editionNumber}</p>
+        <p style={{ marginTop: 8 }}><strong>Edition:</strong> {edition}</p>
+        <p style={{ marginTop: 8 }}><strong>Edition Executor:</strong> {editionExecutor}</p>
+        <p style={{ marginTop: 8 }}><strong>Edition Number:</strong> {editionNumber}</p>
         <Divider />
-        <p style={{ marginTop: 8 }}>Conservation data: {isConservation}</p>
-        <p style={{ marginTop: 8 }}>Conservation Category: {conservationCategory}</p>
+        <p style={{ marginTop: 8 }}><strong>Conservation data:</strong> {isConservation}</p>
+        <p style={{ marginTop: 8 }}><strong>Conservation Category:</strong> {conservationCategory}</p>
         <Divider />
         <Divider />
         User Address:
