@@ -130,8 +130,15 @@ contract Sculpture {
         persistentData = _persistentData;
         miscData = _miscData;
         editionData = _editionData;
-        conservationData = _conservationData;
         sculptureOwner = _sculptureOwner;
+
+        // Stores the Conservation information depending on the 'Conservation' option
+        conservationData.conservation = _conservationData.conservation;
+        if (_conservationData.conservation) {
+            conservationData.conservationLabel = _conservationData.conservationLabel;
+        } else {
+            conservationData.conservationLabel = SculptureLibrary.ConservationData.NONE;
+        }
     }
 
     struct UpdatedSculptureData {
@@ -230,6 +237,7 @@ contract Sculpture {
             updatedData.editionExecutor = _editionExecutor;
         }
 
+        // TODO: Clarify if conservation data can be updated or not
         // TODO: check what would happen when this value is not provided
         if (_editionNumber !=  editionData.editionNumber) {
             editionData.editionNumber = _editionNumber;
