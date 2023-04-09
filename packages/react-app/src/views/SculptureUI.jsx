@@ -40,33 +40,31 @@ export default function SculptureUI({
 
   // Categorization label options
   const categorizationLabel = [
-    { value: null, label: 'Select the categorization label', disabled: true },
-    { value: 0, label: 'NONE' },
-    { value: 1, label: 'AUTHORIZED UNIQUE WORK' },
-    { value: 2, label: 'AUTHORIZED UNIQUE WORK VARIATION' },
-    { value: 3, label: 'AUTHORIZED WORK' },
-    { value: 4, label: 'AUTHORIZED MULTIPLE' },
-    { value: 5, label: 'AUTHORIZED CAST' },
-    { value: 6, label: 'POSTHUMOUS WORK AUTHORIZED BY ARTIST' },
-    { value: 7, label: 'NPOSTHUMOUS WORK AUTHORIZED BY RIGHTSHOLDERSONE' },
-    { value: 8, label: 'AUTHORIZED REPRODUCTION' },
-    { value: 9, label: 'AUTHORIZED EXHIBITION COPY' },
-    { value: 10, label: 'AUTHORIZED TECHNICAL COPY' },
-    { value: 11, label: 'AUTHORIZED DIGITAL COPY' }
+    { value: '0', label: 'NONE' },
+    { value: '1', label: 'AUTHORIZED UNIQUE WORK' },
+    { value: '2', label: 'AUTHORIZED UNIQUE WORK VARIATION' },
+    { value: '3', label: 'AUTHORIZED WORK' },
+    { value: '4', label: 'AUTHORIZED MULTIPLE' },
+    { value: '5', label: 'AUTHORIZED CAST' },
+    { value: '6', label: 'POSTHUMOUS WORK AUTHORIZED BY ARTIST' },
+    { value: '7', label: 'NPOSTHUMOUS WORK AUTHORIZED BY RIGHTSHOLDERSONE' },
+    { value: '8', label: 'AUTHORIZED REPRODUCTION' },
+    { value: '9', label: 'AUTHORIZED EXHIBITION COPY' },
+    { value: '10', label: 'AUTHORIZED TECHNICAL COPY' },
+    { value: '11', label: 'AUTHORIZED DIGITAL COPY' }
   ]
 
   // Categorization label options
   const conservationLabel = [
-    { value: null, label: 'Select the conservation label', disabled: true },
-    { value: 0, label: 'AUTHORIZED RECONSTRUCTION' },
-    { value: 1, label: 'AUTHORIZED RESTORATION' },
-    { value: 2, label: 'AUTHORIZED EPHEMERAL WORK' }
+    { value: '0', label: 'AUTHORIZED RECONSTRUCTION' },
+    { value: '1', label: 'AUTHORIZED RESTORATION' },
+    { value: '2', label: 'AUTHORIZED EPHEMERAL WORK' }
   ]
 
   // Conservation options
   const conversationOptions = [
-    { value: false, label: 'NO' },
-    { value: true, label: 'YES' },
+    { value: '0', label: 'NO' },
+    { value: '1', label: 'YES' },
   ]
   const { Option } = Select;
 
@@ -90,18 +88,28 @@ export default function SculptureUI({
   const [location, setLocation] = useState("");
   const [categorizationCategory, setCategorizationCategory] = useState(null);
 
+  // Get the selected option based on the categorizationCategory state
+  const categorizationLabelOption = categorizationLabel.find(
+    (option) => option.value === categorizationCategory
+  );
+
   // Edition data
-  const [edition, setEdition] = useState(0);
+  const [edition, setEdition] = useState("");
   const [editionExecutor, setEditionExecutor] = useState("");
-  const [editionNumber, setEditionNumber] = useState(0);
+  const [editionNumber, setEditionNumber] = useState("");
 
   // Conservation data
   const [isConservation, setIsConservation] = useState(null);
   const [conservationCategory, setConservationCategory] = useState(null);
 
   // Get the selected option based on the isConservation state
-  const selectedOption = conversationOptions.find(
+  const conservationOption = conversationOptions.find(
     (option) => option.value === isConservation
+  );
+
+  // Get the selected option based on the conservationCategory state
+  const conservationCategoryOption = conservationLabel.find(
+    (option) => option.value === conservationCategory
   );
 
   // Sculpture owner
@@ -194,11 +202,11 @@ export default function SculptureUI({
             setTechnique(data[MISCELLANEOUS_DATA][MISC_TECHNIQUE]);
             setDimensions(data[MISCELLANEOUS_DATA][MISC_DIMENSIONS]);
             setLocation(data[MISCELLANEOUS_DATA][MISC_LOCATION]);
-            setCategorizationCategory(data[MISCELLANEOUS_DATA][MISC_CATEGORIZATION_LABEL]);
-            setEdition(data[EDITION_DATA][EDITION_EDITION]);
+            setCategorizationCategory(data[MISCELLANEOUS_DATA][MISC_CATEGORIZATION_LABEL].toString());
+            setEdition(data[EDITION_DATA][EDITION_EDITION].toString());
             setEditionExecutor(data[EDITION_DATA][EDITION_EDITION_EXECUTOR]);
-            setEditionNumber(data[EDITION_DATA][EDITION_EDITION_NUMBER]);
-            setIsConservation(Boolean(data[CONSERVATION_DATA][CONSV_CONSERVATION]));
+            setEditionNumber(data[EDITION_DATA][EDITION_EDITION_NUMBER].toString());
+            setIsConservation(data[CONSERVATION_DATA][CONSV_CONSERVATION].toString());
             setConservationCategory(data[CONSERVATION_DATA][CONSV_CONSERVATION_LABEL]);
 
             setGetDataStatus("Sculpture Data recovered successfully!");
@@ -258,9 +266,9 @@ export default function SculptureUI({
                 setDimensions("");
                 setLocation("");
                 setCategorizationCategory(null);
-                setEdition(0);
+                setEdition("");
                 setEditionExecutor("");
-                setEditionNumber(0);
+                setEditionNumber("");
                 setIsConservation(null);
                 setConservationCategory(null);
                 setSculptureOwner("");
@@ -283,14 +291,14 @@ export default function SculptureUI({
         <p style={{ marginTop: 8 }}><strong>Technique:</strong> {technique}</p>
         <p style={{ marginTop: 8 }}><strong>Dimensions:</strong> {dimensions}</p>
         <p style={{ marginTop: 8 }}><strong>Location:</strong> {location}</p>
-        <p style={{ marginTop: 8 }}><strong>Categorization Category:</strong> {categorizationCategory}</p>
+        <p style={{ marginTop: 8 }}><strong>Categorization Category:</strong> {categorizationLabelOption ? categorizationLabelOption.label : '-'}</p>
         <Divider />
         <p style={{ marginTop: 8 }}><strong>Edition:</strong> {edition}</p>
         <p style={{ marginTop: 8 }}><strong>Edition Executor:</strong> {editionExecutor}</p>
         <p style={{ marginTop: 8 }}><strong>Edition Number:</strong> {editionNumber}</p>
         <Divider />
-        <p style={{ marginTop: 8 }}><strong>Conservation data:</strong> {selectedOption ? selectedOption.label : '-'}</p>
-        <p style={{ marginTop: 8 }}><strong>Conservation Category:</strong> {conservationCategory}</p>
+        <p style={{ marginTop: 8 }}><strong>Conservation data:</strong> {conservationOption ? conservationOption.label : '-'}</p>
+        <p style={{ marginTop: 8 }}><strong>Conservation Category:</strong> {conservationCategoryOption ? conservationCategoryOption.label : '-'}</p>
         <Divider />
         <Divider />
         User Address:
