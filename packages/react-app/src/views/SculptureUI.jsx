@@ -169,7 +169,7 @@ export default function SculptureUI({
         field.newValue = field.oldValue;
       }
 
-      if (!checkMaxLength(field.value.toString())) {
+      if (!checkMaxLength(field.newValue.toString())) {
         setUpdateDataStatus(`The ${field.name} field exceeds the maximum string length of 64 characters`);
 
         return false;
