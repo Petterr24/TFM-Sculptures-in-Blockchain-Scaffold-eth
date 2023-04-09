@@ -160,6 +160,22 @@ export default function SculptureUI({
     return str.length <= 64;
   }
 
+  function setData(data) {
+    setSculptureName(data[PERSISTENT_DATA][PERSISTENT_SCULPTURE_NAME]);
+    setArtist(data[PERSISTENT_DATA][PERSISTENT_ARTIST]);
+    setCriticalCatalogNumber(data[PERSISTENT_DATA][PERSISTENT_CRITICAL_CATALOG_NUMBER]);
+    setDate(data[MISCELLANEOUS_DATA][MISC_DATE]);
+    setTechnique(data[MISCELLANEOUS_DATA][MISC_TECHNIQUE]);
+    setDimensions(data[MISCELLANEOUS_DATA][MISC_DIMENSIONS]);
+    setLocation(data[MISCELLANEOUS_DATA][MISC_LOCATION]);
+    setCategorizationCategory(data[MISCELLANEOUS_DATA][MISC_CATEGORIZATION_LABEL].toString());
+    setEdition(data[EDITION_DATA][EDITION_EDITION].toString());
+    setEditionExecutor(data[EDITION_DATA][EDITION_EDITION_EXECUTOR]);
+    setEditionNumber(data[EDITION_DATA][EDITION_EDITION_NUMBER].toString());
+    setIsConservation(data[CONSERVATION_DATA][CONSV_CONSERVATION].toString());
+    setConservationCategory(data[CONSERVATION_DATA][CONSV_CONSERVATION_LABEL]);
+  }
+
   async function updateSculpture() {
     // Check that the following fields are provided
     for (const field of fields) {
@@ -194,9 +210,7 @@ export default function SculptureUI({
       setUpdateDataStatus("Sculpture record updated successfully");
 
       // Update the information in the UI
-      getSculptureData();
-
-      return true;
+      return getSculptureDataAfterUpdate();
     } catch (err) {
       console.error(err);
       setUpdateDataStatus("Failed to updated a Sculpture record");
@@ -205,44 +219,55 @@ export default function SculptureUI({
     }
   }
 
+  async function getSculptureDataAfterUpdate() {
+    try {
+      const data = await tx(sculptureInstance.getSculptureData());
+
+      // Update the state variables with the parsed data
+      setData(data)
+      setGetDataStatus("Sculpture Data recovered successfully!");
+
+      return true;
+    } catch (err) {
+      console.error(err);
+      setUpdateDataStatus("Failed to get data after a Sculpture record update");
+
+      return false;
+    }
+  }
+
   async function getSculptureData() {
-    const sculptureRecordsAddresses = await tx(readContracts.SculptureFactory.getSculptures());
+    try {
+      const sculptureRecordsAddresses = await tx(readContracts.SculptureFactory.getSculptures());
 
-    for (let i = 0; i < sculptureRecordsAddresses.length; i++) {
-      if (sculptureRecordsAddresses[i] === sculptureAddress) {
-        for (const contractName in sculptureRecords) {
-          const contractInstance = sculptureRecords[contractName];
-          if (contractInstance && contractInstance.address === sculptureAddress) {
-            setVerifiedSculptureAddress(sculptureAddress);
-            setSculptureInstance(contractInstance);
-            const data = await tx(contractInstance.getSculptureData());
-
-            // Update the state variables with the parsed data
-            setSculptureName(data[PERSISTENT_DATA][PERSISTENT_SCULPTURE_NAME]);
-            setArtist(data[PERSISTENT_DATA][PERSISTENT_ARTIST]);
-            setCriticalCatalogNumber(data[PERSISTENT_DATA][PERSISTENT_CRITICAL_CATALOG_NUMBER]);
-            setDate(data[MISCELLANEOUS_DATA][MISC_DATE]);
-            setTechnique(data[MISCELLANEOUS_DATA][MISC_TECHNIQUE]);
-            setDimensions(data[MISCELLANEOUS_DATA][MISC_DIMENSIONS]);
-            setLocation(data[MISCELLANEOUS_DATA][MISC_LOCATION]);
-            setCategorizationCategory(data[MISCELLANEOUS_DATA][MISC_CATEGORIZATION_LABEL].toString());
-            setEdition(data[EDITION_DATA][EDITION_EDITION].toString());
-            setEditionExecutor(data[EDITION_DATA][EDITION_EDITION_EXECUTOR]);
-            setEditionNumber(data[EDITION_DATA][EDITION_EDITION_NUMBER].toString());
-            setIsConservation(data[CONSERVATION_DATA][CONSV_CONSERVATION].toString());
-            setConservationCategory(data[CONSERVATION_DATA][CONSV_CONSERVATION_LABEL]);
-
-            setGetDataStatus("Sculpture Data recovered successfully!");
-
-            return true;
+      for (let i = 0; i < sculptureRecordsAddresses.length; i++) {
+        if (sculptureRecordsAddresses[i] === sculptureAddress) {
+          for (const contractName in sculptureRecords) {
+            const contractInstance = sculptureRecords[contractName];
+            if (contractInstance && contractInstance.address === sculptureAddress) {
+              setVerifiedSculptureAddress(sculptureAddress);
+              setSculptureInstance(contractInstance);
+              const data = await tx(contractInstance.getSculptureData());
+  
+              // Update the state variables with the parsed data
+              setData(data)
+              setGetDataStatus("Sculpture Data recovered successfully!");
+  
+              return true;
+            }
           }
         }
       }
+  
+      setGetDataStatus("The provided Sculpture address does not exist!");
+  
+      return false;
+    } catch (err) {
+      console.error(err);
+      setGetDataStatus("Failed to get the Sculpture Record");
+
+      return false;
     }
-
-    setGetDataStatus("The provided Sculpture address does not exist!");
-
-    return false;
   }
 
   return (
