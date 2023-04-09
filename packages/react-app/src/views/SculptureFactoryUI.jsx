@@ -76,6 +76,17 @@ export default function SculptureFactoryUI({
   // Sculpture owner
   const [sculptureOwner, setSculptureOwner] = useState("");
 
+  function isValidDate(value) {
+    const regexFormat1 = /^\d{4}$/; // Regex pattern to match the data format like "1990"
+    const regexFormat2 = /^(c\.)?\d{4}$/; // Regex pattern to match the date format like "c.1990"
+
+    if (regexFormat1.test(value) || regexFormat2.test(value)) {
+      return true;
+    }
+
+    return false;
+  }
+
   async function createSculpture() {
     if (!sculptureName) {
       setCreationStatus("Please introduce the Sculpture Name");
@@ -99,6 +110,12 @@ export default function SculptureFactoryUI({
       setCreationStatus("Please introduce the Date");
 
       return false;
+    } else {
+      if (!isValidDate(date)) {
+        setCreationStatus("Invalid date format. Please provide a valid year in the format '1990' or 'c.1990'");
+
+        return false;
+      }
     }
 
     if (!technique) {

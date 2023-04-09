@@ -291,14 +291,14 @@ export default function SculptureUI({
         <p style={{ marginTop: 8 }}><strong>Technique:</strong> {technique}</p>
         <p style={{ marginTop: 8 }}><strong>Dimensions:</strong> {dimensions}</p>
         <p style={{ marginTop: 8 }}><strong>Location:</strong> {location}</p>
-        <p style={{ marginTop: 8 }}><strong>Categorization Category:</strong> {categorizationLabelOption ? categorizationLabelOption.label : '-'}</p>
+        <p style={{ marginTop: 8 }}><strong>Categorization Label:</strong> {categorizationLabelOption ? categorizationLabelOption.label : '-'}</p>
         <Divider />
         <p style={{ marginTop: 8 }}><strong>Edition:</strong> {edition}</p>
         <p style={{ marginTop: 8 }}><strong>Edition Executor:</strong> {editionExecutor}</p>
         <p style={{ marginTop: 8 }}><strong>Edition Number:</strong> {editionNumber}</p>
         <Divider />
-        <p style={{ marginTop: 8 }}><strong>Conservation data:</strong> {conservationOption ? conservationOption.label : '-'}</p>
-        <p style={{ marginTop: 8 }}><strong>Conservation Category:</strong> {conservationCategoryOption ? conservationCategoryOption.label : '-'}</p>
+        <p style={{ marginTop: 8 }}><strong>Conservation:</strong> {conservationOption ? conservationOption.label : '-'}</p>
+        <p style={{ marginTop: 8 }}><strong>Conservation Label:</strong> {conservationCategoryOption ? conservationCategoryOption.label : '-'}</p>
         <Divider />
         <Divider />
         User Address:
