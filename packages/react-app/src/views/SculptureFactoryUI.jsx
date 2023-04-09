@@ -59,12 +59,12 @@ export default function SculptureFactoryUI({
   const [technique, setTechnique] = useState("");
   const [dimensions, setDimensions] = useState("");
   const [location, setLocation] = useState("");
-  const [categorizationCategory, setcategorizationCategory] = useState(null);
+  const [categorizationCategory, setCategorizationCategory] = useState(null);
 
   // Edition data
-  const [edition, setEdition] = useState(0);
+  const [edition, setEdition] = useState(null);
   const [editionExecutor, setEditionExecutor] = useState("");
-  const [editionNumber, setEditionNumber] = useState(0);
+  const [editionNumber, setEditionNumber] = useState(null);
 
   // Conservation data
   const [isConservation, setIsConservation] = useState(null);
@@ -109,7 +109,7 @@ export default function SculptureFactoryUI({
     // Check that the following fields are provided
     for (const field of fields) {
       if ((field.name != 'Conservation options') && (!field.value)) {
-        if ((field.name == 'Categorization Labels') || (field.name == 'Conservation options')) {
+        if (field.name == 'Categorization Labels') {
           setCreationStatus(`Please choose any of the ${field.name}`);
         } else {
           setCreationStatus(`Please introduce the ${field.name}`);
@@ -117,15 +117,17 @@ export default function SculptureFactoryUI({
 
         return false;
       } else if ((field.name == 'Conservation options') && (field.value == null)) {
-        setCreationStatus(`Please introduce the ${field.name}`);
+        setCreationStatus(`Please choose any of the ${field.name}`);
       }
 
       if (!checkMaxLength(field.value.toString())) {
-        setCreationStatus(`The ${field.name} field exceeds the maximum string length`);
+        setCreationStatus(`The ${field.name} field exceeds the maximum string length of 64 characters`);
 
         return false;
       }
     }
+
+    // TODO: Once the doubt are solved. Implement the restriction to provide Edition data and verify the max string length for the Edition executor
 
     if (!isValidDate(date)) {
       setCreationStatus("Invalid date format. Please provide a valid year in the format '1990' or 'c.1990'");
@@ -278,7 +280,7 @@ export default function SculptureFactoryUI({
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginTop: 10 }}>Categorization Label:</label>
-          <Select style={{ marginTop: 5 }} value={categorizationCategory} onChange={setcategorizationCategory}>
+          <Select style={{ marginTop: 5 }} value={categorizationCategory} onChange={setCategorizationCategory}>
             {categorizationLabel.map((option) => (
               <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
@@ -345,10 +347,10 @@ export default function SculptureFactoryUI({
                 setTechnique("");
                 setDimensions("");
                 setLocation("");
-                setcategorizationCategory(null);
-                setEdition(0);
+                setCategorizationCategory(null);
+                setEdition(null);
                 setEditionExecutor("");
-                setEditionNumber(0);
+                setEditionNumber(null);
                 setIsConservation(null);
                 setConservationCategory(null);
                 setSculptureOwner("");
