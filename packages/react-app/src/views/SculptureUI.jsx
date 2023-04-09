@@ -65,7 +65,6 @@ export default function SculptureUI({
 
   // Conservation options
   const conversationOptions = [
-    { value: null, label: 'Select the conservation option', disabled: true },
     { value: false, label: 'NO' },
     { value: true, label: 'YES' },
   ]
@@ -99,6 +98,11 @@ export default function SculptureUI({
   // Conservation data
   const [isConservation, setIsConservation] = useState(null);
   const [conservationCategory, setConservationCategory] = useState(null);
+
+  // Get the selected option based on the isConservation state
+  const selectedOption = conversationOptions.find(
+    (option) => option.value === isConservation
+  );
 
   // Sculpture owner
   const [sculptureOwner, setSculptureOwner] = useState("");
@@ -194,7 +198,7 @@ export default function SculptureUI({
             setEdition(data[EDITION_DATA][EDITION_EDITION]);
             setEditionExecutor(data[EDITION_DATA][EDITION_EDITION_EXECUTOR]);
             setEditionNumber(data[EDITION_DATA][EDITION_EDITION_NUMBER]);
-            setIsConservation(data[CONSERVATION_DATA][CONSV_CONSERVATION]);
+            setIsConservation(Boolean(data[CONSERVATION_DATA][CONSV_CONSERVATION]));
             setConservationCategory(data[CONSERVATION_DATA][CONSV_CONSERVATION_LABEL]);
 
             setGetDataStatus("Sculpture Data recovered successfully!");
@@ -285,7 +289,7 @@ export default function SculptureUI({
         <p style={{ marginTop: 8 }}><strong>Edition Executor:</strong> {editionExecutor}</p>
         <p style={{ marginTop: 8 }}><strong>Edition Number:</strong> {editionNumber}</p>
         <Divider />
-        <p style={{ marginTop: 8 }}><strong>Conservation data:</strong> {isConservation}</p>
+        <p style={{ marginTop: 8 }}><strong>Conservation data:</strong> {selectedOption ? selectedOption.label : '-'}</p>
         <p style={{ marginTop: 8 }}><strong>Conservation Category:</strong> {conservationCategory}</p>
         <Divider />
         <Divider />
