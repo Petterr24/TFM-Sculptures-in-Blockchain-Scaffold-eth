@@ -24,7 +24,8 @@ export default function SculptureUI({
   const PERSISTENT_DATA = 0;
   const MISCELLANEOUS_DATA = 1;
   const EDITION_DATA = 2;
-  const CONSERVATION_DATA = 2;
+  const CONSERVATION_DATA = 3;
+  const OWNER = 4;
 
   //Offsets to identify each field in each dataset
   const PERSISTENT_SCULPTURE_NAME = 0;
@@ -43,25 +44,26 @@ export default function SculptureUI({
 
   // Categorization label options
   const categorizationLabel = [
-    { value: '0', label: 'NONE' },
-    { value: '1', label: 'AUTHORIZED UNIQUE WORK' },
-    { value: '2', label: 'AUTHORIZED UNIQUE WORK VARIATION' },
-    { value: '3', label: 'AUTHORIZED WORK' },
-    { value: '4', label: 'AUTHORIZED MULTIPLE' },
-    { value: '5', label: 'AUTHORIZED CAST' },
-    { value: '6', label: 'POSTHUMOUS WORK AUTHORIZED BY ARTIST' },
-    { value: '7', label: 'NPOSTHUMOUS WORK AUTHORIZED BY RIGHTSHOLDERSONE' },
-    { value: '8', label: 'AUTHORIZED REPRODUCTION' },
-    { value: '9', label: 'AUTHORIZED EXHIBITION COPY' },
-    { value: '10', label: 'AUTHORIZED TECHNICAL COPY' },
-    { value: '11', label: 'AUTHORIZED DIGITAL COPY' }
+    { value: null, label: 'Select the categorization label', disabled: true },
+    { value: 1, label: 'AUTHORIZED UNIQUE WORK' },
+    { value: 2, label: 'AUTHORIZED UNIQUE WORK VARIATION' },
+    { value: 3, label: 'AUTHORIZED WORK' },
+    { value: 4, label: 'AUTHORIZED MULTIPLE' },
+    { value: 5, label: 'AUTHORIZED CAST' },
+    { value: 6, label: 'POSTHUMOUS WORK AUTHORIZED BY ARTIST' },
+    { value: 7, label: 'NPOSTHUMOUS WORK AUTHORIZED BY RIGHTSHOLDERSONE' },
+    { value: 8, label: 'AUTHORIZED REPRODUCTION' },
+    { value: 9, label: 'AUTHORIZED EXHIBITION COPY' },
+    { value: 10, label: 'AUTHORIZED TECHNICAL COPY' },
+    { value: 11, label: 'AUTHORIZED DIGITAL COPY' }
   ]
 
   // Categorization label options
   const conservationLabel = [
-    { value: '0', label: 'AUTHORIZED RECONSTRUCTION' },
-    { value: '1', label: 'AUTHORIZED RESTORATION' },
-    { value: '2', label: 'AUTHORIZED EPHEMERAL WORK' }
+    { value: '0', label: 'NONE' },
+    { value: '1', label: 'AUTHORIZED RECONSTRUCTION' },
+    { value: '2', label: 'AUTHORIZED RESTORATION' },
+    { value: '3', label: 'AUTHORIZED EPHEMERAL WORK' }
   ]
 
   // Conservation options
@@ -174,18 +176,73 @@ export default function SculptureUI({
     setEditionNumber(data[EDITION_DATA][EDITION_EDITION_NUMBER].toString());
     setIsConservation(data[CONSERVATION_DATA][CONSV_CONSERVATION].toString());
     setConservationCategory(data[CONSERVATION_DATA][CONSV_CONSERVATION_LABEL]);
+    setSculptureOwner(data[OWNER]);
   }
 
   async function updateSculpture() {
+    if (!verifiedSculptureAddress) {
+      setUpdateDataStatus(`Please first enter the address of the Sculpture record you want to update the data`);
+      setDateUpdate("");
+      setTechniqueUpdate("");
+      setDimensionsUpdate("");
+      setLocationUpdate("");
+      setCategorizationCategoryUpdate(null);
+      setEditionUpdate(null);
+      setEditionExecutorUpdate("");
+      setEditionNumberUpdate(null);
+      setSculptureOwnerUpdate("");
+      setGetDataStatus("");
+
+      return false;
+    }
+
     // Check that the following fields are provided
     for (const field of fields) {
-      if ((field.name != 'Conservation options') && (!field.value)) {
-        field.newValue = field.oldValue;
-      } else if ((field.name == 'Conservation options') && (field.value == null)) {
-        field.newValue = field.oldValue;
+      if (!field.newValue) {
+        switch (field.name) {
+          case 'Date':
+            setDateUpdate(field.oldValue);
+            break;
+
+          case 'Technique':
+            setTechniqueUpdate(field.oldValue);
+            break;
+
+          case 'Sculpture Dimensions':
+            setDimensionsUpdate(field.oldValue);
+            break;
+
+          case 'Location':
+            setLocationUpdate(field.oldValue);
+            break;
+
+          case 'Categorization Labels':
+            setCategorizationCategoryUpdate(parseInt(field.oldValue));
+            break;
+
+          case 'Edition':
+            setEditionUpdate(parseInt(field.oldValue));
+            break;
+
+          case 'Edition Executor':
+            setEditionExecutor(field.oldValue);
+            break;
+
+          case 'Edition Number':
+            setEditionNumberUpdate(parseInt(field.oldValue));
+            break;
+
+          case 'Sculpture owner':
+            setSculptureOwnerUpdate(field.oldValue);
+            break;
+
+          default:
+            // Do nothing
+        }
       }
 
-      if (!checkMaxLength(field.newValue.toString())) {
+
+      if (!field.newValue && !checkMaxLength(field.newValue.toString())) {
         setUpdateDataStatus(`The ${field.name} field exceeds the maximum string length of 64 characters`);
 
         return false;
@@ -225,7 +282,7 @@ export default function SculptureUI({
 
       // Update the state variables with the parsed data
       setData(data)
-      setGetDataStatus("Sculpture Data recovered successfully!");
+      setGetDataStatus("Sculpture data recovered successfully!");
 
       return true;
     } catch (err) {
@@ -251,7 +308,7 @@ export default function SculptureUI({
   
               // Update the state variables with the parsed data
               setData(data)
-              setGetDataStatus("Sculpture Data recovered successfully!");
+              setGetDataStatus("Sculpture data recovered successfully!");
   
               return true;
             }
@@ -287,7 +344,7 @@ export default function SculptureUI({
         />
         <Divider/>
         {/*
-          ⚙️ Section: To look for the Sculpture record
+          ⚙️ Section: To look for the Sculpture record. TODO: decide if we want to display the owner
         */}
         <div>
           <label>Sculpture Address:</label>
@@ -320,6 +377,15 @@ export default function SculptureUI({
                 setIsConservation(null);
                 setConservationCategory(null);
                 setSculptureOwner("");
+                setDateUpdate("");
+                setTechniqueUpdate("");
+                setDimensionsUpdate("");
+                setLocationUpdate("");
+                setCategorizationCategoryUpdate(null);
+                setEditionUpdate(null);
+                setEditionExecutorUpdate("");
+                setEditionNumberUpdate(null);
+                setSculptureOwnerUpdate("");
               }
             }).catch(error => {
               console.log(error);

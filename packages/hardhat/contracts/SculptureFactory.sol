@@ -103,6 +103,7 @@ contract Sculpture {
 
     // The owner must be encrypted in the REST API before sending so that it is protected against miners
     string private sculptureOwner;
+
     // Sculpture data
     SculptureLibrary.PersistentData public persistentData;
     SculptureLibrary.MiscellaneousData public miscData;
@@ -157,9 +158,10 @@ contract Sculpture {
         SculptureLibrary.PersistentData memory,
         SculptureLibrary.MiscellaneousData memory,
         SculptureLibrary.EditionData memory,
-        SculptureLibrary.ConservationData memory
+        SculptureLibrary.ConservationData memory,
+        string memory
     ) {
-        return (persistentData, miscData, editionData, conservationData);
+        return (persistentData, miscData, editionData, conservationData, sculptureOwner);
     }
 
     event SculptureUpdated(uint256 timestamp, address authorizedModifier, UpdatedSculptureData updatedData);
