@@ -46,8 +46,8 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
 
   console.log(`Deployer: ${deployer}`);
 
-  // Deploy the UserAuthorization contract
-  const userAuthorizationInstance = await deploy("UserAuthorization", {
+  // Deploy the UserAuthorisation contract
+  const userAuthorisationInstance = await deploy("UserAuthorisation", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     // args: [ "Hello", ethers.utils.parseEther("1.5") ],
@@ -59,7 +59,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   await deploy("SculptureFactory", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    args: [ userAuthorizationInstance.address ],
+    args: [ userAuthorisationInstance.address ],
     log: true,
     //waitConfirmations: 5,
   });

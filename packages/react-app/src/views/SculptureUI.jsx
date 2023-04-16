@@ -45,25 +45,25 @@ export default function SculptureUI({
   // Categorization label options
   const categorizationLabel = [
     { value: null, label: 'Select the categorization label', disabled: true },
-    { value: 1, label: 'AUTHORIZED UNIQUE WORK' },
-    { value: 2, label: 'AUTHORIZED UNIQUE WORK VARIATION' },
-    { value: 3, label: 'AUTHORIZED WORK' },
-    { value: 4, label: 'AUTHORIZED MULTIPLE' },
-    { value: 5, label: 'AUTHORIZED CAST' },
-    { value: 6, label: 'POSTHUMOUS WORK AUTHORIZED BY ARTIST' },
-    { value: 7, label: 'NPOSTHUMOUS WORK AUTHORIZED BY RIGHTSHOLDERSONE' },
-    { value: 8, label: 'AUTHORIZED REPRODUCTION' },
-    { value: 9, label: 'AUTHORIZED EXHIBITION COPY' },
-    { value: 10, label: 'AUTHORIZED TECHNICAL COPY' },
-    { value: 11, label: 'AUTHORIZED DIGITAL COPY' }
+    { value: 1, label: 'AUTHORISED UNIQUE WORK' },
+    { value: 2, label: 'AUTHORISED UNIQUE WORK VARIATION' },
+    { value: 3, label: 'AUTHORISED WORK' },
+    { value: 4, label: 'AUTHORISED MULTIPLE' },
+    { value: 5, label: 'AUTHORISED CAST' },
+    { value: 6, label: 'POSTHUMOUS WORK AUTHORISED BY ARTIST' },
+    { value: 7, label: 'NPOSTHUMOUS WORK AUTHORISED BY RIGHTSHOLDERSONE' },
+    { value: 8, label: 'AUTHORISED REPRODUCTION' },
+    { value: 9, label: 'AUTHORISED EXHIBITION COPY' },
+    { value: 10, label: 'AUTHORISED TECHNICAL COPY' },
+    { value: 11, label: 'AUTHORISED DIGITAL COPY' }
   ]
 
   // Categorization label options
   const conservationLabel = [
     { value: '0', label: 'NONE' },
-    { value: '1', label: 'AUTHORIZED RECONSTRUCTION' },
-    { value: '2', label: 'AUTHORIZED RESTORATION' },
-    { value: '3', label: 'AUTHORIZED EPHEMERAL WORK' }
+    { value: '1', label: 'AUTHORISED RECONSTRUCTION' },
+    { value: '2', label: 'AUTHORISED RESTORATION' },
+    { value: '3', label: 'AUTHORISED EPHEMERAL WORK' }
   ]
 
   // Conservation options
@@ -92,11 +92,11 @@ export default function SculptureUI({
   const [technique, setTechnique] = useState("");
   const [dimensions, setDimensions] = useState("");
   const [location, setLocation] = useState("");
-  const [categorizationCategory, setCategorizationCategory] = useState(null);
+  const [categorizationTag, setCategorizationTag] = useState(null);
 
-  // Get the selected option based on the categorizationCategory state
+  // Get the selected option based on the categorizationTag state
   const categorizationLabelOption = categorizationLabel.find(
-    (option) => option.value === categorizationCategory
+    (option) => option.value === categorizationTag
   );
 
   // Edition data
@@ -130,7 +130,7 @@ export default function SculptureUI({
   const [techniqueUpdate, setTechniqueUpdate] = useState("");
   const [dimensionsUpdate, setDimensionsUpdate] = useState("");
   const [locationUpdate, setLocationUpdate] = useState("");
-  const [categorizationCategoryUpdate, setCategorizationCategoryUpdate] = useState(null);
+  const [categorizationTagUpdate, setCategorizationTagUpdate] = useState(null);
 
   // Edition data
   const [editionUpdate, setEditionUpdate] = useState(null);
@@ -150,7 +150,7 @@ export default function SculptureUI({
     { name: 'Technique', oldValue: technique, newValue: techniqueUpdate },
     { name: 'Sculpture Dimensions', oldValue: dimensions, newValue: dimensionsUpdate },
     { name: 'Location', oldValue: location, newValue: locationUpdate },
-    { name: 'Categorization Labels', oldValue: categorizationCategory, newValue: categorizationCategoryUpdate },
+    { name: 'Categorization Labels', oldValue: categorizationTag, newValue: categorizationTagUpdate },
     { name: 'Edition', oldValue: edition, newValue: editionUpdate },
     { name: 'Edition Executor', oldValue: editionExecutor, newValue: editionExecutorUpdate },
     { name: 'Edition Number', oldValue: editionNumber, newValue: editionNumberUpdate },
@@ -183,7 +183,7 @@ export default function SculptureUI({
     setTechnique(data[MISCELLANEOUS_DATA][MISC_TECHNIQUE]);
     setDimensions(data[MISCELLANEOUS_DATA][MISC_DIMENSIONS]);
     setLocation(data[MISCELLANEOUS_DATA][MISC_LOCATION]);
-    setCategorizationCategory(data[MISCELLANEOUS_DATA][MISC_CATEGORIZATION_LABEL].toString());
+    setCategorizationTag(data[MISCELLANEOUS_DATA][MISC_CATEGORIZATION_LABEL].toString());
     setEdition(data[EDITION_DATA][EDITION_EDITION].toString());
     setEditionExecutor(data[EDITION_DATA][EDITION_EDITION_EXECUTOR]);
     setEditionNumber(data[EDITION_DATA][EDITION_EDITION_NUMBER].toString());
@@ -199,7 +199,7 @@ export default function SculptureUI({
       setTechniqueUpdate("");
       setDimensionsUpdate("");
       setLocationUpdate("");
-      setCategorizationCategoryUpdate(null);
+      setCategorizationTagUpdate(null);
       setEditionUpdate(null);
       setEditionExecutorUpdate("");
       setEditionNumberUpdate(null);
@@ -230,7 +230,7 @@ export default function SculptureUI({
             break;
 
           case 'Categorization Labels':
-            setCategorizationCategoryUpdate(parseInt(field.oldValue));
+            setCategorizationTagUpdate(parseInt(field.oldValue));
             break;
 
           case 'Edition':
@@ -276,7 +276,7 @@ export default function SculptureUI({
         techniqueUpdate,
         dimensionsUpdate,
         locationUpdate,
-        categorizationCategoryUpdate,
+        categorizationTagUpdate,
         editionUpdate,
         editionExecutorUpdate,
         editionNumberUpdate,
@@ -389,7 +389,7 @@ export default function SculptureUI({
                 setTechnique("");
                 setDimensions("");
                 setLocation("");
-                setCategorizationCategory(null);
+                setCategorizationTag(null);
                 setEdition("");
                 setEditionExecutor("");
                 setEditionNumber("");
@@ -400,7 +400,7 @@ export default function SculptureUI({
                 setTechniqueUpdate("");
                 setDimensionsUpdate("");
                 setLocationUpdate("");
-                setCategorizationCategoryUpdate(null);
+                setCategorizationTagUpdate(null);
                 setEditionUpdate(null);
                 setEditionExecutorUpdate("");
                 setEditionNumberUpdate(null);
@@ -490,7 +490,7 @@ export default function SculptureUI({
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginTop: 10 }}>Categorization Label:</label>
-          <Select style={{ marginTop: 5 }} value={categorizationCategoryUpdate} onChange={setCategorizationCategoryUpdate}>
+          <Select style={{ marginTop: 5 }} value={categorizationTagUpdate} onChange={setCategorizationTagUpdate}>
             {categorizationLabel.map((option) => (
               <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
@@ -534,7 +534,7 @@ export default function SculptureUI({
                 setTechniqueUpdate("");
                 setDimensionsUpdate("");
                 setLocationUpdate("");
-                setCategorizationCategoryUpdate(null);
+                setCategorizationTagUpdate(null);
                 setEditionUpdate(null);
                 setEditionExecutorUpdate("");
                 setEditionNumberUpdate(null);

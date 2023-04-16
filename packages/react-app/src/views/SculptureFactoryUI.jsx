@@ -19,26 +19,26 @@ export default function SculptureFactoryUI({
   // Categorization label options
   const categorizationLabel = [
     { value: null, label: 'Select the categorization label', disabled: true },
-    { value: 1, label: 'AUTHORIZED UNIQUE WORK' },
-    { value: 2, label: 'AUTHORIZED UNIQUE WORK VARIATION' },
-    { value: 3, label: 'AUTHORIZED WORK' },
-    { value: 4, label: 'AUTHORIZED MULTIPLE' },
-    { value: 5, label: 'AUTHORIZED CAST' },
-    { value: 6, label: 'POSTHUMOUS WORK AUTHORIZED BY ARTIST' },
-    { value: 7, label: 'NPOSTHUMOUS WORK AUTHORIZED BY RIGHTSHOLDERSONE' },
-    { value: 8, label: 'AUTHORIZED REPRODUCTION' },
-    { value: 9, label: 'AUTHORIZED EXHIBITION COPY' },
-    { value: 10, label: 'AUTHORIZED TECHNICAL COPY' },
-    { value: 11, label: 'AUTHORIZED DIGITAL COPY' }
+    { value: 1, label: 'AUTHORISED UNIQUE WORK' },
+    { value: 2, label: 'AUTHORISED UNIQUE WORK VARIATION' },
+    { value: 3, label: 'AUTHORISED WORK' },
+    { value: 4, label: 'AUTHORISED MULTIPLE' },
+    { value: 5, label: 'AUTHORISED CAST' },
+    { value: 6, label: 'POSTHUMOUS WORK AUTHORISED BY ARTIST' },
+    { value: 7, label: 'NPOSTHUMOUS WORK AUTHORISED BY RIGHTSHOLDERSONE' },
+    { value: 8, label: 'AUTHORISED REPRODUCTION' },
+    { value: 9, label: 'AUTHORISED EXHIBITION COPY' },
+    { value: 10, label: 'AUTHORISED TECHNICAL COPY' },
+    { value: 11, label: 'AUTHORISED DIGITAL COPY' }
   ]
 
   // Categorization label options
   const conservationLabel = [
     { value: null, label: 'Select the conservation label', disabled: true },
     { value: 0, label: 'NONE' },
-    { value: 1, label: 'AUTHORIZED RECONSTRUCTION' },
-    { value: 2, label: 'AUTHORIZED RESTORATION' },
-    { value: 3, label: 'AUTHORIZED EPHEMERAL WORK' }
+    { value: 1, label: 'AUTHORISED RECONSTRUCTION' },
+    { value: 2, label: 'AUTHORISED RESTORATION' },
+    { value: 3, label: 'AUTHORISED EPHEMERAL WORK' }
   ]
 
   // Conservation options
@@ -59,7 +59,7 @@ export default function SculptureFactoryUI({
   const [technique, setTechnique] = useState("");
   const [dimensions, setDimensions] = useState("");
   const [location, setLocation] = useState("");
-  const [categorizationCategory, setCategorizationCategory] = useState(null);
+  const [categorizationTag, setCategorizationTag] = useState(null);
 
   // Edition data
   const [edition, setEdition] = useState(null);
@@ -85,7 +85,10 @@ export default function SculptureFactoryUI({
     { name: 'Technique', value: technique },
     { name: 'Sculpture Dimensions', value: dimensions },
     { name: 'Location', value: location },
-    { name: 'Categorization Labels', value: categorizationCategory },
+    { name: 'Categorization Labels', value: categorizationTag },
+    { name: 'Edition', value: edition },
+    { name: 'Edition executor', value: editionExecutor },
+    { name: 'Edition number', value: editionNumber },
     { name: 'Conservation options', value: isConservation },
     { name: 'Sculpture owner', value: sculptureOwner }
   ];
@@ -107,12 +110,36 @@ export default function SculptureFactoryUI({
     return str.length <= 64;
   }
 
+  function isCorrectCategLabelForEdition() {
+    // One of the following categorization labels is required to store information in the edition fields:
+    // 'AUTHORISED REPRODUCTION'
+    // 'AUTHORISED EXHIBITION COPY'
+    // 'AUTHORISED TECHNICAL COPY'
+    // 'AUTHORISED DIGITAL COPY'
+    return ((categorizationTag > 7) && (categorizationTag < 12))
+  }
+
   async function createSculpture() {
     // Check that the following fields are provided
     for (const field of fields) {
       if ((field.name != 'Conservation options') && (!field.value)) {
         if (field.name == 'Categorization Labels') {
           setCreationStatus(`Please choose any of the ${field.name}`);
+        } else if ((field.name == 'Edition') || (field.name == 'Edition executor') || (field.name == 'Edition number')) {
+          if (field.value) {
+            if (!isCorrectCategLabelForEdition) {
+              setCreationStatus(`Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.`);
+            }
+          } else {
+            // Set defaults values to not fail in the SC
+            if (field.name == 'Edition') {
+              setEdition(0);
+            } else if ((field.name == 'Edition number')) {
+              setEditionNumber(0);
+            } else {
+              setEditionExecutor(" ");
+            }
+          }
         } else {
           setCreationStatus(`Please introduce the ${field.name}`);
         }
@@ -160,7 +187,7 @@ export default function SculptureFactoryUI({
       technique,
       dimensions,
       location,
-      categorizationCategory
+      categorizationTag
     ]
 
     const editionData = [
@@ -281,7 +308,7 @@ export default function SculptureFactoryUI({
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginTop: 10 }}>Categorization Label:</label>
-          <Select style={{ marginTop: 5 }} value={categorizationCategory} onChange={setCategorizationCategory}>
+          <Select style={{ marginTop: 5 }} value={categorizationTag} onChange={setCategorizationTag}>
             {categorizationLabel.map((option) => (
               <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
@@ -348,7 +375,7 @@ export default function SculptureFactoryUI({
                 setTechnique("");
                 setDimensions("");
                 setLocation("");
-                setCategorizationCategory(null);
+                setCategorizationTag(null);
                 setEdition(null);
                 setEditionExecutor("");
                 setEditionNumber(null);

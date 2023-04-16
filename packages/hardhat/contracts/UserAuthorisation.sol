@@ -4,9 +4,9 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 
 // Smart Contract to store the privileges of those users that can create new Smart Contracts
-contract UserAuthorization {
+contract UserAuthorisation {
     // Singleton to allow only creating one Instance of this Smart Contract
-    address private s_UserAuthorization;
+    address private s_UserAuthorisation;
 
     // Count the number of admin users
     uint256 numOfAdmins;
@@ -29,10 +29,10 @@ contract UserAuthorization {
 
     constructor() {
         // Check if an instance of this Smart Contract already exists
-        require(s_UserAuthorization == address(0), "The Instance of this Smart Contract already exists");
+        require(s_UserAuthorisation == address(0), "The Instance of this Smart Contract already exists");
 
         // Set the Instance address to the address of the contract
-        s_UserAuthorization = address(this);
+        s_UserAuthorisation = address(this);
 
         // Increse the number of admins
         numOfAdmins++;
@@ -41,8 +41,8 @@ contract UserAuthorization {
         users[msg.sender] = User(msg.sender, uint8(PrivilegeLevel.ADMIN));
     }
 
-    // Event for logging user authorization
-    event UserAuthorized(
+    // Event for logging user authorisation
+    event UserAuthorised(
         address indexed userAddress,
         string privilegeLevel
     );
@@ -59,13 +59,13 @@ contract UserAuthorization {
         string info
     );
 
-    // Authorizes a new user
-    function authorizeUser(
+    // Authorises a new user
+    function authoriseUser(
         address _userAddress,
         uint8 _privilegeLevel
     ) public isAdmin isValidPrivilege(_privilegeLevel) {
-        // Checks if the user is already authorized
-        require(users[_userAddress].userAddress == address(0), "User is already created and authorized");
+        // Checks if the user is already authorised
+        require(users[_userAddress].userAddress == address(0), "User is already created and authorised");
 
         // Stores the user data
         users[_userAddress] = User(_userAddress, _privilegeLevel);
@@ -74,8 +74,8 @@ contract UserAuthorization {
             numOfAdmins++;
         }
 
-        // Emits the event for logging the user authorization
-        emit UserAuthorized(_userAddress, getPrivilegeAsString(uint8(_privilegeLevel)));
+        // Emits the event for logging the user authorisation
+        emit UserAuthorised(_userAddress, getPrivilegeAsString(uint8(_privilegeLevel)));
     }
 
     // Changes the user privileges
@@ -106,12 +106,12 @@ contract UserAuthorization {
             numOfAdmins--;
         }
 
-        // Emits the event for logging the user authorization
+        // Emits the event for logging the user authorisation
         emit NewUserPrivilege(_userAddress, getPrivilegeAsString(_newPrivilegeLevel));
     }
 
-    // Removes an Authorized User
-    function removeAuthorizedUser(
+    // Removes an Authorised User
+    function removeAuthorisedUser(
         address _userAddress
     ) public isAdmin isAnExistingUser(_userAddress) {
         
@@ -124,18 +124,18 @@ contract UserAuthorization {
         users[_userAddress].privilegeLevel = uint8(PrivilegeLevel.NONE);
 
         // Emits the event for logging the user removal
-        emit UserRemoved(_userAddress, "Authorized user removed!");
+        emit UserRemoved(_userAddress, "Authorised user removed!");
     }
 
     // Checks if a user has the minimum privileges to create a Record
-    function isAuthorizedToCreate(address _userAddress) public view returns (bool) {
-        // Checks if the user is authorized and has the required privilege level
+    function isAuthorisedToCreate(address _userAddress) public view returns (bool) {
+        // Checks if the user is authorised and has the required privilege level
         return users[_userAddress].privilegeLevel == uint8(PrivilegeLevel.ADMIN);
     }
 
     // Checks if a user has the minimum privileges to update a Record
-    function isAuthorizedToUpdate(address _userAddress) public view returns (bool) {
-        // Checks if the user is authorized and has the required privilege level
+    function isAuthorisedToUpdate(address _userAddress) public view returns (bool) {
+        // Checks if the user is authorised and has the required privilege level
         return users[_userAddress].privilegeLevel >= uint8(PrivilegeLevel.USER);
     }
 
@@ -147,7 +147,7 @@ contract UserAuthorization {
         return (users[_userAddress].userAddress != address(0));
     }
 
-    function isUserAuthorizationSC(address addr) public view returns (bool) {
+    function isUserAuthorisationSC(address addr) public view returns (bool) {
         return addr == address(this);
     }
 
@@ -156,7 +156,7 @@ contract UserAuthorization {
     }
 
     modifier isAdmin() {
-        require(users[msg.sender].privilegeLevel == uint8(PrivilegeLevel.ADMIN), "You are not authorized to perform this action!");
+        require(users[msg.sender].privilegeLevel == uint8(PrivilegeLevel.ADMIN), "You are not authorised to perform this action!");
         _;
     }
 

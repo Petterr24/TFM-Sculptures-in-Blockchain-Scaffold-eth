@@ -30,7 +30,7 @@ import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { getRPCPollTime, Transactor, Web3ModalSetup } from "./helpers";
-import { Home, UserAuthorizationUI, SculptureFactoryUI, SculptureUI, Hints, Subgraph } from "./views";
+import { Home, UserAuthorisationUI, SculptureFactoryUI, SculptureUI, Hints, Subgraph } from "./views";
 import { useStaticJsonRPC, useGasPrice } from "./hooks";
 
 const { ethers } = require("ethers");
@@ -332,8 +332,8 @@ function App(props) {
         <Menu.Item key="/hints">
           <Link to="/hints">Hints</Link>
         </Menu.Item>
-        <Menu.Item key="/userauthorizationui">
-          <Link to="/userauthorizationui">UserAuthorizationUI</Link>
+        <Menu.Item key="/userauthorisationui">
+          <Link to="/userauthorisationui">UserAuthorisationUI</Link>
         </Menu.Item>
         <Menu.Item key="/sculpturefactory">
           <Link to="/sculpturefactory">SculptureFactoryUI</Link>
@@ -362,7 +362,7 @@ function App(props) {
             */}
 
           <Contract
-            name="UserAuthorization"
+            name="UserAuthorisation"
             price={price}
             signer={userSigner}
             provider={localProvider}
@@ -388,8 +388,8 @@ function App(props) {
             price={price}
           />
         </Route>
-        <Route path="/userauthorizationui">
-          <UserAuthorizationUI
+        <Route path="/userauthorisationui">
+          <UserAuthorisationUI
             address={address}
             userSigner={userSigner}
             mainnetProvider={mainnetProvider}

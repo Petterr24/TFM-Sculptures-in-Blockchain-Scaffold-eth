@@ -7,24 +7,24 @@ library SculptureLibrary {
 
     enum CategorizationLabel {
         NONE,
-        AUTHORIZED_UNIQUE_WORK, 
-        AUTHORIZED_UNIQUE_WORK_VARIATION, 
-        AUTHORIZED_WORK, 
-        AUTHORIZED_MULTIPLE, 
-        AUTHORIZED_CAST, 
-        POSTHUMOUS_WORK_AUTHORIZED_BY_ARTIST, 
-        POSTHUMOUS_WORK_AUTHORIZED_BY_RIGHTSHOLDERS, 
-        AUTHORIZED_REPRODUCTION, 
-        AUTHORIZED_EXHIBITION_COPY, 
-        AUTHORIZED_TECHNICAL_COPY, 
-        AUTHORIZED_DIGITAL_COPY 
+        AUTHORISED_UNIQUE_WORK, 
+        AUTHORISED_UNIQUE_WORK_VARIATION, 
+        AUTHORISED_WORK, 
+        AUTHORISED_MULTIPLE, 
+        AUTHORISED_CAST, 
+        POSTHUMOUS_WORK_AUTHORISED_BY_ARTIST, 
+        POSTHUMOUS_WORK_AUTHORISED_BY_RIGHTSHOLDERS, 
+        AUTHORISED_REPRODUCTION, 
+        AUTHORISED_EXHIBITION_COPY, 
+        AUTHORISED_TECHNICAL_COPY, 
+        AUTHORISED_DIGITAL_COPY 
     }
     
     enum ConservationLabel {
         NONE,
-        AUTHORIZED_RECONSTRUCTION,
-        AUTHORIZED_RESTORATION,
-        AUTHORIZED_EPHEMERAL_WORK
+        AUTHORISED_RECONSTRUCTION,
+        AUTHORISED_RESTORATION,
+        AUTHORISED_EPHEMERAL_WORK
     }
 
     struct PersistentData {
@@ -53,16 +53,16 @@ library SculptureLibrary {
     }
 
     function isCategorizationLabelValid(uint8 _label) internal pure returns (bool) {
-        return (_label >= uint8(CategorizationLabel.AUTHORIZED_UNIQUE_WORK) && _label <= uint8(CategorizationLabel.AUTHORIZED_DIGITAL_COPY));
+        return (_label >= uint8(CategorizationLabel.AUTHORISED_UNIQUE_WORK) && _label <= uint8(CategorizationLabel.AUTHORISED_DIGITAL_COPY));
     }
 
     function isEditionDataValid(uint8 _categorizationLabel, EditionData memory _editionData) internal pure returns (bool) {
         if ((_editionData.edition != 0) || (bytes(_editionData.editionExecutor).length > 0) || (_editionData.editionNumber != 0)) {
             // Edition Data is only available for the following categorization labels
-            if ((_categorizationLabel == uint8(CategorizationLabel.AUTHORIZED_REPRODUCTION))
-                    || (_categorizationLabel == uint8(CategorizationLabel.AUTHORIZED_EXHIBITION_COPY))
-                    || (_categorizationLabel == uint8(CategorizationLabel.AUTHORIZED_TECHNICAL_COPY))
-                    || (_categorizationLabel == uint8(CategorizationLabel.AUTHORIZED_DIGITAL_COPY))) {
+            if ((_categorizationLabel == uint8(CategorizationLabel.AUTHORISED_REPRODUCTION))
+                    || (_categorizationLabel == uint8(CategorizationLabel.AUTHORISED_EXHIBITION_COPY))
+                    || (_categorizationLabel == uint8(CategorizationLabel.AUTHORISED_TECHNICAL_COPY))
+                    || (_categorizationLabel == uint8(CategorizationLabel.AUTHORISED_DIGITAL_COPY))) {
                 return true;
             } else {
                 return false;
@@ -73,44 +73,44 @@ library SculptureLibrary {
     }
 
     function isConservationLabelValid(uint8 _label) internal pure returns (bool) {
-        return (_label >= uint8(ConservationLabel.NONE) && _label <= uint8(ConservationLabel.AUTHORIZED_EPHEMERAL_WORK));
+        return (_label >= uint8(ConservationLabel.NONE) && _label <= uint8(ConservationLabel.AUTHORISED_EPHEMERAL_WORK));
     }
 
     function getCategorizationLabelAsString(uint8 _enum) internal pure returns (string memory) {
-        if (_enum == uint8(CategorizationLabel.AUTHORIZED_UNIQUE_WORK)) {
-            return "Authorized unique work";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORIZED_UNIQUE_WORK_VARIATION)) {
-            return "Authorized unique work variation";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORIZED_WORK)) {
-            return "Authorized work";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORIZED_MULTIPLE)) {
-            return "Authorized multiple";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORIZED_CAST)) {
-            return "Authorized cast";
-        } else if (_enum == uint8(CategorizationLabel.POSTHUMOUS_WORK_AUTHORIZED_BY_ARTIST)) {
-            return "Posthumous work authorized by artist";
-        } else if (_enum == uint8(CategorizationLabel.POSTHUMOUS_WORK_AUTHORIZED_BY_RIGHTSHOLDERS)) {
-            return "Posthumous work authorized by rightsholders";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORIZED_REPRODUCTION)) {
-            return "Authorized reproduction";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORIZED_EXHIBITION_COPY)) {
-            return "Authorized exhibition copy";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORIZED_TECHNICAL_COPY)) {
-            return "Authorized technical copy";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORIZED_DIGITAL_COPY)) {
-            return "Authorized digital copy";
+        if (_enum == uint8(CategorizationLabel.AUTHORISED_UNIQUE_WORK)) {
+            return "Authorised unique work";
+        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_UNIQUE_WORK_VARIATION)) {
+            return "Authorised unique work variation";
+        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_WORK)) {
+            return "Authorised work";
+        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_MULTIPLE)) {
+            return "Authorised multiple";
+        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_CAST)) {
+            return "Authorised cast";
+        } else if (_enum == uint8(CategorizationLabel.POSTHUMOUS_WORK_AUTHORISED_BY_ARTIST)) {
+            return "Posthumous work authorised by artist";
+        } else if (_enum == uint8(CategorizationLabel.POSTHUMOUS_WORK_AUTHORISED_BY_RIGHTSHOLDERS)) {
+            return "Posthumous work authorised by rightsholders";
+        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_REPRODUCTION)) {
+            return "Authorised reproduction";
+        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_EXHIBITION_COPY)) {
+            return "Authorised exhibition copy";
+        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_TECHNICAL_COPY)) {
+            return "Authorised technical copy";
+        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_DIGITAL_COPY)) {
+            return "Authorised digital copy";
         }
 
         revert("Invalid Categorization Label");
     }
 
     function getConservationLabelAsString(ConservationLabel _enum) internal pure returns (string memory) {
-        if (_enum == ConservationLabel.AUTHORIZED_RECONSTRUCTION) {
-            return "Authorized reconstruction";
-        } else if (_enum == ConservationLabel.AUTHORIZED_RESTORATION) {
-            return "Authorized restoration";
-        } else if (_enum == ConservationLabel.AUTHORIZED_EPHEMERAL_WORK) {
-            return "Authorized ephermal work";
+        if (_enum == ConservationLabel.AUTHORISED_RECONSTRUCTION) {
+            return "Authorised reconstruction";
+        } else if (_enum == ConservationLabel.AUTHORISED_RESTORATION) {
+            return "Authorised restoration";
+        } else if (_enum == ConservationLabel.AUTHORISED_EPHEMERAL_WORK) {
+            return "Authorised ephermal work";
         }
 
         revert("Invalid Conservation Label");

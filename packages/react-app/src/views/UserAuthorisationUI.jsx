@@ -5,7 +5,7 @@ import { SyncOutlined } from "@ant-design/icons";
 
 import { Address, Balance, Events } from "../components";
 
-export default function UserAuthorizationUI({
+export default function UserAuthorisationUI({
   address,
   mainnetProvider,
   localProvider,
@@ -25,7 +25,7 @@ export default function UserAuthorizationUI({
   ]
   const { Option } = Select;
 
-  // States used to authorize a new user
+  // States used to authorise a new user
   const [userAddress, setUserAddress] = useState("");
   const [privilegeLevel, setPrivilegeLevel] = useState(null);
   const [newUserStatus, setNewUserStatus] = useState("");
@@ -36,23 +36,23 @@ export default function UserAuthorizationUI({
   const [oldPrivilegeLevel, setOldPrivilegeLevel] = useState(null);
   const [newPrivilegeStatus, setNewPrivilegeStatus] = useState("");
 
-  // States used to remove an authorized user
+  // States used to remove an authorised user
   const [userAddressToRemove, setUserAddressToRemove] = useState("");
   const [removedUserStatus, setRemovedUserStatus] = useState("");
 
-  async function authorizeUser() {
+  async function authoriseUser() {
     if (!userAddress || !privilegeLevel) {
       setNewUserStatus("Please enter an address and privilege level");
       return;
     }
 
     try {
-      const transaction = await tx(writeContracts.UserAuthorization.authorizeUser(userAddress, privilegeLevel));
+      const transaction = await tx(writeContracts.UserAuthorisation.authoriseUser(userAddress, privilegeLevel));
       await transaction.wait();
-      setNewUserStatus("User authorized");
+      setNewUserStatus("User authorised");
     } catch (err) {
       console.error(err);
-      setNewUserStatus("Failed to authorize user");
+      setNewUserStatus("Failed to authorise user");
     }
   }
 
@@ -63,7 +63,7 @@ export default function UserAuthorizationUI({
     }
 
     try {
-      const transaction = await tx(writeContracts.UserAuthorization.changeUserPrivilege(existingUserAddress, oldPrivilegeLevel, newPrivilegeLevel));
+      const transaction = await tx(writeContracts.UserAuthorisation.changeUserPrivilege(existingUserAddress, oldPrivilegeLevel, newPrivilegeLevel));
       await transaction.wait();
       setNewPrivilegeStatus("User privilege changed");
     } catch (err) {
@@ -72,40 +72,40 @@ export default function UserAuthorizationUI({
     }
   }
 
-  async function removeAuthorizedUser() {
+  async function removeAuthorisedUser() {
     if (!userAddressToRemove) {
       setRemovedUserStatus("Please enter an address");
       return;
     }
 
     try {
-      const transaction = await tx(writeContracts.UserAuthorization.removeAuthorizedUser(userAddressToRemove));
+      const transaction = await tx(writeContracts.UserAuthorisation.removeAuthorisedUser(userAddressToRemove));
       await transaction.wait();
-      setRemovedUserStatus("Authorized user removed");
+      setRemovedUserStatus("Authorised user removed");
     } catch (err) {
       console.error(err);
-      setRemovedUserStatus("Failed to remove an authorized user");
+      setRemovedUserStatus("Failed to remove an authorised user");
     }
   }
 
   return (
     <div>
       {/*
-        ⚙️ User Authorization User Interface
+        ⚙️ User Authorisation User Interface
       */}
       <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64 }}>
         <Divider />
-        <h2 style={{ fontWeight: 'bold', fontSize: '28px' }}>User Authorization</h2>
+        <h2 style={{ fontWeight: 'bold', fontSize: '28px' }}>User Authorisation</h2>
         <Divider />
         <label>SmartContract Address:</label>
         <Address
-          address={readContracts && readContracts.UserAuthorization ? readContracts.UserAuthorization.address : null}
+          address={readContracts && readContracts.UserAuthorisation ? readContracts.UserAuthorisation.address : null}
           ensProvider={mainnetProvider}
           fontSize={16}
         />
         <Divider/>
         {/*
-          ⚙️ Section: New User Authorization
+          ⚙️ Section: New User Authorisation
         */}
         <div>
           <label>User Address:</label>
@@ -129,11 +129,11 @@ export default function UserAuthorizationUI({
         <Button 
           style={{ marginTop: 10 }}
           onClick={() => {
-            authorizeUser();
+            authoriseUser();
             setUserAddress("");
             setPrivilegeLevel(null);
           }}>
-          Authorize User
+          Authorise User
         </Button>
         <p style={{ marginTop: 8 }}>Transcation status: {newUserStatus}</p>
         <Divider/>
@@ -182,7 +182,7 @@ export default function UserAuthorizationUI({
         <p style={{ marginTop: 8 }}>Transcation status: {newPrivilegeStatus}</p>
         <Divider/>
         {/*
-          ⚙️ Section: Remove authorized user
+          ⚙️ Section: Remove authorised user
         */}
         <div>
           <label>User Address:</label>
@@ -196,10 +196,10 @@ export default function UserAuthorizationUI({
         <Button 
           style={{ marginTop: 10 }}
           onClick={() => {
-            removeAuthorizedUser();
+            removeAuthorisedUser();
             setUserAddressToRemove("");
           }}>
-          Remove authorized user
+          Remove authorised user
         </Button>
         <p style={{ marginTop: 8 }}>Transcation status: {removedUserStatus}</p>
         <Divider />
@@ -216,10 +216,10 @@ export default function UserAuthorizationUI({
         Events
       */}
       <Events
-        title="Authorized Users"
+        title="Authorised Users"
         contracts={readContracts}
-        contractName="UserAuthorization"
-        eventName="UserAuthorized"
+        contractName="UserAuthorisation"
+        eventName="UserAuthorised"
         localProvider={localProvider}
         mainnetProvider={mainnetProvider}
         startBlock={1}
@@ -227,7 +227,7 @@ export default function UserAuthorizationUI({
       <Events
         title="New User Privilege"
         contracts={readContracts}
-        contractName="UserAuthorization"
+        contractName="UserAuthorisation"
         eventName="NewUserPrivilege"
         localProvider={localProvider}
         mainnetProvider={mainnetProvider}
@@ -236,7 +236,7 @@ export default function UserAuthorizationUI({
       <Events
         title="Removed User"
         contracts={readContracts}
-        contractName="UserAuthorization"
+        contractName="UserAuthorisation"
         eventName="UserRemoved"
         localProvider={localProvider}
         mainnetProvider={mainnetProvider}

@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "hardhat/console.sol";
 import "./SculptureLibrary.sol";
-import "./UserAuthorization.sol";
+import "./UserAuthorisation.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract SculptureFactory {
@@ -14,20 +14,20 @@ contract SculptureFactory {
     // Stores the addresses of the deployed SC (records)
     address[] private sculptures;
 
-    // UserAuthorization instance
-    UserAuthorization userAuthorizationInstance;
+    // UserAuthorisation instance
+    UserAuthorisation userAuthorisationInstance;
 
     event NewSculpture(address sculpture);
 
-    constructor(address _userAuthorizationAddress) {
+    constructor(address _userAuthorisationAddress) {
         // Checks if an instance of this Smart Contract already exists
         require(s_SculptureFactory == address(0), "The Instance of this Smart Contract already exists");
 
         //TODO: checks if the address is a correct SC address
-        userAuthorizationInstance = UserAuthorization(_userAuthorizationAddress);
+        userAuthorisationInstance = UserAuthorisation(_userAuthorisationAddress);
 
         // Checks if the user to deploy this SC is an admin user
-        require(userAuthorizationInstance.isAdminUser(msg.sender), "You are not authorized to deploy this SC");
+        require(userAuthorisationInstance.isAdminUser(msg.sender), "You are not authorised to deploy this SC");
 
         // Sets the Instance address to the address of the contract
         s_SculptureFactory = address(this);
@@ -44,11 +44,11 @@ contract SculptureFactory {
         require(s_SculptureFactory == address(this));
         
         // Checks if the user is an Admin user
-        require(userAuthorizationInstance.isAuthorizedToCreate(msg.sender) == true, "Your are not authorized to create a record.");
+        require(userAuthorisationInstance.isAuthorisedToCreate(msg.sender) == true, "Your are not authorised to create a record.");
 
         require(parseSculptureData(_persistentData, _miscData, _editionData, _conservationData, _sculptureOwner) == true);
 
-        address newSculptureAddress = address(new Sculpture{value: msg.value}(_persistentData, _miscData, _editionData, _conservationData, _sculptureOwner, address(userAuthorizationInstance), address(this)));
+        address newSculptureAddress = address(new Sculpture{value: msg.value}(_persistentData, _miscData, _editionData, _conservationData, _sculptureOwner, address(userAuthorisationInstance), address(this)));
 
         // Emit the new Sculpture address
         emit NewSculpture(newSculptureAddress);
@@ -80,7 +80,7 @@ contract SculptureFactory {
         require(SculptureLibrary.checkMaxStringLength(_miscData.dimensions) == true, "The Dimensions field exceeds the maximum string length!");
         require(SculptureLibrary.checkMaxStringLength(_miscData.location) == true, "The Location field exceeds the maximum string length!");
         require(SculptureLibrary.isCategorizationLabelValid(_miscData.categorizationLabel) == true, "The Categorizatoin Label is not a valid value!");
-        require(SculptureLibrary.isEditionDataValid(_miscData.categorizationLabel, _editionData) == true, "The Edition options are only available when the categorization label is Authorized reproduction, exhibitiion copy, technical copy or digital copy!");
+        require(SculptureLibrary.isEditionDataValid(_miscData.categorizationLabel, _editionData) == true, "The Edition options are only available when the categorization label is Authorised reproduction, exhibitiion copy, technical copy or digital copy!");
         require(SculptureLibrary.checkMaxStringLength(_editionData.editionExecutor) == true, "The Edition Excutor field exceeds the maximum string length!");
         require(SculptureLibrary.isConservationLabelValid(_conservationData.conservationLabel) == true, "The Conservation Label is not a valid value!");
         require(SculptureLibrary.checkMaxStringLength(_sculptureOwner) == true, "The Sculpture Owner field exceeds the maximum string length!");
@@ -90,8 +90,8 @@ contract SculptureFactory {
 }
 
 contract Sculpture {
-    // UserAuthorization instance
-    UserAuthorization userAuthorizationInstance;
+    // UserAuthorisation instance
+    UserAuthorisation userAuthorisationInstance;
 
     // SculptureFactory instance (parent)
     SculptureFactory sculptureFactoryInstance;
@@ -117,16 +117,16 @@ contract Sculpture {
         SculptureLibrary.EditionData memory _editionData,
         SculptureLibrary.ConservationData memory _conservationData,
         string memory _sculptureOwner,
-        address _userAuthorizationAddress,
+        address _userAuthorisationAddress,
         address _sculptureFactoryAddress
     ) payable {
-        require(_userAuthorizationAddress != address(0), "Invalid UserAuthorization SC address!");
+        require(_userAuthorisationAddress != address(0), "Invalid UserAuthorisation SC address!");
         require(_sculptureFactoryAddress != address(0), "Invalid SculptureFactory SC address!");
 
-        userAuthorizationInstance = UserAuthorization(_userAuthorizationAddress);
+        userAuthorisationInstance = UserAuthorisation(_userAuthorisationAddress);
         sculptureFactoryInstance = SculptureFactory(_sculptureFactoryAddress);
 
-        require(userAuthorizationInstance.isUserAuthorizationSC(_userAuthorizationAddress) == true, "This address does not belong to the UserAuthorization SC!");
+        require(userAuthorisationInstance.isUserAuthorisationSC(_userAuthorisationAddress) == true, "This address does not belong to the UserAuthorisation SC!");
         require(sculptureFactoryInstance.isSculptureFactory(_sculptureFactoryAddress) == true, "This address does not belong to the SculptureFactory SC!");
 
         persistentData = _persistentData;
@@ -165,7 +165,7 @@ contract Sculpture {
         return (persistentData, miscData, editionData, conservationData, sculptureOwner);
     }
 
-    event SculptureUpdated(uint256 timestamp, address authorizedModifier, UpdatedSculptureData updatedData);
+    event SculptureUpdated(uint256 timestamp, address authorisedModifier, UpdatedSculptureData updatedData);
 
     function updateSculpture(
         string memory _date,
@@ -179,7 +179,7 @@ contract Sculpture {
         string memory _sculptureOwner
     ) public {
         // Checks if the user has privileges to update the data
-        require(userAuthorizationInstance.isAuthorizedToUpdate(msg.sender) == true, "Your are not authorized to update a record.");
+        require(userAuthorisationInstance.isAuthorisedToUpdate(msg.sender) == true, "Your are not authorised to update a record.");
 
         // Initializes the updated data struct
         UpdatedSculptureData memory updatedData = UpdatedSculptureData(
@@ -230,10 +230,10 @@ contract Sculpture {
         }
 
         // Only update the Edition data when the categorization label is one of the available options to store this information. Otherwise, ignore this data
-        if ((miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORIZED_REPRODUCTION))
-                || (miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORIZED_EXHIBITION_COPY))
-                || (miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORIZED_TECHNICAL_COPY))
-                || (miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORIZED_DIGITAL_COPY))) {
+        if ((miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORISED_REPRODUCTION))
+                || (miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORISED_EXHIBITION_COPY))
+                || (miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORISED_TECHNICAL_COPY))
+                || (miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORISED_DIGITAL_COPY))) {
 
             if (_edition !=  editionData.edition) {
                 editionData.edition = _edition;
