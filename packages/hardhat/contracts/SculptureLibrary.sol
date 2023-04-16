@@ -52,12 +52,28 @@ library SculptureLibrary {
         uint8 conservationLabel;
     }
 
-    function isCategorizationLabelValid(uint8 label) internal pure returns (bool) {
-        return (label >= uint8(CategorizationLabel.AUTHORIZED_UNIQUE_WORK) && label <= uint8(CategorizationLabel.AUTHORIZED_DIGITAL_COPY));
+    function isCategorizationLabelValid(uint8 _label) internal pure returns (bool) {
+        return (_label >= uint8(CategorizationLabel.AUTHORIZED_UNIQUE_WORK) && _label <= uint8(CategorizationLabel.AUTHORIZED_DIGITAL_COPY));
     }
 
-    function isConservationLabelValid(uint8 label) internal pure returns (bool) {
-        return (label >= uint8(ConservationLabel.NONE) && label <= uint8(ConservationLabel.AUTHORIZED_EPHEMERAL_WORK));
+    function isEditionDataValid(uint8 _categorizationLabel, EditionData memory _editionData) internal pure returns (bool) {
+        if ((_editionData.edition != 0) || (bytes(_editionData.editionExecutor).length > 0) || (_editionData.editionNumber != 0)) {
+            // Edition Data is only available for the following categorization labels
+            if ((_categorizationLabel == CategorizationLabel.AUTHORIZED_REPRODUCTION)
+                    || (_categorizationLabel == CategorizationLabel.AUTHORIZED_EXHIBITION_COPY)
+                    || (_categorizationLabel == CategorizationLabel.AUTHORIZED_TECHNICAL_COPY)
+                    || (_categorizationLabel == CategorizationLabel.AUTHORIZED_DIGITAL_COPY)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function isConservationLabelValid(uint8 _label) internal pure returns (bool) {
+        return (_label >= uint8(ConservationLabel.NONE) && _label <= uint8(ConservationLabel.AUTHORIZED_EPHEMERAL_WORK));
     }
 
     function getCategorizationLabelAsString(uint8 _enum) internal pure returns (string memory) {
@@ -116,6 +132,34 @@ library SculptureLibrary {
                     return false;
                 }
             }
+        } else if (strBytes.length == 9 || strBytes.length == 11) {
+            // Parse data for a Date value such as "1990-1992" or "1990 - 1992". Both are valid
+            // Check format of string using ASCII table
+            for (uint i = 0; i < strBytes.length; i++) {
+                // Check the digits
+                if ((i < 4 || i > (strBytes.length - 5)) && (strBytes[i] < 48 || strBytes[i] > 57)) {
+                    return false;
+                }
+
+                // Check the hypen for "1990-1992"
+                if ((strBytes.length == 9) && (i == 4) && (strBytes[i] != 45)) {
+                    return false;
+                }
+
+                // Check the hypen and whitespaces for "1990 - 1992"
+                if ((strBytes.length == 11) && (i > 3 || i < 7)) {
+                    // Check the two whitespaces
+                    if ((i == 4 || i == 6) && strBytes[i] != 32) {
+                        return false;
+                    }
+
+                    if (i == 5 && strBytes[i] != 45) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         } else {
             return false;
         }

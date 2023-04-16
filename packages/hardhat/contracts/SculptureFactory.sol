@@ -80,6 +80,7 @@ contract SculptureFactory {
         require(SculptureLibrary.checkMaxStringLength(_miscData.dimensions) == true, "The Dimensions field exceeds the maximum string length!");
         require(SculptureLibrary.checkMaxStringLength(_miscData.location) == true, "The Location field exceeds the maximum string length!");
         require(SculptureLibrary.isCategorizationLabelValid(_miscData.categorizationLabel) == true, "The Categorizatoin Label is not a valid value!");
+        require(SculptureLibrary.isEditionDataValid(_miscData.categorizationLabel, _editionData) == true, "The Edition options are only available when the categorization label is Authorized reproduction, exhibitiion copy, technical copy or digital copy!");
         require(SculptureLibrary.checkMaxStringLength(_editionData.editionExecutor) == true, "The Edition Excutor field exceeds the maximum string length!");
         require(SculptureLibrary.isConservationLabelValid(_conservationData.conservationLabel) == true, "The Conservation Label is not a valid value!");
         require(SculptureLibrary.checkMaxStringLength(_sculptureOwner) == true, "The Sculpture Owner field exceeds the maximum string length!");
@@ -221,29 +222,36 @@ contract Sculpture {
             updatedData.location = _location;
         }
 
-        if ((_categorizationLabel != uint8(SculptureLibrary.CategorizationLabel.NONE)) && SculptureLibrary.isCategorizationLabelValid(_categorizationLabel)) {
+        if (_categorizationLabel != uint8(SculptureLibrary.CategorizationLabel.NONE)) {
+            require(SculptureLibrary.isCategorizationLabelValid(_categorizationLabel) == true, "The Categorizatoin Label is not a valid value!");
+
             miscData.categorizationLabel = _categorizationLabel;
             updatedData.categorizationLabel = SculptureLibrary.getCategorizationLabelAsString(_categorizationLabel);
         }
 
-        // TODO: check what would happen when this value is not provided
-        if (_edition !=  editionData.edition) {
-            editionData.edition = _edition;
-            updatedData.edition = _edition.toString();
-        }
+        // Only update the Edition data when the categorization label is one of the available options to store this information. Otherwise, ignore this data
+        if ((miscData.categorizationLabel == CategorizationLabel.AUTHORIZED_REPRODUCTION)
+                || (miscData.categorizationLabel == CategorizationLabel.AUTHORIZED_EXHIBITION_COPY)
+                || (miscData.categorizationLabel == CategorizationLabel.AUTHORIZED_TECHNICAL_COPY)
+                || (miscData.categorizationLabel == CategorizationLabel.AUTHORIZED_DIGITAL_COPY)) {
 
-        if (bytes(_editionExecutor).length > 0) {
-            require(SculptureLibrary.checkMaxStringLength(_editionExecutor) == true, "The Edition Excutor field exceeds the maximum string length!");
+            if (_edition !=  editionData.edition) {
+                editionData.edition = _edition;
+                updatedData.edition = _edition.toString();
+            }
 
-            editionData.editionExecutor = _editionExecutor;
-            updatedData.editionExecutor = _editionExecutor;
-        }
+            if (bytes(_editionExecutor).length > 0) {
+                require(SculptureLibrary.checkMaxStringLength(_editionExecutor) == true, "The Edition Excutor field exceeds the maximum string length!");
 
-        // TODO: Clarify if conservation data can be updated or not
-        // TODO: check what would happen when this value is not provided
-        if (_editionNumber !=  editionData.editionNumber) {
-            editionData.editionNumber = _editionNumber;
-            updatedData.editionNumber = _editionNumber.toString();
+                editionData.editionExecutor = _editionExecutor;
+                updatedData.editionExecutor = _editionExecutor;
+            }
+
+            // TODO: Clarify if conservation data can be updated or not
+            if (_editionNumber !=  editionData.editionNumber) {
+                editionData.editionNumber = _editionNumber;
+                updatedData.editionNumber = _editionNumber.toString();
+            }
         }
 
         if (bytes(_sculptureOwner).length > 0) {
