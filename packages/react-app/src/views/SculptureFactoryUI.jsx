@@ -122,13 +122,17 @@ export default function SculptureFactoryUI({
   async function createSculpture() {
     // Check that the following fields are provided
     for (const field of fields) {
-      if ((field.name != 'Conservation options') && (!field.value)) {
-        if (field.name == 'Categorization Labels') {
+      if (field.name != 'Conservation options') {
+        if ((field.name == 'Categorization Labels') && (!field.value)) {
           setCreationStatus(`Please choose any of the ${field.name}`);
+
+          return false;
         } else if ((field.name == 'Edition') || (field.name == 'Edition executor') || (field.name == 'Edition number')) {
           if (field.value) {
             if (!isCorrectCategLabelForEdition) {
               setCreationStatus(`Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.`);
+
+              return false;
             }
           } else {
             // Set defaults values to not fail in the SC
@@ -140,13 +144,15 @@ export default function SculptureFactoryUI({
               setEditionExecutor(" ");
             }
           }
-        } else {
+        } else if (!field.value) {
           setCreationStatus(`Please introduce the ${field.name}`);
-        }
 
-        return false;
+          return false;
+        }
       } else if ((field.name == 'Conservation options') && (field.value == null)) {
         setCreationStatus(`Please choose any of the ${field.name}`);
+
+        return false;
       }
 
       if (!checkMaxLength(field.value.toString())) {
