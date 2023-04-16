@@ -162,6 +162,19 @@ export default function SculptureUI({
     return str.length <= 64;
   }
 
+  function isValidDate(value) {
+    const regexFormat1 = /^\d{4}$/; // Regex pattern to match the data format like "1990"
+    const regexFormat2 = /^(c\.)?\d{4}$/; // Regex pattern to match the date format like "c.1990"
+    const regexFormat3 = /^\d{4}-\d{4}$/; // Regex pattern to match the date format like "1990-1992"
+    const regexFormat4 = /^\d{4}\s-\s\d{4}$/; // Regex pattern to match the date format like "1990 - 1992"
+
+    if (regexFormat1.test(value) || regexFormat2.test(value) || regexFormat3.test(value) || regexFormat4.test(value)) {
+      return true;
+    }
+
+    return false;
+  }
+
   function setData(data) {
     setSculptureName(data[PERSISTENT_DATA][PERSISTENT_SCULPTURE_NAME]);
     setArtist(data[PERSISTENT_DATA][PERSISTENT_ARTIST]);
@@ -247,6 +260,12 @@ export default function SculptureUI({
 
         return false;
       }
+    }
+
+    if (!isValidDate(dateUpdate)) {
+      setUpdateDataStatus("Invalid date format. Please provide a valid year in the format '1990', 'c.1990', '1990-1992' or '1990 - 1992'");
+
+      return false;
     }
 
     // TODO: Once the doubt are solved. If necessary implement the conservation data update (including in SCs, not supported)

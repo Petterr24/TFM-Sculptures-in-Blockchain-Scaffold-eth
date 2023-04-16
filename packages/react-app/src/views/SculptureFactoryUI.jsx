@@ -93,8 +93,10 @@ export default function SculptureFactoryUI({
   function isValidDate(value) {
     const regexFormat1 = /^\d{4}$/; // Regex pattern to match the data format like "1990"
     const regexFormat2 = /^(c\.)?\d{4}$/; // Regex pattern to match the date format like "c.1990"
+    const regexFormat3 = /^\d{4}-\d{4}$/; // Regex pattern to match the date format like "1990-1992"
+    const regexFormat4 = /^\d{4}\s-\s\d{4}$/; // Regex pattern to match the date format like "1990 - 1992"
 
-    if (regexFormat1.test(value) || regexFormat2.test(value)) {
+    if (regexFormat1.test(value) || regexFormat2.test(value) || regexFormat3.test(value) || regexFormat4.test(value)) {
       return true;
     }
 
@@ -128,9 +130,8 @@ export default function SculptureFactoryUI({
     }
 
     // TODO: Once the doubt are solved. Implement the restriction to provide Edition data and verify the max string length for the Edition executor
-
     if (!isValidDate(date)) {
-      setCreationStatus("Invalid date format. Please provide a valid year in the format '1990' or 'c.1990'");
+      setCreationStatus("Invalid date format. Please provide a valid year in the format '1990', 'c.1990', '1990-1992' or '1990 - 1992'");
 
       return false;
     }

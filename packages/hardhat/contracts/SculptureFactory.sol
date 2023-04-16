@@ -230,10 +230,10 @@ contract Sculpture {
         }
 
         // Only update the Edition data when the categorization label is one of the available options to store this information. Otherwise, ignore this data
-        if ((miscData.categorizationLabel == CategorizationLabel.AUTHORIZED_REPRODUCTION)
-                || (miscData.categorizationLabel == CategorizationLabel.AUTHORIZED_EXHIBITION_COPY)
-                || (miscData.categorizationLabel == CategorizationLabel.AUTHORIZED_TECHNICAL_COPY)
-                || (miscData.categorizationLabel == CategorizationLabel.AUTHORIZED_DIGITAL_COPY)) {
+        if ((miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORIZED_REPRODUCTION))
+                || (miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORIZED_EXHIBITION_COPY))
+                || (miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORIZED_TECHNICAL_COPY))
+                || (miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORIZED_DIGITAL_COPY))) {
 
             if (_edition !=  editionData.edition) {
                 editionData.edition = _edition;
