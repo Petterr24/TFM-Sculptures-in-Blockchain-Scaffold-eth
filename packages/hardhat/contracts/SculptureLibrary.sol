@@ -57,7 +57,7 @@ library SculptureLibrary {
     }
 
     function isEditionDataValid(uint8 _categorizationLabel, EditionData memory _editionData) internal pure returns (bool) {
-        if ((_editionData.edition != 0) || (bytes(_editionData.editionExecutor).length > 0) || (_editionData.editionNumber != 0)) {
+        if ((_editionData.edition != 0) || ((bytes(_editionData.editionExecutor).length > 0) && (bytes(_editionData.editionExecutor) != " ")) || (_editionData.editionNumber != 0)) {
             // Edition Data is only available for the following categorization labels
             if ((_categorizationLabel == uint8(CategorizationLabel.AUTHORISED_REPRODUCTION))
                     || (_categorizationLabel == uint8(CategorizationLabel.AUTHORISED_EXHIBITION_COPY))
