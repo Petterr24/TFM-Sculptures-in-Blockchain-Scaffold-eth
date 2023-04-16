@@ -392,7 +392,8 @@ export default function SculptureFactoryUI({
                 setEditionNumber(0);
                 setEditionNumberUI(null);
                 setIsConservation(null);
-                setConservationCategory(null);
+                setConservationCategory(0);
+                setConservationCategoryUI(null);
                 setSculptureOwner("");
               }
             }).catch(error => {
