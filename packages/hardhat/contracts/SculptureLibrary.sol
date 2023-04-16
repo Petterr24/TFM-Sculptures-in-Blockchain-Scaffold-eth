@@ -59,10 +59,10 @@ library SculptureLibrary {
     function isEditionDataValid(uint8 _categorizationLabel, EditionData memory _editionData) internal pure returns (bool) {
         if ((_editionData.edition != 0) || (bytes(_editionData.editionExecutor).length > 0) || (_editionData.editionNumber != 0)) {
             // Edition Data is only available for the following categorization labels
-            if ((_categorizationLabel == CategorizationLabel.AUTHORIZED_REPRODUCTION)
-                    || (_categorizationLabel == CategorizationLabel.AUTHORIZED_EXHIBITION_COPY)
-                    || (_categorizationLabel == CategorizationLabel.AUTHORIZED_TECHNICAL_COPY)
-                    || (_categorizationLabel == CategorizationLabel.AUTHORIZED_DIGITAL_COPY)) {
+            if ((_categorizationLabel == uint8(CategorizationLabel.AUTHORIZED_REPRODUCTION))
+                    || (_categorizationLabel == uint8(CategorizationLabel.AUTHORIZED_EXHIBITION_COPY))
+                    || (_categorizationLabel == uint8(CategorizationLabel.AUTHORIZED_TECHNICAL_COPY))
+                    || (_categorizationLabel == uint8(CategorizationLabel.AUTHORIZED_DIGITAL_COPY))) {
                 return true;
             } else {
                 return false;
@@ -137,23 +137,23 @@ library SculptureLibrary {
             // Check format of string using ASCII table
             for (uint i = 0; i < strBytes.length; i++) {
                 // Check the digits
-                if ((i < 4 || i > (strBytes.length - 5)) && (strBytes[i] < 48 || strBytes[i] > 57)) {
+                if ((i < 4 || i > (strBytes.length - 5)) && (uint8(strBytes[i]) < 48 || uint8(strBytes[i]) > 57)) {
                     return false;
                 }
 
                 // Check the hypen for "1990-1992"
-                if ((strBytes.length == 9) && (i == 4) && (strBytes[i] != 45)) {
+                if ((strBytes.length == 9) && (i == 4) && (strBytes[i] != "-")) {
                     return false;
                 }
 
                 // Check the hypen and whitespaces for "1990 - 1992"
                 if ((strBytes.length == 11) && (i > 3 || i < 7)) {
                     // Check the two whitespaces
-                    if ((i == 4 || i == 6) && strBytes[i] != 32) {
+                    if ((i == 4 || i == 6) && uint8(strBytes[i]) != 32) {
                         return false;
                     }
 
-                    if (i == 5 && strBytes[i] != 45) {
+                    if (i == 5 && strBytes[i] != "-") {
                         return false;
                     }
                 }
