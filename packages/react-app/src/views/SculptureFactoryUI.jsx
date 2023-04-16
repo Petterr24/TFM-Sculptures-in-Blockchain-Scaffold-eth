@@ -141,7 +141,7 @@ export default function SculptureFactoryUI({
             } else if ((field.name == 'Edition number')) {
               setEditionNumber(0);
             } else {
-              setEditionExecutor(" ");
+              setEditionExecutor("-");
             }
           }
         } else if (!field.value) {
