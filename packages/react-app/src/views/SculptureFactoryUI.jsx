@@ -32,7 +32,7 @@ export default function SculptureFactoryUI({
     { value: 11, label: 'AUTHORISED DIGITAL COPY' }
   ]
 
-  // Categorization label options
+  // Conservation label options
   const conservationLabel = [
     { value: null, label: 'Select the conservation label', disabled: true },
     { value: 0, label: 'NONE' },
@@ -62,13 +62,17 @@ export default function SculptureFactoryUI({
   const [categorizationTag, setCategorizationTag] = useState(null);
 
   // Edition data
-  const [edition, setEdition] = useState(null);
-  const [editionExecutor, setEditionExecutor] = useState("");
-  const [editionNumber, setEditionNumber] = useState(null);
+  const [edition, setEdition] = useState(0);
+  const [editionExecutor, setEditionExecutor] = useState("-");
+  const [editionNumber, setEditionNumber] = useState(0);
+  const [editionUI, setEditionUI] = useState(null);
+  const [editionExecutorUI, setEditionExecutorUI] = useState("");
+  const [editionNumberUI, setEditionNumberUI] = useState(null);
 
   // Conservation data
   const [isConservation, setIsConservation] = useState(null);
-  const [conservationCategory, setConservationCategory] = useState(null);
+  const [conservationCategory, setConservationCategory] = useState(0);
+  const [conservationCategoryUI, setConservationCategoryUI] = useState(null);
 
   // Create Sculpture Status
   const [creationStatus, setCreationStatus] = useState("");
@@ -127,22 +131,17 @@ export default function SculptureFactoryUI({
           setCreationStatus(`Please choose any of the ${field.name}`);
 
           return false;
-        } else if ((field.name == 'Edition') || (field.name == 'Edition executor') || (field.name == 'Edition number')) {
-          if (field.value) {
-            if (!isCorrectCategLabelForEdition) {
-              setCreationStatus(`Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.`);
+        } else if ((field.name == 'Edition') || (field.name == 'Edition number')) {
+          if (field.value != 0 && !isCorrectCategLabelForEdition) {
+            setCreationStatus(`Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.`);
 
-              return false;
-            }
-          } else {
-            // Set defaults values to not fail in the SC
-            if (field.name == 'Edition') {
-              setEdition(0);
-            } else if ((field.name == 'Edition number')) {
-              setEditionNumber(0);
-            } else {
-              setEditionExecutor("-");
-            }
+            return false;
+          }
+        } else if ((field.name == 'Edition executor')) {
+          if ((field.value != '-') && !isCorrectCategLabelForEdition) {
+            setCreationStatus(`Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.`);
+
+            return false;
           }
         } else if (!field.value) {
           setCreationStatus(`Please introduce the ${field.name}`);
@@ -155,7 +154,7 @@ export default function SculptureFactoryUI({
         return false;
       }
 
-      if (!checkMaxLength(field.value.toString())) {
+      if ((field.name != 'Edition') && (field.name != 'Edition number') && !checkMaxLength(field.value.toString())) {
         setCreationStatus(`The ${field.name} field exceeds the maximum string length of 64 characters`);
 
         return false;
@@ -177,9 +176,6 @@ export default function SculptureFactoryUI({
       setCreationStatus("You cannot choose a conservation label if you select the conservation option as 'NO'");
 
       return false;
-    } else {
-      // Sets the NONE option to not send a null object to the SC
-      setConservationCategory(0);
     }
 
     const persistentData = [
@@ -325,27 +321,30 @@ export default function SculptureFactoryUI({
         <div>
           <label>Edition:</label>
           <Input
-              value={edition}
+              value={editionUI}
               onChange={e => {
                 setEdition(e.target.value);
+                setEditionUI(e.target.value);
               }}
           />
         </div>
         <div>
           <label>Edition Executor:</label>
           <Input
-              value={editionExecutor}
+              value={editionExecutorUI}
               onChange={e => {
                 setEditionExecutor(e.target.value);
+                setEditionExecutorUI(e.target.value);
               }}
           />
         </div>
         <div>
           <label>Edition Number:</label>
           <Input
-              value={editionNumber}
+              value={editionNumberUI}
               onChange={e => {
                 setEditionNumber(e.target.value);
+                setEditionNumberUI(e.target.value);
               }}
           />
         </div>
@@ -361,7 +360,11 @@ export default function SculptureFactoryUI({
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginTop: 10 }}>Conservation Label:</label>
-          <Select style={{ marginTop: 5 }} value={conservationCategory} onChange={setConservationCategory}>
+          <Select style={{ marginTop: 5 }} value={conservationCategoryUI}
+            onChange={e => {
+              setConservationCategory(e.target.value); 
+              setConservationCategoryUI(e.target.value);
+            }}>
             {conservationLabel.map((option) => (
               <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
@@ -382,9 +385,12 @@ export default function SculptureFactoryUI({
                 setDimensions("");
                 setLocation("");
                 setCategorizationTag(null);
-                setEdition(null);
-                setEditionExecutor("");
-                setEditionNumber(null);
+                setEdition(0);
+                setEditionUI(null);
+                setEditionExecutor('-');
+                setEditionExecutorUI("");
+                setEditionNumber(0);
+                setEditionNumberUI(null);
                 setIsConservation(null);
                 setConservationCategory(null);
                 setSculptureOwner("");
