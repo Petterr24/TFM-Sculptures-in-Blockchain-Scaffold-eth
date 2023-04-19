@@ -77,46 +77,6 @@ library SculptureLibrary {
         return (_label >= uint8(ConservationLabel.NONE) && _label <= uint8(ConservationLabel.AUTHORISED_EPHEMERAL_WORK));
     }
 
-    function getCategorizationLabelAsString(uint8 _enum) internal pure returns (string memory) {
-        if (_enum == uint8(CategorizationLabel.AUTHORISED_UNIQUE_WORK)) {
-            return "Authorised unique work";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_UNIQUE_WORK_VARIATION)) {
-            return "Authorised unique work variation";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_WORK)) {
-            return "Authorised work";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_MULTIPLE)) {
-            return "Authorised multiple";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_CAST)) {
-            return "Authorised cast";
-        } else if (_enum == uint8(CategorizationLabel.POSTHUMOUS_WORK_AUTHORISED_BY_ARTIST)) {
-            return "Posthumous work authorised by artist";
-        } else if (_enum == uint8(CategorizationLabel.POSTHUMOUS_WORK_AUTHORISED_BY_RIGHTSHOLDERS)) {
-            return "Posthumous work authorised by rightsholders";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_REPRODUCTION)) {
-            return "Authorised reproduction";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_EXHIBITION_COPY)) {
-            return "Authorised exhibition copy";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_TECHNICAL_COPY)) {
-            return "Authorised technical copy";
-        } else if (_enum == uint8(CategorizationLabel.AUTHORISED_DIGITAL_COPY)) {
-            return "Authorised digital copy";
-        }
-
-        revert("Invalid Categorization Label");
-    }
-
-    function getConservationLabelAsString(ConservationLabel _enum) internal pure returns (string memory) {
-        if (_enum == ConservationLabel.AUTHORISED_RECONSTRUCTION) {
-            return "Authorised reconstruction";
-        } else if (_enum == ConservationLabel.AUTHORISED_RESTORATION) {
-            return "Authorised restoration";
-        } else if (_enum == ConservationLabel.AUTHORISED_EPHEMERAL_WORK) {
-            return "Authorised ephermal work";
-        }
-
-        revert("Invalid Conservation Label");
-    }
-
     function isValidDate(string memory _date) internal pure returns (bool) {
         bytes memory strBytes = bytes(_date);
         if (strBytes.length == 6) {

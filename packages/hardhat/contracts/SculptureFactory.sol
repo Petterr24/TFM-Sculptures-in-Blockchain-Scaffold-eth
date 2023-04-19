@@ -4,7 +4,6 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 import "./SculptureLibrary.sol";
 import "./UserAuthorisation.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract SculptureFactory {
 
@@ -88,10 +87,8 @@ contract Sculpture {
     // UNIX Time of the last unit modification
     uint256 public lastChangeTimestamp;
 
-    // Strings library from OpenZeppelin
-    using Strings for uint256;
-
-    // The owner must be encrypted in the REST API before sending so that it is protected against miners
+    // The owner should be encrypted in in the backend before sending so that it is protected against miners
+    // As agreed, for now, this field will be in plain format but we keep it as private
     string private sculptureOwner;
 
     // Sculpture data
@@ -132,18 +129,6 @@ contract Sculpture {
         }
     }
 
-    struct UpdatedSculptureData {
-        string date;
-        string technique;
-        string dimensions;
-        string location;
-        string categorizationLabel;
-        string edition;
-        string editionExecutor;
-        string editionNumber;
-        string sculptureOwner;
-    }
-
     function getSculptureData() public view returns (
         SculptureLibrary.PersistentData memory,
         SculptureLibrary.MiscellaneousData memory,
@@ -154,7 +139,7 @@ contract Sculpture {
         return (persistentData, miscData, editionData, conservationData, sculptureOwner);
     }
 
-    event SculptureUpdated(uint256 timestamp, address authorisedModifier, UpdatedSculptureData updatedData);
+    event SculptureUpdated(uint256 timestamp, address authorisedModifier, string info);
 
     function updateSculpture(
         string memory _date,
@@ -170,52 +155,34 @@ contract Sculpture {
         // Checks if the user has privileges to update the data
         require(userAuthorisationInstance.isAuthorisedToUpdate(msg.sender) == true, "Your are not authorised to update a record.");
 
-        // Initializes the updated data struct
-        UpdatedSculptureData memory updatedData = UpdatedSculptureData(
-            "Not updated",
-            "Not updated",
-            "Not updated",
-            "Not updated",
-            "Not updated",
-            "Not updated",
-            "Not updated",
-            "Not updated",
-            "Not updated"
-        );
-
         if (bytes(_date).length > 0) {
             require(SculptureLibrary.isValidDate(_date) == true, "The Date field is wrong. Two different options are possible, example:'c.1990' for an aproximate date or just 1990!");
 
             miscData.date = _date;
-            updatedData.date = _date;
         }
 
         if (bytes(_technique).length > 0) {
             require(SculptureLibrary.checkMaxStringLength(_technique) == true, "The Technique field exceeds the maximum string length!");
 
             miscData.technique = _technique;
-            updatedData.technique = _technique;
         }
 
         if (bytes(_dimensions).length > 0) {
             require(SculptureLibrary.checkMaxStringLength(_dimensions) == true, "The Dimensions field exceeds the maximum string length!");
 
             miscData.dimensions = _dimensions;
-            updatedData.dimensions = _dimensions;
         }
 
         if (bytes(_location).length > 0) {
             require(SculptureLibrary.checkMaxStringLength(_location) == true, "The Location field exceeds the maximum string length!");
 
             miscData.location = _location;
-            updatedData.location = _location;
         }
 
         if (_categorizationLabel != uint8(SculptureLibrary.CategorizationLabel.NONE)) {
             require(SculptureLibrary.isCategorizationLabelValid(_categorizationLabel) == true, "The Categorizatoin Label is not a valid value!");
 
             miscData.categorizationLabel = _categorizationLabel;
-            updatedData.categorizationLabel = SculptureLibrary.getCategorizationLabelAsString(_categorizationLabel);
         }
 
         // Only update the Edition data when the categorization label is one of the available options to store this information. Otherwise, ignore this data
@@ -226,20 +193,17 @@ contract Sculpture {
 
             if (_edition !=  editionData.edition) {
                 editionData.edition = _edition;
-                updatedData.edition = _edition.toString();
             }
 
             if (bytes(_editionExecutor).length > 0) {
                 require(SculptureLibrary.checkMaxStringLength(_editionExecutor) == true, "The Edition Excutor field exceeds the maximum string length!");
 
                 editionData.editionExecutor = _editionExecutor;
-                updatedData.editionExecutor = _editionExecutor;
             }
 
             // TODO: Clarify if conservation data can be updated or not
             if (_editionNumber !=  editionData.editionNumber) {
                 editionData.editionNumber = _editionNumber;
-                updatedData.editionNumber = _editionNumber.toString();
             }
         }
 
@@ -247,11 +211,9 @@ contract Sculpture {
             require(SculptureLibrary.checkMaxStringLength(_sculptureOwner) == true, "The Sculpture Owner field exceeds the maximum string length!");
 
             sculptureOwner = _sculptureOwner;
-            // Avoid displaying the Sclupture Owner for confidentiality purposes. Just to notify that this value has been updated
-            updatedData.sculptureOwner = "Updated";
         }
 
         lastChangeTimestamp = block.timestamp;
-        emit SculptureUpdated(lastChangeTimestamp, msg.sender, updatedData);
+        emit SculptureUpdated(lastChangeTimestamp, msg.sender, "Sculpture data updated successfully");
     }
 }
