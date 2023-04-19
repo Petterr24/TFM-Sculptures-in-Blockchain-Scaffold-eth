@@ -8,9 +8,6 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract SculptureFactory {
 
-    // Singleton to allow only creating one Instance of this Smart Contract
-    address private s_SculptureFactory;
-
     // Stores the addresses of the deployed SC (records)
     address[] private sculptures;
 
@@ -20,17 +17,12 @@ contract SculptureFactory {
     event NewSculpture(address sculpture);
 
     constructor(address _userAuthorisationAddress) {
-        // Checks if an instance of this Smart Contract already exists
-        require(s_SculptureFactory == address(0), "The Instance of this Smart Contract already exists");
 
         //TODO: checks if the address is a correct SC address
         userAuthorisationInstance = UserAuthorisation(_userAuthorisationAddress);
 
         // Checks if the user to deploy this SC is an admin user
         require(userAuthorisationInstance.isAdminUser(msg.sender), "You are not authorised to deploy this SC");
-
-        // Sets the Instance address to the address of the contract
-        s_SculptureFactory = address(this);
     }
 
     function createSculpture(
@@ -40,9 +32,6 @@ contract SculptureFactory {
         SculptureLibrary.ConservationData memory _conservationData,
         string memory _sculptureOwner
     ) external payable returns (address) {
-        // This function can only be used by the root Factory SC
-        require(s_SculptureFactory == address(this));
-        
         // Checks if the user is an Admin user
         require(userAuthorisationInstance.isAuthorisedToCreate(msg.sender) == true, "Your are not authorised to create a record.");
 

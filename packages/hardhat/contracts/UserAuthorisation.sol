@@ -5,8 +5,6 @@ import "hardhat/console.sol";
 
 // Smart Contract to store the privileges of those users that can create new Smart Contracts
 contract UserAuthorisation {
-    // Singleton to allow only creating one Instance of this Smart Contract
-    address private s_UserAuthorisation;
 
     // Count the number of admin users
     uint256 numOfAdmins;
@@ -28,12 +26,6 @@ contract UserAuthorisation {
     }
 
     constructor() {
-        // Check if an instance of this Smart Contract already exists
-        require(s_UserAuthorisation == address(0), "The Instance of this Smart Contract already exists");
-
-        // Set the Instance address to the address of the contract
-        s_UserAuthorisation = address(this);
-
         // Increse the number of admins
         numOfAdmins++;
 
