@@ -57,15 +57,20 @@ library SculptureLibrary {
     }
 
     function isEditionDataValid(uint8 _categorizationLabel, EditionData memory _editionData) internal pure returns (bool) {
+        // Edition Data is only available for the following categorization labels:
+        // - AUTHORISED_REPRODUCTION
+        // - AUTHORISED_EXHIBITION_COPY
+        // - AUTHORISED_TECHNICAL_COPY
+        // - AUTHORISED_DIGITAL_COPY
         bytes memory editionExecutorBytes = bytes(_editionData.editionExecutor);
         if ((_editionData.edition != 0) || (_editionData.editionNumber != 0) || ((editionExecutorBytes.length == 1) && (editionExecutorBytes[0] != "-")) || (editionExecutorBytes.length > 1)) {
-            // Edition Data is only available for the following categorization labels
-            if ((_categorizationLabel == uint8(CategorizationLabel.AUTHORISED_REPRODUCTION))
-                    || (_categorizationLabel == uint8(CategorizationLabel.AUTHORISED_EXHIBITION_COPY))
-                    || (_categorizationLabel == uint8(CategorizationLabel.AUTHORISED_TECHNICAL_COPY))
-                    || (_categorizationLabel == uint8(CategorizationLabel.AUTHORISED_DIGITAL_COPY))) {
-                return true;
-            } else {
+            // The categorization label must be one of the supported ones when the Edition data is provided
+            if (_categorizationLabel < uint8(CategorizationLabel.AUTHORISED_REPRODUCTION)) {
+                return false;
+            }
+        } else {
+            // It is necessary to check that the Edition data is not missing when the one of the required Categorization Labels is provided
+            if (_categorizationLabel >= uint8(CategorizationLabel.AUTHORISED_REPRODUCTION)) {
                 return false;
             }
         }
