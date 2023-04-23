@@ -61,6 +61,7 @@ export default function SculptureUI({
 
   // Categorization label options
   const conservationLabel = [
+    { value: null, label: 'Select the conservation label', disabled: true },
     { value: '0', label: 'NONE' },
     { value: '1', label: 'AUTHORISED RECONSTRUCTION' },
     { value: '2', label: 'AUTHORISED RESTORATION' },
@@ -69,6 +70,7 @@ export default function SculptureUI({
 
   // Conservation options
   const conversationOptions = [
+    { value: null, label: 'Select the conservation option', disabled: true },
     { value: 'false', label: 'NO' },
     { value: 'true', label: 'YES' },
   ]
