@@ -73,6 +73,10 @@ contract SculptureFactory {
         require(SculptureLibrary.isConservationLabelValid(_conservationData.conservationLabel) == true, "The Conservation Label is not a valid value!");
         require(SculptureLibrary.checkMaxStringLength(_sculptureOwner) == true, "The Sculpture Owner field exceeds the maximum string length!");
 
+        if (_conservationData.conservation) {
+            require(_conservationData.conservationLabel > uint8(SculptureLibrary.ConservationLabel.NONE), "A conservation label is required when selecting Conservation!");
+        }
+
         return true;
     }
 }
@@ -142,72 +146,94 @@ contract Sculpture {
     event SculptureUpdated(uint256 timestamp, address authorisedModifier, string info);
 
     function updateSculpture(
-        string memory _date,
-        string memory _technique,
-        string memory _dimensions,
-        string memory _location,
-        uint8 _categorizationLabel,
-        uint256 _edition,
-        string memory _editionExecutor,
-        uint256 _editionNumber,
+        SculptureLibrary.MiscellaneousData memory _miscData,
+        SculptureLibrary.EditionData memory _editionData,
+        SculptureLibrary.ConservationData memory _conservationData,
         string memory _sculptureOwner
     ) public {
         // Checks if the user has privileges to update the data
         require(userAuthorisationInstance.isAuthorisedToUpdate(msg.sender) == true, "Your are not authorised to update a record.");
 
-        if (bytes(_date).length > 0) {
-            require(SculptureLibrary.isValidDate(_date) == true, "The Date field is wrong. Two different options are possible, example:'c.1990' for an aproximate date or just 1990!");
+        // The SculptureUI sends the already stored values for those fields that were not provided when updating the data
+        if (_miscData.date != miscData.date) {
+            require(SculptureLibrary.isValidDate(_miscData.date) == true, "The Date field is wrong. Two different options are possible, example:'c.1990' for an aproximate date or just 1990!");
 
-            miscData.date = _date;
+            miscData.date = _miscData.date;
         }
 
-        if (bytes(_technique).length > 0) {
-            require(SculptureLibrary.checkMaxStringLength(_technique) == true, "The Technique field exceeds the maximum string length!");
+        if (_miscData.technique != miscData.technique) {
+            require(SculptureLibrary.checkMaxStringLength(_miscData.technique) == true, "The Technique field exceeds the maximum string length!");
 
-            miscData.technique = _technique;
+            miscData.technique = _miscData.technique;
         }
 
-        if (bytes(_dimensions).length > 0) {
-            require(SculptureLibrary.checkMaxStringLength(_dimensions) == true, "The Dimensions field exceeds the maximum string length!");
+        if (_miscData.dimensions != miscData.dimensions) {
+            require(SculptureLibrary.checkMaxStringLength(_miscData.dimensions) == true, "The Dimensions field exceeds the maximum string length!");
 
-            miscData.dimensions = _dimensions;
+            miscData.dimensions = _miscData.dimensions;
         }
 
-        if (bytes(_location).length > 0) {
-            require(SculptureLibrary.checkMaxStringLength(_location) == true, "The Location field exceeds the maximum string length!");
+        if (_miscData.location != miscData.location) {
+            require(SculptureLibrary.checkMaxStringLength(_miscData.location) == true, "The Location field exceeds the maximum string length!");
 
-            miscData.location = _location;
+            miscData.location = _miscData.location;
         }
 
-        if (_categorizationLabel != uint8(SculptureLibrary.CategorizationLabel.NONE)) {
-            require(SculptureLibrary.isCategorizationLabelValid(_categorizationLabel) == true, "The Categorizatoin Label is not a valid value!");
+        if (_miscData.categorizationLabel != miscData.categorizationLabel) {
+            require(SculptureLibrary.isCategorizationLabelValid(_miscData.categorizationLabel) == true, "The Categorizatoin Label is not a valid value!");
 
-            miscData.categorizationLabel = _categorizationLabel;
-        }
-
-        // Only update the Edition data when the categorization label is one of the available options to store this information. Otherwise, ignore this data
-        if ((miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORISED_REPRODUCTION))
-                || (miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORISED_EXHIBITION_COPY))
-                || (miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORISED_TECHNICAL_COPY))
-                || (miscData.categorizationLabel == uint8(SculptureLibrary.CategorizationLabel.AUTHORISED_DIGITAL_COPY))) {
-
-            if (_edition !=  editionData.edition) {
-                editionData.edition = _edition;
+            if (_miscData.categorizationLabel >= uint8(CategorizationLabel.AUTHORISED_REPRODUCTION)) {
+                // Check that the edition data is provided, otherwise reject this transaction
+                require(SculptureLibrary.isEditionDataValid(_miscData.categorizationLabel, _editionData) == true, "The Edition options are required when the categorization label is Authorised reproduction, exhibition copy, technical copy or digital copy!");
             }
 
-            if (bytes(_editionExecutor).length > 0) {
-                require(SculptureLibrary.checkMaxStringLength(_editionExecutor) == true, "The Edition Excutor field exceeds the maximum string length!");
+            miscData.categorizationLabel = _miscData.categorizationLabel;
+        }
 
-                editionData.editionExecutor = _editionExecutor;
+        // Check if any of the edition fields is provided just checking the stored value since the UI sends the same value when it is not provided
+        if ((_editionData.edition !=  editionData.edition) || (_editionData.editionNumber !=  editionData.editionNumber) || (_editionData.editionExecutor != editionData.editionExecutor)) {
+            require(miscData.categorizationLabel >= uint8(SculptureLibrary.CategorizationLabel.AUTHORISED_REPRODUCTION), "The Edition options are only available when the categorization label is Authorised reproduction, exhibition copy, technical copy or digital copy!");
+
+            if (_editionData.edition != editionData.edition) {
+                editionData.edition = _editionData.edition;
             }
 
-            // TODO: Clarify if conservation data can be updated or not
-            if (_editionNumber !=  editionData.editionNumber) {
-                editionData.editionNumber = _editionNumber;
+            if (_editionData.editionExecutor != editionData.editionExecutor) {
+                require(SculptureLibrary.checkMaxStringLength(_editionData.editionExecutor) == true, "The Edition Excutor field exceeds the maximum string length!");
+
+                editionData.editionExecutor = _editionData.editionExecutor;
+            }
+
+            if (_editionData.editionNumber != editionData.editionNumber) {
+                editionData.editionNumber = _editionData.editionNumber;
             }
         }
 
-        if (bytes(_sculptureOwner).length > 0) {
+        bool cleanConservationLabel = false;
+        if (_conservationData.conservation != conservationData.conservation) {
+            if (_conservationData.conservation) {
+                require(_conservationData.conservationLabel > uint8(SculptureLibrary.ConservationLabel.NONE), "A conservation label is required when selecting Conservation. NONE is not a valid option");
+            } else {
+                // Set the flag to clean the conservation label automatically when the conservation is set to False
+                cleanConservationLabel = true;
+            }
+
+            conservationData.conservation = _conservationData.conservation;
+        }
+
+        // Check if the update for the conservation label can be skipped just cleaning its label when setting conservation to False
+        if (cleanConservationLabel) {
+            conservationData.conservationLabel = uint8(SculptureLibrary.ConservationLabel.NONE);
+        } else {
+            if (_conservationData.conservationLabel != conservationData.conservationLabel) {
+                require(SculptureLibrary.isConservationLabelValid(_conservationData.conservationLabel) == true, "The Conservation Label is not a valid value!");
+                require(conservationData.conservation, "It is necessary to choose the Conservation option in order to set a conservation label");
+
+                conservationData.conservationLabel = _conservationData.conservationLabel;
+            }
+        }
+
+        if (_sculptureOwner != sculptureOwner) {
             require(SculptureLibrary.checkMaxStringLength(_sculptureOwner) == true, "The Sculpture Owner field exceeds the maximum string length!");
 
             sculptureOwner = _sculptureOwner;

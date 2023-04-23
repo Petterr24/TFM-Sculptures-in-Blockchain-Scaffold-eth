@@ -141,9 +141,9 @@ export default function SculptureUI({
   // Sculpture owner
   const [sculptureOwnerUpdate, setSculptureOwnerUpdate] = useState("");
 
-  // Conservation data --> TODO: discuss if necessary update these fields as well
-  //const [isConservation, setIsConservation] = useState(null);
-  //const [conservationCategory, setConservationCategory] = useState(null);
+  // Conservation data
+  const [isConservationUpdate, setIsConservationUpdate] = useState(null);
+  const [conservationCategoryUpdate, setConservationCategoryUpdate] = useState(null);
 
   // Some input fields
   const fields = [
@@ -155,7 +155,8 @@ export default function SculptureUI({
     { name: 'Edition', oldValue: edition, newValue: editionUpdate },
     { name: 'Edition Executor', oldValue: editionExecutor, newValue: editionExecutorUpdate },
     { name: 'Edition Number', oldValue: editionNumber, newValue: editionNumberUpdate },
-    //{ name: 'Conservation options', oldValue: isConservation, newValue: editionUpdate }, TODO: Add if necessary
+    { name: 'Conservation options', oldValue: isConservation, newValue: isConservationUpdate },
+    { name: 'Conservation labels', oldValue: conservationCategory, newValue: conservationCategoryUpdate },
     { name: 'Sculpture owner', oldValue: sculptureOwner, newValue: sculptureOwnerUpdate }
   ];
 
@@ -210,6 +211,8 @@ export default function SculptureUI({
       setEditionUpdate(null);
       setEditionExecutorUpdate("");
       setEditionNumberUpdate(null);
+      setIsConservationUpdate(null);
+      setConservationCategoryUpdate(null);
       setSculptureOwnerUpdate("");
       setGetDataStatus("");
 
@@ -256,11 +259,16 @@ export default function SculptureUI({
             setSculptureOwnerUpdate(field.oldValue);
             break;
 
+          case 'Conservation options':
+            setIsConservationUpdate(field.oldValue);
+
+          case 'Conservation labels':
+            setConservationCategoryUpdate(field.oldValue);
+
           default:
             // Do nothing
         }
       }
-
 
       if (!field.newValue && !checkMaxLength(field.newValue.toString())) {
         setUpdateDataStatus(`The ${field.name} field exceeds the maximum string length of 64 characters`);
@@ -269,24 +277,42 @@ export default function SculptureUI({
       }
     }
 
+    // If the choosen field is 'NONE', recover the old value to send to the SC
+    if (categorizationTagUpdate == '0') {
+      setCategorizationTagUpdate(parseInt(categorizationTag));
+    }
+
     if (!isValidDate(dateUpdate)) {
       setUpdateDataStatus("Invalid date format. Please provide a valid year in the format '1990', 'c.1990', '1990-1992' or '1990 - 1992'");
 
       return false;
     }
 
-    // TODO: Once the doubt are solved. If necessary implement the conservation data update (including in SCs, not supported)
-    // TODO: There is no restrictions for Edition fields depending on the categorization labels
+    const miscellaneousDataUpdate = [
+      dateUpdate,
+      techniqueUpdate,
+      dimensionsUpdate,
+      locationUpdate,
+      categorizationTagUpdate
+    ]
+
+    const editionDataUpdate = [
+      editionUpdate,
+      editionExecutorUpdate,
+      editionNumberUpdate 
+    ]
+
+    const conservationDataUpdate = [
+      isConservationUpdate,
+      conservationCategoryUpdate
+    ]
+
+    // TODO: There is no restrictions for Edition fields depending on the categorization labels. Same for conservation maybe
     try {
       const transaction = await tx(sculptureInstance.updateSculpture(
-        dateUpdate,
-        techniqueUpdate,
-        dimensionsUpdate,
-        locationUpdate,
-        categorizationTagUpdate,
-        editionUpdate,
-        editionExecutorUpdate,
-        editionNumberUpdate,
+        miscellaneousDataUpdate,
+        editionDataUpdate,
+        conservationDataUpdate,
         sculptureOwnerUpdate));
 
       await transaction.wait();
@@ -532,6 +558,29 @@ export default function SculptureUI({
               }}
           />
         </div>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <label style={{ marginTop: 10 }}>Conservation:</label>
+          <Select style={{ marginTop: 5 }} value={isConservationUpdate} onChange={setIsConservationUpdate}>
+            {conversationOptions.map((option) => (
+              <Option key={option.value} value={option.value} disabled={option.disabled}>
+                {option.label}
+              </Option>
+            ))}
+          </Select>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <label style={{ marginTop: 10 }}>Conservation Label:</label>
+          <Select style={{ marginTop: 5 }} value={conservationCategoryUpdate}
+            onChange={e => {
+              setConservationCategoryUpdate(e.target.value); 
+            }}>
+            {conservationLabel.map((option) => (
+              <Option key={option.value} value={option.value} disabled={option.disabled}>
+                {option.label}
+              </Option>
+            ))}
+          </Select>
+        </div>
         <Button 
           style={{ marginTop: 10 }}
           onClick={() => {
@@ -545,6 +594,8 @@ export default function SculptureUI({
                 setEditionUpdate(null);
                 setEditionExecutorUpdate("");
                 setEditionNumberUpdate(null);
+                setIsConservationUpdate(null);
+                setConservationCategoryUpdate(null);
                 setSculptureOwnerUpdate("");
               }
             }).catch(error => {
