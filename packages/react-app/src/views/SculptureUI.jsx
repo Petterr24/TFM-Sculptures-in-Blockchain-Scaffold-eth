@@ -572,10 +572,7 @@ export default function SculptureUI({
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginTop: 10 }}>Conservation Label:</label>
-          <Select style={{ marginTop: 5 }} value={conservationCategoryUpdate}
-            onChange={e => {
-              setConservationCategoryUpdate(e.target.value); 
-            }}>
+          <Select style={{ marginTop: 5 }} value={conservationCategoryUpdate} onChange={setConservationCategoryUpdate}>
             {conservationLabel.map((option) => (
               <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
