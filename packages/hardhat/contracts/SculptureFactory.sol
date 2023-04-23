@@ -182,7 +182,7 @@ contract Sculpture {
         if (_miscData.categorizationLabel != miscData.categorizationLabel) {
             require(SculptureLibrary.isCategorizationLabelValid(_miscData.categorizationLabel) == true, "The Categorizatoin Label is not a valid value!");
 
-            if (_miscData.categorizationLabel >= uint8(CategorizationLabel.AUTHORISED_REPRODUCTION)) {
+            if (_miscData.categorizationLabel >= uint8(SculptureLibrary.CategorizationLabel.AUTHORISED_REPRODUCTION)) {
                 // Check that the edition data is provided, otherwise reject this transaction
                 require(SculptureLibrary.isEditionDataValid(_miscData.categorizationLabel, _editionData) == true, "The Edition options are required when the categorization label is Authorised reproduction, exhibition copy, technical copy or digital copy!");
             }
