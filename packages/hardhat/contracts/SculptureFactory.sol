@@ -202,7 +202,7 @@ contract Sculpture {
                 editionData.edition = _editionData.edition;
             }
 
-            if (_editionData.editionExecutor != editionData.editionExecutor) {
+            if (isDifferentValue(_editionData.editionExecutor, editionData.editionExecutor)) {
                 require(SculptureLibrary.checkMaxStringLength(_editionData.editionExecutor) == true, "The Edition Excutor field exceeds the maximum string length!");
 
                 editionData.editionExecutor = _editionData.editionExecutor;
