@@ -45,17 +45,18 @@ export default function SculptureUI({
   // Categorization label options
   const categorizationLabel = [
     { value: null, label: 'Select the categorization label', disabled: true },
-    { value: 1, label: 'AUTHORISED UNIQUE WORK' },
-    { value: 2, label: 'AUTHORISED UNIQUE WORK VARIATION' },
-    { value: 3, label: 'AUTHORISED WORK' },
-    { value: 4, label: 'AUTHORISED MULTIPLE' },
-    { value: 5, label: 'AUTHORISED CAST' },
-    { value: 6, label: 'POSTHUMOUS WORK AUTHORISED BY ARTIST' },
-    { value: 7, label: 'NPOSTHUMOUS WORK AUTHORISED BY RIGHTSHOLDERSONE' },
-    { value: 8, label: 'AUTHORISED REPRODUCTION' },
-    { value: 9, label: 'AUTHORISED EXHIBITION COPY' },
-    { value: 10, label: 'AUTHORISED TECHNICAL COPY' },
-    { value: 11, label: 'AUTHORISED DIGITAL COPY' }
+    { value: '0', label: 'NONE' },
+    { value: '1', label: 'AUTHORISED UNIQUE WORK' },
+    { value: '2', label: 'AUTHORISED UNIQUE WORK VARIATION' },
+    { value: '3', label: 'AUTHORISED WORK' },
+    { value: '4', label: 'AUTHORISED MULTIPLE' },
+    { value: '5', label: 'AUTHORISED CAST' },
+    { value: '6', label: 'POSTHUMOUS WORK AUTHORISED BY ARTIST' },
+    { value: '7', label: 'NPOSTHUMOUS WORK AUTHORISED BY RIGHTSHOLDERSONE' },
+    { value: '8', label: 'AUTHORISED REPRODUCTION' },
+    { value: '9', label: 'AUTHORISED EXHIBITION COPY' },
+    { value: '10', label: 'AUTHORISED TECHNICAL COPY' },
+    { value: '11', label: 'AUTHORISED DIGITAL COPY' }
   ]
 
   // Categorization label options
@@ -68,8 +69,8 @@ export default function SculptureUI({
 
   // Conservation options
   const conversationOptions = [
-    { value: '0', label: 'NO' },
-    { value: '1', label: 'YES' },
+    { value: 'false', label: 'NO' },
+    { value: 'true', label: 'YES' },
   ]
   const { Option } = Select;
 
