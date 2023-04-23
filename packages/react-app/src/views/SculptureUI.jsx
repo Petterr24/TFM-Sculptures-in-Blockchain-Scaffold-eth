@@ -113,12 +113,12 @@ export default function SculptureUI({
 
   // Get the selected option based on the isConservation state
   const conservationOption = conversationOptions.find(
-    (option) => option.value === isConservation
+    (option) => option.value !== null && option.value === isConservation
   );
 
   // Get the selected option based on the conservationCategory state
   const conservationCategoryOption = conservationLabel.find(
-    (option) => option.value === conservationCategory
+    (option) => option.value !== null && option.value === conservationCategory
   );
 
   // Sculpture owner
