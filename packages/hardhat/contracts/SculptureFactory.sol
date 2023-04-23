@@ -145,6 +145,10 @@ contract Sculpture {
 
     event SculptureUpdated(uint256 timestamp, address authorisedModifier, string info);
 
+    function isDifferentValue(string memory str1, string memory str2) private pure returns (bool) {
+        return keccak256(bytes(str1)) != keccak256(bytes(str2));
+    }
+
     function updateSculpture(
         SculptureLibrary.MiscellaneousData memory _miscData,
         SculptureLibrary.EditionData memory _editionData,
@@ -155,25 +159,25 @@ contract Sculpture {
         require(userAuthorisationInstance.isAuthorisedToUpdate(msg.sender) == true, "Your are not authorised to update a record.");
 
         // The SculptureUI sends the already stored values for those fields that were not provided when updating the data
-        if (_miscData.date != miscData.date) {
+        if (isDifferentValue(_miscData.date, miscData.date)) {
             require(SculptureLibrary.isValidDate(_miscData.date) == true, "The Date field is wrong. Two different options are possible, example:'c.1990' for an aproximate date or just 1990!");
 
             miscData.date = _miscData.date;
         }
 
-        if (_miscData.technique != miscData.technique) {
+        if (isDifferentValue(_miscData.technique, miscData.technique)) {
             require(SculptureLibrary.checkMaxStringLength(_miscData.technique) == true, "The Technique field exceeds the maximum string length!");
 
             miscData.technique = _miscData.technique;
         }
 
-        if (_miscData.dimensions != miscData.dimensions) {
+        if (isDifferentValue(_miscData.dimensions, miscData.dimensions)) {
             require(SculptureLibrary.checkMaxStringLength(_miscData.dimensions) == true, "The Dimensions field exceeds the maximum string length!");
 
             miscData.dimensions = _miscData.dimensions;
         }
 
-        if (_miscData.location != miscData.location) {
+        if (isDifferentValue(_miscData.location, miscData.location)) {
             require(SculptureLibrary.checkMaxStringLength(_miscData.location) == true, "The Location field exceeds the maximum string length!");
 
             miscData.location = _miscData.location;
@@ -191,7 +195,7 @@ contract Sculpture {
         }
 
         // Check if any of the edition fields is provided just checking the stored value since the UI sends the same value when it is not provided
-        if ((_editionData.edition !=  editionData.edition) || (_editionData.editionNumber !=  editionData.editionNumber) || (_editionData.editionExecutor != editionData.editionExecutor)) {
+        if ((_editionData.edition !=  editionData.edition) || (_editionData.editionNumber !=  editionData.editionNumber) || (isDifferentValue(_editionData.editionExecutor, editionData.editionExecutor))) {
             require(miscData.categorizationLabel >= uint8(SculptureLibrary.CategorizationLabel.AUTHORISED_REPRODUCTION), "The Edition options are only available when the categorization label is Authorised reproduction, exhibition copy, technical copy or digital copy!");
 
             if (_editionData.edition != editionData.edition) {
@@ -233,7 +237,7 @@ contract Sculpture {
             }
         }
 
-        if (_sculptureOwner != sculptureOwner) {
+        if (isDifferentValue(_sculptureOwner, sculptureOwner)) {
             require(SculptureLibrary.checkMaxStringLength(_sculptureOwner) == true, "The Sculpture Owner field exceeds the maximum string length!");
 
             sculptureOwner = _sculptureOwner;
