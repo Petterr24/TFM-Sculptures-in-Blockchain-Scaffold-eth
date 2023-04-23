@@ -97,7 +97,7 @@ export default function SculptureUI({
 
   // Get the selected option based on the categorizationTag state
   const categorizationLabelOption = categorizationLabel.find(
-    (option) => option.value === categorizationTag
+    (option) => option.value !== null && option.value === categorizationTag
   );
 
   // Edition data
@@ -185,9 +185,15 @@ export default function SculptureUI({
     setDimensions(data[MISCELLANEOUS_DATA][MISC_DIMENSIONS]);
     setLocation(data[MISCELLANEOUS_DATA][MISC_LOCATION]);
     setCategorizationTag(data[MISCELLANEOUS_DATA][MISC_CATEGORIZATION_LABEL].toString());
-    setEdition(data[EDITION_DATA][EDITION_EDITION].toString());
-    setEditionExecutor(data[EDITION_DATA][EDITION_EDITION_EXECUTOR]);
-    setEditionNumber(data[EDITION_DATA][EDITION_EDITION_NUMBER].toString());
+    if (data[EDITION_DATA][EDITION_EDITION_EXECUTOR] != '-') {
+      setEdition(data[EDITION_DATA][EDITION_EDITION].toString());
+      setEditionExecutor(data[EDITION_DATA][EDITION_EDITION_EXECUTOR]);
+      setEditionNumber(data[EDITION_DATA][EDITION_EDITION_NUMBER].toString());
+    } else {
+      setEdition(null);
+      setEditionExecutor("");
+      setEditionNumber(null)
+    }
     setIsConservation(data[CONSERVATION_DATA][CONSV_CONSERVATION].toString());
     setConservationCategory(data[CONSERVATION_DATA][CONSV_CONSERVATION_LABEL]);
     setSculptureOwner(data[OWNER]);
@@ -428,14 +434,14 @@ export default function SculptureUI({
         <p style={{ marginTop: 8 }}><strong>Technique:</strong> {technique}</p>
         <p style={{ marginTop: 8 }}><strong>Dimensions:</strong> {dimensions}</p>
         <p style={{ marginTop: 8 }}><strong>Location:</strong> {location}</p>
-        <p style={{ marginTop: 8 }}><strong>Categorization Label:</strong> {categorizationLabelOption ? categorizationLabelOption.label : '-'}</p>
+        <p style={{ marginTop: 8 }}><strong>Categorization Label:</strong> {categorizationLabelOption ? categorizationLabelOption.label : ''}</p>
         <Divider />
         <p style={{ marginTop: 8 }}><strong>Edition:</strong> {edition}</p>
         <p style={{ marginTop: 8 }}><strong>Edition Executor:</strong> {editionExecutor}</p>
         <p style={{ marginTop: 8 }}><strong>Edition Number:</strong> {editionNumber}</p>
         <Divider />
-        <p style={{ marginTop: 8 }}><strong>Conservation:</strong> {conservationOption ? conservationOption.label : '-'}</p>
-        <p style={{ marginTop: 8 }}><strong>Conservation Label:</strong> {conservationCategoryOption ? conservationCategoryOption.label : '-'}</p>
+        <p style={{ marginTop: 8 }}><strong>Conservation:</strong> {conservationOption ? conservationOption.label : ''}</p>
+        <p style={{ marginTop: 8 }}><strong>Conservation Label:</strong> {conservationCategoryOption ? conservationCategoryOption.label : ''}</p>
         <Divider />
         <Divider />
         <Divider style={{ fontWeight: 'bold', fontSize: '20px' }}>Update Sculpture:</Divider>
