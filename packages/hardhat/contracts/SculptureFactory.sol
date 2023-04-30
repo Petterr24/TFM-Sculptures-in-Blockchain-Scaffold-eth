@@ -231,7 +231,7 @@ contract Sculpture {
         } else {
             if (_conservationData.conservationLabel != conservationData.conservationLabel) {
                 require(SculptureLibrary.isConservationLabelValid(_conservationData.conservationLabel) == true, "The Conservation Label is not a valid value!");
-                require(conservationData.conservation, "It is necessary to choose the Conservation option in order to set a conservation label");
+                require(conservationData.conservation, "It is necessary to choose the Conservation option to 'YES' to be able to set a conservation label");
 
                 conservationData.conservationLabel = _conservationData.conservationLabel;
             }

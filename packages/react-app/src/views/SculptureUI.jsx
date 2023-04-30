@@ -44,15 +44,15 @@ export default function SculptureUI({
 
   // Categorization label options
   const categorizationLabel = [
-    { value: null, label: 'Select the categorization label', disabled: true },
+    { value: '', label: 'Select the categorization label' },
     { value: '0', label: 'NONE' },
     { value: '1', label: 'AUTHORISED UNIQUE WORK' },
     { value: '2', label: 'AUTHORISED UNIQUE WORK VARIATION' },
     { value: '3', label: 'AUTHORISED WORK' },
     { value: '4', label: 'AUTHORISED MULTIPLE' },
     { value: '5', label: 'AUTHORISED CAST' },
-    { value: '6', label: 'POSTHUMOUS WORK AUTHORISED BY ARTIST' },
-    { value: '7', label: 'NPOSTHUMOUS WORK AUTHORISED BY RIGHTSHOLDERSONE' },
+    { value: '6', label: 'POSTHUMOUS WORK AUTHORISED BY THE ARTIST' },
+    { value: '7', label: 'POSTHUMOUS WORK AUTHORISED BY THE RIGHTSHOLDERS' },
     { value: '8', label: 'AUTHORISED REPRODUCTION' },
     { value: '9', label: 'AUTHORISED EXHIBITION COPY' },
     { value: '10', label: 'AUTHORISED TECHNICAL COPY' },
@@ -61,7 +61,7 @@ export default function SculptureUI({
 
   // Categorization label options
   const conservationLabel = [
-    { value: null, label: 'Select the conservation label', disabled: true },
+    { value: '', label: 'Select the conservation label' },
     { value: '0', label: 'NONE' },
     { value: '1', label: 'AUTHORISED RECONSTRUCTION' },
     { value: '2', label: 'AUTHORISED RESTORATION' },
@@ -70,7 +70,7 @@ export default function SculptureUI({
 
   // Conservation options
   const conversationOptions = [
-    { value: null, label: 'Select the conservation option', disabled: true },
+    { value: '', label: 'Select the conservation option' },
     { value: 'false', label: 'NO' },
     { value: 'true', label: 'YES' },
   ]
@@ -95,11 +95,11 @@ export default function SculptureUI({
   const [technique, setTechnique] = useState("");
   const [dimensions, setDimensions] = useState("");
   const [location, setLocation] = useState("");
-  const [categorizationTag, setCategorizationTag] = useState(null);
+  const [categorizationTag, setCategorizationTag] = useState("");
 
   // Get the selected option based on the categorizationTag state
   const categorizationLabelOption = categorizationLabel.find(
-    (option) => option.value !== null && option.value === categorizationTag
+    (option) => option.value !== '' && option.value === categorizationTag
   );
 
   // Edition data
@@ -108,17 +108,17 @@ export default function SculptureUI({
   const [editionNumber, setEditionNumber] = useState("");
 
   // Conservation data
-  const [isConservation, setIsConservation] = useState(null);
-  const [conservationCategory, setConservationCategory] = useState(null);
+  const [isConservation, setIsConservation] = useState("");
+  const [conservationCategory, setConservationCategory] = useState("");
 
   // Get the selected option based on the isConservation state
   const conservationOption = conversationOptions.find(
-    (option) => option.value !== null && option.value === isConservation
+    (option) => option.value !== '' && option.value === isConservation
   );
 
   // Get the selected option based on the conservationCategory state
   const conservationCategoryOption = conservationLabel.find(
-    (option) => option.value !== null && option.value !== '0' && option.value === conservationCategory
+    (option) => option.value !== '' && option.value !== '0' && option.value === conservationCategory
   );
 
   // Sculpture owner
@@ -144,46 +144,43 @@ export default function SculptureUI({
   const [sculptureOwnerUpdate, setSculptureOwnerUpdate] = useState("");
 
   // Conservation data
-  const [isConservationUpdate, setIsConservationUpdate] = useState(null);
+  const [isConservationUpdate, setIsConservationUpdate] = useState(true);
   const [conservationCategoryUpdate, setConservationCategoryUpdate] = useState(null);
 
-  // Some input fields
-  const fields = [
-    { name: 'Date', oldValue: date, newValue: dateUpdate },
-    { name: 'Technique', oldValue: technique, newValue: techniqueUpdate },
-    { name: 'Sculpture Dimensions', oldValue: dimensions, newValue: dimensionsUpdate },
-    { name: 'Location', oldValue: location, newValue: locationUpdate },
-    { name: 'Categorization Labels', oldValue: categorizationTag, newValue: categorizationTagUpdate },
-    { name: 'Edition', oldValue: edition, newValue: editionUpdate },
-    { name: 'Edition Executor', oldValue: editionExecutor, newValue: editionExecutorUpdate },
-    { name: 'Edition Number', oldValue: editionNumber, newValue: editionNumberUpdate },
-    { name: 'Conservation options', oldValue: isConservation, newValue: isConservationUpdate },
-    { name: 'Conservation labels', oldValue: conservationCategory, newValue: conservationCategoryUpdate },
-    { name: 'Sculpture owner', oldValue: sculptureOwner, newValue: sculptureOwnerUpdate }
-  ];
-
   /********************* States to show the new value to update the Record in the UI. **************************/
-  // Update Sculpture Status
-  const [updateDataStatusUI, setUpdateDataStatusUI] = useState("");
-
   // Miscelaneous data
   const [dateUpdateUI, setDateUpdateUI] = useState("");
   const [techniqueUpdateUI, setTechniqueUpdateUI] = useState("");
   const [dimensionsUpdateUI, setDimensionsUpdateUI] = useState("");
   const [locationUpdateUI, setLocationUpdateUI] = useState("");
-  const [categorizationTagUpdateUI, setCategorizationTagUpdateUI] = useState(null);
+  const [categorizationTagUpdateUI, setCategorizationTagUpdateUI] = useState("");
 
   // Edition data
-  const [editionUpdateUI, setEditionUpdateUI] = useState(null);
+  const [editionUpdateUI, setEditionUpdateUI] = useState("");
   const [editionExecutorUpdateUI, setEditionExecutorUpdateUI] = useState("");
-  const [editionNumberUpdateUI, setEditionNumberUpdateUI] = useState(null);
+  const [editionNumberUpdateUI, setEditionNumberUpdateUI] = useState("");
   
   // Sculpture owner
   const [sculptureOwnerUpdateUI, setSculptureOwnerUpdateUI] = useState("");
 
   // Conservation data
-  const [isConservationUpdateUI, setIsConservationUpdateUI] = useState(null);
-  const [conservationCategoryUpdateUI, setConservationCategoryUpdateUI] = useState(null);
+  const [isConservationUpdateUI, setIsConservationUpdateUI] = useState("");
+  const [conservationCategoryUpdateUI, setConservationCategoryUpdateUI] = useState("");
+
+  /********************* Inputs fields provided to update a Sculpture record. **************************/
+  const fields = [
+    { name: 'Date', oldValue: date, newValue: dateUpdate },
+    { name: 'Technique', oldValue: technique, newValue: techniqueUpdate },
+    { name: 'Sculpture Dimensions', oldValue: dimensions, newValue: dimensionsUpdate },
+    { name: 'Location', oldValue: location, newValue: locationUpdate },
+    { name: 'Categorization Labels', oldValue: categorizationTag, newValue: categorizationTagUpdateUI },
+    { name: 'Sculpture owner', oldValue: sculptureOwner, newValue: sculptureOwnerUpdate },
+    { name: 'Edition', oldValue: edition, newValue: editionUpdateUI },
+    { name: 'Edition Executor', oldValue: editionExecutor, newValue: editionExecutorUpdate },
+    { name: 'Edition Number', oldValue: editionNumber, newValue: editionNumberUpdateUI },
+    { name: 'Conservation options', oldValue: isConservation, newValue: isConservationUpdateUI },
+    { name: 'Conservation labels', oldValue: conservationCategory, newValue: conservationCategoryUpdateUI }
+  ];
 
   function checkMaxLength(str) {
     return str.length <= 64;
@@ -216,9 +213,9 @@ export default function SculptureUI({
       setEditionExecutor(data[EDITION_DATA][EDITION_EDITION_EXECUTOR]);
       setEditionNumber(data[EDITION_DATA][EDITION_EDITION_NUMBER].toString());
     } else {
-      setEdition(null);
+      setEdition("");
       setEditionExecutor("");
-      setEditionNumber(null)
+      setEditionNumber("")
     }
     setIsConservation(data[CONSERVATION_DATA][CONSV_CONSERVATION].toString());
     setConservationCategory(data[CONSERVATION_DATA][CONSV_CONSERVATION_LABEL].toString());
@@ -244,82 +241,13 @@ export default function SculptureUI({
       setTechniqueUpdateUI("");
       setDimensionsUpdateUI("");
       setLocationUpdateUI("");
-      setCategorizationTagUpdateUI(null);
-      setEditionUpdateUI(null);
+      setCategorizationTagUpdateUI("");
+      setEditionUpdateUI("");
       setEditionExecutorUpdateUI("");
-      setEditionNumberUpdateUI(null);
-      setIsConservationUpdateUI(null);
-      setConservationCategoryUpdateUI(null);
+      setEditionNumberUpdateUI("");
+      setIsConservationUpdateUI("");
+      setConservationCategoryUpdateUI("");
       setSculptureOwnerUpdateUI("");
-
-      return false;
-    }
-
-    // Check that the following fields are provided
-    for (const field of fields) {
-      if (!field.newValue) {
-        switch (field.name) {
-          case 'Date':
-            setDateUpdate(field.oldValue);
-            break;
-
-          case 'Technique':
-            setTechniqueUpdate(field.oldValue);
-            break;
-
-          case 'Sculpture Dimensions':
-            setDimensionsUpdate(field.oldValue);
-            break;
-
-          case 'Location':
-            setLocationUpdate(field.oldValue);
-            break;
-
-          case 'Categorization Labels':
-            setCategorizationTagUpdate(parseInt(field.oldValue));
-            break;
-
-          case 'Edition':
-            setEditionUpdate(parseInt(field.oldValue));
-            break;
-
-          case 'Edition Executor':
-            setEditionExecutor(field.oldValue);
-            break;
-
-          case 'Edition Number':
-            setEditionNumberUpdate(parseInt(field.oldValue));
-            break;
-
-          case 'Sculpture owner':
-            setSculptureOwnerUpdate(field.oldValue);
-            break;
-
-          case 'Conservation options':
-            setIsConservationUpdate(field.oldValue);
-
-          case 'Conservation labels':
-            setConservationCategoryUpdate(field.oldValue);
-
-          default:
-            // Do nothing
-        }
-      }
-
-      if (!field.newValue && !checkMaxLength(field.newValue.toString())) {
-        setUpdateDataStatus(`The ${field.name} field exceeds the maximum string length of 64 characters`);
-
-        return false;
-      }
-    }
-
-    // If the choosen field is 'NONE', recover the old value to send to the SC
-    if (categorizationTagUpdate == '0') {
-      setCategorizationTagUpdate(parseInt(categorizationTag));
-    }
-
-    if (!isValidDate(dateUpdate)) {
-      setUpdateDataStatus("Invalid date format. Please provide a valid year in the format '1990', 'c.1990', '1990-1992' or '1990 - 1992'");
 
       return false;
     }
@@ -343,13 +271,184 @@ export default function SculptureUI({
       conservationCategoryUpdate
     ]
 
+    let sculptureOwnerData = sculptureOwnerUpdate;
+
+    // Check that the following fields are provided
+    for (const field of fields) {
+      let skipStringLengthCheck = false;
+      if (!field.newValue) {
+        switch (field.name) {
+          case 'Date':
+            setDateUpdate(field.oldValue);
+            miscellaneousDataUpdate[MISC_DATE] = field.oldValue;
+            break;
+
+          case 'Technique':
+            setTechniqueUpdate(field.oldValue);
+            miscellaneousDataUpdate[MISC_TECHNIQUE] = field.oldValue;
+            break;
+
+          case 'Sculpture Dimensions':
+            setDimensionsUpdate(field.oldValue);
+            miscellaneousDataUpdate[MISC_DIMENSIONS] = field.oldValue;
+            break;
+
+          case 'Location':
+            setLocationUpdate(field.oldValue);
+            miscellaneousDataUpdate[MISC_LOCATION] = field.oldValue;
+            break;
+
+          case 'Categorization Labels':
+            setCategorizationTagUpdate(parseInt(field.oldValue));
+            miscellaneousDataUpdate[MISC_CATEGORIZATION_LABEL] = parseInt(field.oldValue);
+            skipStringLengthCheck = true;
+            break;
+
+          case 'Edition':
+            // If Edition is not provided, check if the previous value was empty, so we have to send the default value '0'
+            let editionValue = 0;
+            if (field.oldValue != "") {
+              editionValue = parseInt(field.oldValue);
+            }
+            setEditionUpdate(editionValue);
+            editionDataUpdate[EDITION_EDITION] = editionValue;
+            skipStringLengthCheck = true;
+            break;
+
+          case 'Edition Executor':
+            // If EditionExecutor is not provided, check if the previous value was empty, so we have to send the default value '-'
+            let editionExecutorValue = "-";
+            if (field.oldValue != "") {
+              editionExecutorValue = field.oldValue;
+            }
+            setEditionExecutorUpdate(editionExecutorValue)
+            editionDataUpdate[EDITION_EDITION_EXECUTOR] = editionExecutorValue;
+            break;
+
+          case 'Edition Number':
+            // If EditionNumber is not provided, check if the previous value was empty, so we have to send the default value '0'
+            let editionNumberValue = 0;
+            if (field.oldValue != "") {
+              editionNumberValue = parseInt(field.oldValue);
+            }
+            setEditionNumberUpdate(editionNumberValue);
+            editionDataUpdate[EDITION_EDITION_NUMBER] = editionNumberValue;
+            skipStringLengthCheck = true;
+            break;
+
+          case 'Sculpture owner':
+            setSculptureOwnerUpdate(field.oldValue);
+            sculptureOwnerData = field.oldValue;
+            break;
+
+          case 'Conservation options':
+            let conservationValue = false;
+            if (field.oldValue == 'true') {
+              conservationValue = true;
+            }
+            setIsConservationUpdate(conservationValue);
+            conservationDataUpdate[CONSV_CONSERVATION] = conservationValue;
+            skipStringLengthCheck = true;
+            break;
+
+          case 'Conservation labels':
+            // If ConservationLabel is not provided, check if the previous value was empty, so we have to send the default value '0'
+            let conservationLabelValue = 0;
+            if (field.oldValue != "") {
+              conservationLabelValue = parseInt(field.oldValue);
+            }
+            setConservationCategoryUpdate(conservationLabelValue);
+            conservationDataUpdate[CONSV_CONSERVATION_LABEL] = conservationLabelValue;
+            skipStringLengthCheck = true;
+            break;
+
+          default:
+            // Do nothing
+        }
+      } else {
+        // Convert the non string fields to the corresponding type (int or boolean) using the UI states which are strings
+        skipStringLengthCheck = true;
+        switch (field.name) {
+          case 'Date':
+            if (!isValidDate(field.newValue)) {
+              setUpdateDataStatus("Invalid date format. Please provide a valid year in the format '1990', 'c.1990', '1990-1992' or '1990 - 1992'");
+
+              return false;
+            }
+            break;
+
+          case 'Categorization Labels':
+            // If the choosen field is 'NONE', recover the old value to send to the SC
+            // This would mean that the user would have regretted choosing a new label and the only way to deselect would be choosing NONE
+            let categorizationTagValue = parseInt(field.newValue);
+            if (categorizationTagValue == '0') {
+              categorizationTagValue = parseInt(field.oldValue);
+            }
+            setCategorizationTagUpdate(categorizationTagValue);
+            miscellaneousDataUpdate[MISC_CATEGORIZATION_LABEL] = categorizationTagValue;
+            break;
+
+          case 'Edition':
+            let editionValue = parseInt(field.newValue);
+            setEditionUpdate(editionValue);
+            editionDataUpdate[EDITION_EDITION] = editionValue;
+            break;
+
+          case 'Edition Number':
+            let editionNumberValue = parseInt(field.newValue);
+            setEditionNumberUpdate(editionNumberValue);
+            editionDataUpdate[EDITION_EDITION_NUMBER] = editionNumberValue;
+            break;
+
+          case 'Conservation options':
+            let conservationValue = false;
+            if (field.newValue == 'true') {
+              conservationValue = true;
+            }
+            setIsConservationUpdate(conservationValue);
+            conservationDataUpdate[CONSV_CONSERVATION] = conservationValue;
+            break;
+
+          case 'Conservation labels':
+            let conservationLabelValue = parseInt(field.newValue);
+            setConservationCategoryUpdate(conservationLabelValue);
+            conservationDataUpdate[CONSV_CONSERVATION_LABEL] = conservationLabelValue;
+            break;
+
+          default:
+            // Do nothing for the other cases
+            // Set to false the String Length check as it means that the current field is a string
+            skipStringLengthCheck = false;
+        }
+      }
+
+      if (!skipStringLengthCheck && !checkMaxLength(field.newValue)) {
+        setUpdateDataStatus(`The ${field.name} field exceeds the maximum string length of 64 characters`);
+
+        return false;
+      }
+    }
+
+    // It is necessary to have a conservation label when the conservation option is set to TRUE ('YES')
+    if (conservationDataUpdate[CONSV_CONSERVATION]  && conservationDataUpdate[CONSV_CONSERVATION_LABEL] == 0) {
+      // Fails if the isConservation value is true and the Conservation label is 'NONE'
+      setUpdateDataStatus("A conservation label is required when selecting Conservation. NONE is not a valid option");
+
+      return false;
+    } else if (!conservationDataUpdate[CONSV_CONSERVATION] && conservationDataUpdate[CONSV_CONSERVATION_LABEL] != 0) {
+      // Fails if the isConservation value is false and the Conservation label is different than 'NONE'
+      setUpdateDataStatus("Conservation labels cannot be selected or stored when conservation is set to 'NO'");
+
+      return false;
+    }
+
     // TODO: There is no restrictions for Edition fields depending on the categorization labels. Same for conservation maybe
     try {
       const transaction = await tx(sculptureInstance.updateSculpture(
         miscellaneousDataUpdate,
         editionDataUpdate,
         conservationDataUpdate,
-        sculptureOwnerUpdate));
+        sculptureOwnerData));
 
       await transaction.wait();
       setUpdateDataStatus("Sculpture record updated successfully");
@@ -420,7 +519,7 @@ export default function SculptureUI({
       {/*
         ⚙️ Sculpture User Interface
       */}
-      <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64 }}>
+      <div style={{ border: "1px solid #cccccc", padding: 16, width: 500, margin: "auto", marginTop: 64 }}>
         <Divider />
         <h2 style={{ fontWeight: 'bold', fontSize: '28px' }}>Sculpture</h2>
         <Divider />
@@ -450,7 +549,10 @@ export default function SculptureUI({
               if (result) {
                 setSculptureAddress("");
               } else {
+                // State to display the current Record address
                 setVerifiedSculptureAddress("");
+
+                // States used to display the information stored in the SmartContract record
                 setSculptureName("");
                 setArtist("");
                 setCriticalCatalogNumber("");
@@ -458,22 +560,40 @@ export default function SculptureUI({
                 setTechnique("");
                 setDimensions("");
                 setLocation("");
-                setCategorizationTag(null);
+                setSculptureOwner("");
+                setCategorizationTag("");
                 setEdition("");
                 setEditionExecutor("");
                 setEditionNumber("");
-                setIsConservation(null);
-                setConservationCategory(null);
-                setSculptureOwner("");
+                setIsConservation("");
+                setConservationCategory("");
+
+                // States used to store the new values that would be supplied to update the exiting record
                 setDateUpdate("");
                 setTechniqueUpdate("");
                 setDimensionsUpdate("");
                 setLocationUpdate("");
+                setSculptureOwnerUpdate("");
                 setCategorizationTagUpdate(null);
                 setEditionUpdate(null);
                 setEditionExecutorUpdate("");
                 setEditionNumberUpdate(null);
-                setSculptureOwnerUpdate("");
+                setIsConservationUpdate(null);
+                setConservationCategoryUpdate(null);
+
+                // States used to store the values provided by the user in the UI fields to be supplied to the record in order to be updated
+                // They are only used to display the value in the Update Sculpture section
+                setDateUpdateUI("");
+                setTechniqueUpdateUI("");
+                setDimensionsUpdateUI("");
+                setLocationUpdateUI("");
+                setSculptureOwnerUpdateUI("");
+                setCategorizationTagUpdateUI("");
+                setEditionUpdateUI("");
+                setEditionExecutorUpdateUI("");
+                setEditionNumberUpdateUI("");
+                setIsConservationUpdateUI("");
+                setConservationCategoryUpdateUI("");
               }
             }).catch(error => {
               console.log(error);
@@ -496,6 +616,7 @@ export default function SculptureUI({
         <p style={{ marginTop: 8 }}><strong>Technique:</strong> {technique}</p>
         <p style={{ marginTop: 8 }}><strong>Dimensions:</strong> {dimensions}</p>
         <p style={{ marginTop: 8 }}><strong>Location:</strong> {location}</p>
+        <p style={{ marginTop: 8 }}><strong>Sculpture owner:</strong> {sculptureOwner}</p>
         <p style={{ marginTop: 8 }}><strong>Categorization Label:</strong> {categorizationLabelOption ? categorizationLabelOption.label : ''}</p>
         <Divider />
         <p style={{ marginTop: 8 }}><strong>Edition:</strong> {edition}</p>
@@ -564,11 +685,7 @@ export default function SculptureUI({
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginTop: 10 }}>Categorization Label:</label>
-          <Select style={{ marginTop: 5 }} value={categorizationTagUpdateUI}
-            onChange={value => {
-              setCategorizationTagUpdate(value); 
-              setCategorizationTagUpdateUI(value);
-            }}>
+          <Select style={{ marginTop: 5 }} value={categorizationTagUpdateUI} onChange={setCategorizationTagUpdateUI}>
             {categorizationLabel.map((option) => (
               <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
@@ -581,7 +698,6 @@ export default function SculptureUI({
           <Input
               value={editionUpdateUI}
               onChange={e => {
-                setEditionUpdate(e.target.value);
                 setEditionUpdateUI(e.target.value);
               }}
           />
@@ -601,18 +717,13 @@ export default function SculptureUI({
           <Input
               value={editionNumberUpdateUI}
               onChange={e => {
-                setEditionNumberUpdate(e.target.value);
                 setEditionNumberUpdateUI(e.target.value);
               }}
           />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginTop: 10 }}>Conservation:</label>
-          <Select style={{ marginTop: 5 }} value={isConservationUpdateUI}
-            onChange={value => {
-              setIsConservationUpdate(value); 
-              setIsConservationUpdateUI(value);
-            }}>
+          <Select style={{ marginTop: 5 }} value={isConservationUpdateUI} onChange={setIsConservationUpdateUI}>
             {conversationOptions.map((option) => (
               <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
@@ -622,11 +733,7 @@ export default function SculptureUI({
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginTop: 10 }}>Conservation Label:</label>
-          <Select style={{ marginTop: 5 }} value={conservationCategoryUpdateUI}
-            onChange={value => {
-              setConservationCategoryUpdate(value); 
-              setConservationCategoryUpdateUI(value);
-            }}>
+          <Select style={{ marginTop: 5 }} value={conservationCategoryUpdateUI} onChange={setConservationCategoryUpdateUI}>
             {conservationLabel.map((option) => (
               <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
@@ -639,28 +746,32 @@ export default function SculptureUI({
           onClick={() => {
             updateSculpture().then(result => {
               if (result) {
+                // States used to store the new values that would be supplied to update the exiting record
                 setDateUpdate("");
                 setTechniqueUpdate("");
                 setDimensionsUpdate("");
                 setLocationUpdate("");
+                setSculptureOwnerUpdate("");
                 setCategorizationTagUpdate(null);
                 setEditionUpdate(null);
                 setEditionExecutorUpdate("");
                 setEditionNumberUpdate(null);
                 setIsConservationUpdate(null);
                 setConservationCategoryUpdate(null);
-                setSculptureOwnerUpdate("");
+
+                // States used to store the values provided by the user in the UI fields to be supplied to the record in order to be updated
+                // They are only used to display the value in the Update Sculpture section
                 setDateUpdateUI("");
                 setTechniqueUpdateUI("");
                 setDimensionsUpdateUI("");
                 setLocationUpdateUI("");
-                setCategorizationTagUpdateUI(null);
-                setEditionUpdateUI(null);
-                setEditionExecutorUpdateUI("");
-                setEditionNumberUpdateUI(null);
-                setIsConservationUpdateUI(null);
-                setConservationCategoryUpdateUI(null);
                 setSculptureOwnerUpdateUI("");
+                setCategorizationTagUpdateUI("");
+                setEditionUpdateUI("");
+                setEditionExecutorUpdateUI("");
+                setEditionNumberUpdateUI("");
+                setIsConservationUpdateUI("");
+                setConservationCategoryUpdateUI("");
               }
             }).catch(error => {
               console.log(error);

@@ -93,7 +93,7 @@ export default function UserAuthorisationUI({
       {/*
         ⚙️ User Authorisation User Interface
       */}
-      <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64 }}>
+      <div style={{ border: "1px solid #cccccc", padding: 16, width: 500, margin: "auto", marginTop: 64 }}>
         <Divider />
         <h2 style={{ fontWeight: 'bold', fontSize: '28px' }}>User Authorisation</h2>
         <Divider />

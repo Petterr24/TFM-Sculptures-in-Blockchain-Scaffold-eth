@@ -26,8 +26,8 @@ export default function SculptureFactoryUI({
     { value: 3, label: 'AUTHORISED WORK' },
     { value: 4, label: 'AUTHORISED MULTIPLE' },
     { value: 5, label: 'AUTHORISED CAST' },
-    { value: 6, label: 'POSTHUMOUS WORK AUTHORISED BY ARTIST' },
-    { value: 7, label: 'NPOSTHUMOUS WORK AUTHORISED BY RIGHTSHOLDERSONE' },
+    { value: 6, label: 'POSTHUMOUS WORK AUTHORISED BY THE ARTIST' },
+    { value: 7, label: 'POSTHUMOUS WORK AUTHORISED BY THE RIGHTSHOLDERS' },
     { value: 8, label: 'AUTHORISED REPRODUCTION' },
     { value: 9, label: 'AUTHORISED EXHIBITION COPY' },
     { value: 10, label: 'AUTHORISED TECHNICAL COPY' },
@@ -242,7 +242,7 @@ export default function SculptureFactoryUI({
       {/*
         ⚙️ Sculpture Factory User Interface
       */}
-      <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64 }}>
+      <div style={{ border: "1px solid #cccccc", padding: 16, width: 500, margin: "auto", marginTop: 64 }}>
         <Divider />
         <h2 style={{ fontWeight: 'bold', fontSize: '28px' }}>Sculpture Factory</h2>
         <Divider />
