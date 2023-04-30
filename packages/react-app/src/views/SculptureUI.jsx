@@ -118,7 +118,7 @@ export default function SculptureUI({
 
   // Get the selected option based on the conservationCategory state
   const conservationCategoryOption = conservationLabel.find(
-    (option) => option.value !== null && option.value === conservationCategory
+    (option) => option.value !== null && option.value !== '0' && option.value === conservationCategory
   );
 
   // Sculpture owner
@@ -198,7 +198,7 @@ export default function SculptureUI({
       setEditionNumber(null)
     }
     setIsConservation(data[CONSERVATION_DATA][CONSV_CONSERVATION].toString());
-    setConservationCategory(data[CONSERVATION_DATA][CONSV_CONSERVATION_LABEL]);
+    setConservationCategory(data[CONSERVATION_DATA][CONSV_CONSERVATION_LABEL].toString());
     setSculptureOwner(data[OWNER]);
   }
 
