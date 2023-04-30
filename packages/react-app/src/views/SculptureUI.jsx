@@ -162,6 +162,29 @@ export default function SculptureUI({
     { name: 'Sculpture owner', oldValue: sculptureOwner, newValue: sculptureOwnerUpdate }
   ];
 
+  /********************* States to show the new value to update the Record in the UI. **************************/
+  // Update Sculpture Status
+  const [updateDataStatusUI, setUpdateDataStatusUI] = useState("");
+
+  // Miscelaneous data
+  const [dateUpdateUI, setDateUpdateUI] = useState("");
+  const [techniqueUpdateUI, setTechniqueUpdateUI] = useState("");
+  const [dimensionsUpdateUI, setDimensionsUpdateUI] = useState("");
+  const [locationUpdateUI, setLocationUpdateUI] = useState("");
+  const [categorizationTagUpdateUI, setCategorizationTagUpdateUI] = useState(null);
+
+  // Edition data
+  const [editionUpdateUI, setEditionUpdateUI] = useState(null);
+  const [editionExecutorUpdateUI, setEditionExecutorUpdateUI] = useState("");
+  const [editionNumberUpdateUI, setEditionNumberUpdateUI] = useState(null);
+  
+  // Sculpture owner
+  const [sculptureOwnerUpdateUI, setSculptureOwnerUpdateUI] = useState("");
+
+  // Conservation data
+  const [isConservationUpdateUI, setIsConservationUpdateUI] = useState(null);
+  const [conservationCategoryUpdateUI, setConservationCategoryUpdateUI] = useState(null);
+
   function checkMaxLength(str) {
     return str.length <= 64;
   }
@@ -217,6 +240,17 @@ export default function SculptureUI({
       setConservationCategoryUpdate(null);
       setSculptureOwnerUpdate("");
       setGetDataStatus("");
+      setDateUpdateUI("");
+      setTechniqueUpdateUI("");
+      setDimensionsUpdateUI("");
+      setLocationUpdateUI("");
+      setCategorizationTagUpdateUI(null);
+      setEditionUpdateUI(null);
+      setEditionExecutorUpdateUI("");
+      setEditionNumberUpdateUI(null);
+      setIsConservationUpdateUI(null);
+      setConservationCategoryUpdateUI(null);
+      setSculptureOwnerUpdateUI("");
 
       return false;
     }
@@ -481,51 +515,60 @@ export default function SculptureUI({
         <div>
           <label>Date:</label>
           <Input
-              value={dateUpdate}
+              value={dateUpdateUI}
               onChange={e => {
                 setDateUpdate(e.target.value);
+                setDateUpdateUI(e.target.value);
               }}
           />
         </div>
         <div>
           <label>Technique:</label>
           <Input
-              value={techniqueUpdate}
+              value={techniqueUpdateUI}
               onChange={e => {
                 setTechniqueUpdate(e.target.value);
+                setTechniqueUpdateUI(e.target.value);
               }}
           />
         </div>
         <div>
           <label>Dimensions:</label>
           <Input
-              value={dimensionsUpdate}
+              value={dimensionsUpdateUI}
               onChange={e => {
                 setDimensionsUpdate(e.target.value);
+                setDimensionsUpdateUI(e.target.value);
               }}
           />
         </div>
         <div>
           <label>Location:</label>
           <Input
-              value={locationUpdate}
+              value={locationUpdateUI}
               onChange={e => {
                 setLocationUpdate(e.target.value);
+                setLocationUpdateUI(e.target.value);
               }}
           />
         </div>
         <div>
           <label>Owner:</label>
           <Input
-              value={sculptureOwnerUpdate}
+              value={sculptureOwnerUpdateUI}
               onChange={e => {
                 setSculptureOwnerUpdate(e.target.value);
+                setSculptureOwnerUpdateUI(e.target.value);
               }}
           />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginTop: 10 }}>Categorization Label:</label>
-          <Select style={{ marginTop: 5 }} value={categorizationTagUpdate} onChange={setCategorizationTagUpdate}>
+          <Select style={{ marginTop: 5 }} value={categorizationTagUpdateUI}
+            onChange={value => {
+              setCategorizationTagUpdate(value); 
+              setCategorizationTagUpdateUI(value);
+            }}>
             {categorizationLabel.map((option) => (
               <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
@@ -536,33 +579,40 @@ export default function SculptureUI({
         <div>
           <label>Edition:</label>
           <Input
-              value={editionUpdate}
+              value={editionUpdateUI}
               onChange={e => {
                 setEditionUpdate(e.target.value);
+                setEditionUpdateUI(e.target.value);
               }}
           />
         </div>
         <div>
           <label>Edition Executor:</label>
           <Input
-              value={editionExecutorUpdate}
+              value={editionExecutorUpdateUI}
               onChange={e => {
                 setEditionExecutorUpdate(e.target.value);
+                setEditionExecutorUpdateUI(e.target.value);
               }}
           />
         </div>
         <div>
           <label>Edition Number:</label>
           <Input
-              value={editionNumberUpdate}
+              value={editionNumberUpdateUI}
               onChange={e => {
                 setEditionNumberUpdate(e.target.value);
+                setEditionNumberUpdateUI(e.target.value);
               }}
           />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginTop: 10 }}>Conservation:</label>
-          <Select style={{ marginTop: 5 }} value={isConservationUpdate} onChange={setIsConservationUpdate}>
+          <Select style={{ marginTop: 5 }} value={isConservationUpdateUI}
+            onChange={value => {
+              setIsConservationUpdate(value); 
+              setIsConservationUpdateUI(value);
+            }}>
             {conversationOptions.map((option) => (
               <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
@@ -572,7 +622,11 @@ export default function SculptureUI({
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginTop: 10 }}>Conservation Label:</label>
-          <Select style={{ marginTop: 5 }} value={conservationCategoryUpdate} onChange={setConservationCategoryUpdate}>
+          <Select style={{ marginTop: 5 }} value={conservationCategoryUpdateUI}
+            onChange={value => {
+              setConservationCategoryUpdate(value); 
+              setConservationCategoryUpdateUI(value);
+            }}>
             {conservationLabel.map((option) => (
               <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
@@ -596,6 +650,17 @@ export default function SculptureUI({
                 setIsConservationUpdate(null);
                 setConservationCategoryUpdate(null);
                 setSculptureOwnerUpdate("");
+                setDateUpdateUI("");
+                setTechniqueUpdateUI("");
+                setDimensionsUpdateUI("");
+                setLocationUpdateUI("");
+                setCategorizationTagUpdateUI(null);
+                setEditionUpdateUI(null);
+                setEditionExecutorUpdateUI("");
+                setEditionNumberUpdateUI(null);
+                setIsConservationUpdateUI(null);
+                setConservationCategoryUpdateUI(null);
+                setSculptureOwnerUpdateUI("");
               }
             }).catch(error => {
               console.log(error);
