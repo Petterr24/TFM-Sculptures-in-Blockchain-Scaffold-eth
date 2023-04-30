@@ -420,7 +420,7 @@ export default function SculptureFactoryUI({
               console.log(error);
             })
           }}>
-          Create Sculpture
+          Create Sculpture Record
         </Button>
         <p style={{ marginTop: 8 }}>Transcation status: {creationStatus}</p>
         <Divider />
