@@ -1,7 +1,8 @@
 import { Button, Card, DatePicker, Divider, Input, Select, Progress, Slider, Spin, Switch } from "antd";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { utils } from "ethers";
 import { SyncOutlined } from "@ant-design/icons";
+import { List } from "antd";
 
 import { Address, Balance, Events } from "../components";
 
@@ -15,6 +16,7 @@ export default function SculptureFactoryUI({
   readContracts,
   writeContracts,
 }) {
+  const [sculptureAddresses, setSculptureAddresses] = useState([]);
 
   // Categorization label options
   const categorizationLabel = [
@@ -96,6 +98,23 @@ export default function SculptureFactoryUI({
     { name: 'Conservation options', value: isConservation },
     { name: 'Sculpture owner', value: sculptureOwner }
   ];
+
+  async function getExistingSculptureAddresses() {
+    try {
+      const addresses = await readContracts.SculptureFactory.getSculptures();
+      if (addresses.length > 0) {
+        setSculptureAddresses(addresses);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    if (readContracts && readContracts.SculptureFactory) {
+      getExistingSculptureAddresses();
+    }
+  }, [readContracts.SculptureFactory]);
 
   function isValidDate(value) {
     const regexFormat1 = /^\d{4}$/; // Regex pattern to match the data format like "1990"
@@ -207,6 +226,7 @@ export default function SculptureFactoryUI({
       const transaction = await tx(writeContracts.SculptureFactory.createSculpture(persistentData, miscellaneousData, editionData, conservationData, sculptureOwner));
       await transaction.wait();
       setCreationStatus("Sculpture record created successfully");
+      getExistingSculptureAddresses();
 
       return true;
     } catch (err) {
@@ -413,18 +433,28 @@ export default function SculptureFactoryUI({
         <Balance address={address} provider={localProvider} price={price} />
       </div>
 
-      {/*
-        Events
-      */}
-      <Events
-        title="New Sculpture"
-        contracts={readContracts}
-        contractName="SculptureFactory"
-        eventName="NewSculpture"
-        localProvider={localProvider}
-        mainnetProvider={mainnetProvider}
-        startBlock={1}
+    {/*
+      ⚙️ Section to display the available Sculpture records. Using this approach is better than the Events as they are slower than this new approach.
+    */}
+    <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
+      <h2>Sculpture Records:</h2>
+      <List
+        bordered
+        dataSource={sculptureAddresses}
+        renderItem={(address) => {
+          return (
+            <List.Item key={address}>
+              <div>
+              <Address
+                address={address}
+                ensProvider={mainnetProvider}
+                fontSize={16}
+              /></div>
+            </List.Item>
+          );
+        }}
       />
+    </div>
     </div>
   );
 }

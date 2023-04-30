@@ -176,25 +176,53 @@ function App(props) {
     mainnetProviderPollingTime,
   );
 
-  // Sets the new Sculptures
+  // Sets the Sculptures records
   const [sculptureRecords, setSculptureRecords] = useState({});
-  // listen for the NewSculpture event
   useEffect(() => {
-    if (readContracts && readContracts.SculptureFactory) {
-      readContracts.SculptureFactory.on("NewSculpture", (sculptureAddress) => {
+    let listenerActive = false;
+    async function getExistingSculptureContracts() {
+      try {
+        const existingSculptureAddresses = await readContracts.SculptureFactory.getSculptures();
         const provider = new ethers.providers.JsonRpcProvider();
+        const newSculptureRecords = {};
+        for (const address of existingSculptureAddresses) {
+          if (!sculptureRecords[address]) {
+            newSculptureRecords[address] = new ethers.Contract(
+              address,
+              SculptureArtifact.abi,
+              provider.getSigner()
+            );
+          }
+        }
 
-        // Add new contract to readContracts object
-        const newSculptureContracts = { ...sculptureRecords };
-        newSculptureContracts[`Sculpture${sculptureRecords.length + 1}`] = new ethers.Contract(
-          sculptureAddress,
-          SculptureArtifact.abi,
-          provider.getSigner()
-        );
+        if (Object.keys(newSculptureRecords).length > 0) {
+          setSculptureRecords((sculptureRecords) => ({ ...sculptureRecords, ...newSculptureRecords }));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
-        setSculptureRecords(newSculptureContracts);
+    if (readContracts && readContracts.SculptureFactory) {
+      // Fetch the existing Sculpture records
+      getExistingSculptureContracts();
+
+      // listen for the NewSculpture event
+      readContracts.SculptureFactory.on("NewSculpture", (sculptureAddress) => {
+        listenerActive = true;
+        const provider = new ethers.providers.JsonRpcProvider();
+        setSculptureRecords((sculptureRecords) => ({
+          ...sculptureRecords,
+          [sculptureAddress]: new ethers.Contract(sculptureAddress, SculptureArtifact.abi, provider.getSigner()),
+        }));
       });
     }
+
+    return () => {
+      if (listenerActive && readContracts && readContracts.SculptureFactory) {
+        readContracts.SculptureFactory.off("NewSculpture");
+      }
+    };
   }, [readContracts, sculptureRecords, setSculptureRecords]);
 
   /*
