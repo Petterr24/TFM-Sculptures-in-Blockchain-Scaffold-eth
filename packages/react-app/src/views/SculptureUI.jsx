@@ -777,7 +777,7 @@ export default function SculptureUI({
               console.log(error);
             })
           }}>
-          Update Sculpture
+          Update Sculpture Record
         </Button>
         <p style={{ marginTop: 8 }}>Transcation status: {updateDataStatus}</p>
         <Divider />
