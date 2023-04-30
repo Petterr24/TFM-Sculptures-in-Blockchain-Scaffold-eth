@@ -361,9 +361,9 @@ export default function SculptureFactoryUI({
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginTop: 10 }}>Conservation Label:</label>
           <Select style={{ marginTop: 5 }} value={conservationCategoryUI}
-            onChange={e => {
-              setConservationCategory(e.target.value); 
-              setConservationCategoryUI(e.target.value);
+            onChange={value => {
+              setConservationCategory(value); 
+              setConservationCategoryUI(value);
             }}>
             {conservationLabel.map((option) => (
               <Option key={option.value} value={option.value} disabled={option.disabled}>
