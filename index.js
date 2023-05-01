@@ -76,7 +76,7 @@ app.post('/handleDeploy', async (req, res) => {
     }, 25000); // wait for 25 seconds before running the next command
 })
 
-app.post('/startUI'), async (req, res) => {
+app.post('/startUI', async (req, res) => {
     exec(`gnome-terminal -- bash -c "yarn start; exec bash"`, (error, stdout, stderr) => {
         //processStatus.textContent = 'Starting the UI..'
         if (error) {
@@ -88,7 +88,7 @@ app.post('/startUI'), async (req, res) => {
         console.log(stdout)
         console.log('UI started successfully');
     })
-}
+})
 
 // Handlers must be called after all other middleware (app.use)
 // and all routing
