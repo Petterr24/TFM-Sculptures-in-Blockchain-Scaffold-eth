@@ -8,14 +8,24 @@
   <body>
     <div style="border: 1px solid #cccccc; padding: 16px; width: 500px; margin: auto; margin-top: 64px;">
     <hr />
-    <h2 style="font-weight: bold; font-size: 28px;">Home</h2>
+    <h2 style="font-weight: bold; font-size: 28px;">Start local chain</h2>
     <hr />
-        <form action="/handleDeploy" method="post">  <!-- when the formulary is submitted, it will be POSTed to /handleDeploy-->
+        <form action="/startLocalChain" method="post">  <!-- when the formulary is submitted, it will be POSTed to /handleDeploy-->
             <div>
-                <input type="submit" value="Deploy" />
+                <input type="submit" value="Start local chain" />
             </div>
         </form>
     </div>
+    <div style="border: 1px solid #cccccc; padding: 16px; width: 500px; margin: auto; margin-top: 10px;">
+        <hr />
+        <h2 style="font-weight: bold; font-size: 28px;">Deploy Smart Contracts</h2>
+        <hr />
+            <form action="/deploy" method="post">  <!-- when the formulary is submitted, it will be POSTed to /handleDeploy-->
+                <div>
+                    <input type="submit" value="Deploy SCs" />
+                </div>
+            </form>
+        </div>
     <div style="border: 1px solid #cccccc; padding: 16px; width: 500px; margin: auto; margin-top: 10px;">
         <h2 style="font-weight: bold; font-size: 28px;">Provide Contract Addresses</h2>
         <p>Enter the addresses of the deployed contracts:</p>

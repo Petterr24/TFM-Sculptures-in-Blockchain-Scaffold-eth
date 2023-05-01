@@ -46,7 +46,7 @@ app.get('/home', (req, res) => {
     res.sendFile('./packages/home-page/home.html', { root: __dirname })
 })
 
-app.post('/handleDeploy', async (req, res) => {
+app.post('/startLocalChain', async (req, res) => {
     exec(`gnome-terminal -- bash -c "yarn chain; exec bash"`, (error, stdout, stderr) => {
         //processStatus.textContent = 'Starting the chain..'
         if (error) {
@@ -55,25 +55,23 @@ app.post('/handleDeploy', async (req, res) => {
           return;
         }
  
-        console.log("Chain started successfully")
+        console.log("Starting local chain...")
         //processStatus.textContent = 'Chain started successfully'
     })
+})
 
-    setTimeout(() => {
-        exec(`gnome-terminal -- bash -c "yarn deploy; exec bash"`, (error, stdout, stderr) => {
-            //processStatus.textContent = 'Deploying the SmartContracts..'
-            if (error) {
-                console.error(`exec error: ${error}`);
-                res.status(500).send('Server error');
-                return;
-            }
+app.post('/deploy', async (req, res) => {
+    exec("yarn deploy", (error, stdout, stderr) => {
+        //processStatus.textContent = 'Deploying the SmartContracts..'
+        if (error) {
+            console.error(`exec error: ${error}`);
+            res.status(500).send('Server error');
+            return;
+        }
+        //processStatus.textContent = 'Smart contracts deployed successfully'
+    })
 
-            console.log("Smart contracts deployed successfully")
-            //processStatus.textContent = 'Smart contracts deployed successfully'
-        })
-    
-        console.log('Deploy completed successfully');
-    }, 25000); // wait for 25 seconds before running the next command
+    console.log('Deploying the Smart Contracts..');
 })
 
 app.post('/startUI', async (req, res) => {
@@ -84,21 +82,19 @@ app.post('/startUI', async (req, res) => {
           res.status(500).send('Server error');
           return;
         }
-
-        console.log(stdout)
-        console.log('UI started successfully');
     })
+    console.log('Starting the SCs UI..');
 })
 
 // Handlers must be called after all other middleware (app.use)
 // and all routing
 app.use(function (err, req, res, next) {
-  console.error(err.stack)
-  res.status(500).send('Something broke!')
+    console.error(err.stack)
+     res.status(500).send('Something broke!')
 })
 
 app.listen(PORT, () => {
-  const url = `http://localhost:${PORT}/home`;
-  console.log(`Server running on port ${PORT}`);
-  spawn('open', [url]);
+    const url = `http://localhost:${PORT}/home`;
+    console.log(`Server running on port ${PORT}`);
+    spawn('open', [url]);
 });
