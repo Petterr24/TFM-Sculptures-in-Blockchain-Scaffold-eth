@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+  </head>
+  <body>
+    <div style="border: 1px solid #cccccc; padding: 16px; width: 500px; margin: auto; margin-top: 64px;">
+    <hr />
+    <h2 style="font-weight: bold; font-size: 28px;">Home</h2>
+    <hr />
+        <form action="/handleDeploy" method="post">  <!-- when the formulary is submitted, it will be POSTed to /handleDeploy-->
+            <div>
+                <input type="submit" value="Deploy" />
+            </div>
+        </form>
+    </div>
+    <div style="border: 1px solid #cccccc; padding: 16px; width: 500px; margin: auto; margin-top: 10px;">
+        <h2 style="font-weight: bold; font-size: 28px;">Provide Contract Addresses</h2>
+        <p>Enter the addresses of the deployed contracts:</p>
+        <div style="margin-bottom: 16px;">
+        <form action="/provideContractAddresses" method="post">  <!-- when the formulary is submitted, it will be POSTed to /provideContractAddresses-->
+            <div>
+                <label>UserAuthorisation Address:</label>
+                <input type="text" name="UserAuthorisationAddress" />
+            </div>
+            <div>
+                <label>SculptureFactory address:</label>
+                <input type="text" name="SculptureFactoryAddress" />
+            </div>
+            <div>
+                <input type="submit" value="Submit" />
+            </div>
+        </form>
+    </div>
+    </div>
+    <div style="border: 1px solid #cccccc; padding: 16px; width: 500px; margin: auto; margin-top: 10px;">
+        <h2 style="font-weight: bold; font-size: 28px;">START SmartContract UI</h2>
+        <div style="margin-bottom: 16px;">
+        <form action="/startUI" method="post">  <!-- when the formulary is submitted, it will be POSTed to /startUI-->
+            <div>
+                <input type="submit" value="Start SmartContract UI" />
+            </div>
+        </form>
+    </div>
+    </div>
+    <div style="border: 1px solid #cccccc; padding: 16px; width: 500px; margin: auto; margin-top: 10px;">
+        <label>Process status: </label>
+        <span id="processStatus"></span>
+    </div>
