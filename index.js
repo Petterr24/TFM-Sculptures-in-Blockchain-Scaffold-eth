@@ -4,6 +4,7 @@ const fs = require('fs');
 const { exec, spawn } = require('child_process');
 //const processStatus = document.getElementById("processStatus");
 const PORT = 5000
+const path = require('path')
 
 var app = express()
 
@@ -13,16 +14,15 @@ app.post('/provideContractAddresses', async (req, res) => {
     const { UserAuthorisationAddress, SculptureFactoryAddress } = req.body;
 
     // Update the contract addresses in the json files
-    const hardhatContractsPath = path.join(__dirname, ".packages/react-app/src/contracts/hardhat_contracts.json")
-
+    const hardhatContractsPath = path.join(__dirname, "packages/react-app/src/contracts/hardhat_contracts.json")
+    console.log(`Hardhat path ${hardhatContractsPath}`)
     if (!fs.existsSync(hardhatContractsPath)) {
         res.status(500).send('Before updating addresses, you shall deploy the SmartContracts in your machine');
         //processStatus.textContent = 'Before updating addresses, you shall deploy the SmartContracts in your machine'
         return
     }
 
-    console.log(`Hardhat path ${hardhat_contracts}`)
-    const hardhatContractsJson = SON.parse(fs.readFileSync(hardhatContractsPath, "utf-8"))
+    const hardhatContractsJson = JSON.parse(fs.readFileSync(hardhatContractsPath, "utf-8"))
     // 31337 is the localChain, this should be modified to the Testnet
     // Update the addresses
     hardhatContractsJson['31337'][0]['contracts']['UserAuthorisation']['address'] = UserAuthorisationAddress;
