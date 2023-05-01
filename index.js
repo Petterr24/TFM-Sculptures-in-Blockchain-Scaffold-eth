@@ -76,6 +76,7 @@ app.post('/startUI'), async (req, res) => {
     } else {
         console.error(`UI error: ${result.stderr.toString()}`);
         res.status(500).send('Server error');
+    }
 }
 
 // Handlers must be called after all other middleware (app.use)
@@ -87,4 +88,4 @@ app.use(function (err, req, res, next) {
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-});
+})
