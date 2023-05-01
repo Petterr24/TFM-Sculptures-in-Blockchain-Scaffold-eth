@@ -1,7 +1,7 @@
 const express = require('express')
 const https = require('https')
 const fs = require('fs');
-const { exec } = require('child_process');
+const { spawnSync } = require('child_process');
 //const processStatus = document.getElementById("processStatus");
 const PORT = 5000
 
@@ -47,47 +47,35 @@ app.get('/home', (req, res) => {
 })
 
 app.post('/handleDeploy', async (req, res) => {
-    exec('yarn chain', (error, stdout, stderr) => {
-        //processStatus.textContent = 'Starting the chain..'
-        if (error) {
-          console.error(`exec error: ${error}`);
-          res.status(500).send('Server error');
-          return;
-        }
- 
-        console.log(stdout)
-        console.log("Chain started successfully")
-        //processStatus.textContent = 'Chain started successfully'
-    })
+    const chainResult = spawnSync('yarn', ['chain']);
+    if (chainResult.status === 0) {
+        console.log('Chain started successfully');
+    } else {
+        console.error(`Chain error: ${chainResult.stderr.toString()}`);
+        res.status(500).send('Server error');
+        return;
+    }
 
-    exec('yarn deploy', (error, stdout, stderr) => {
-        //processStatus.textContent = 'Deploying the SmartContracts..'
-        if (error) {
-            console.error(`exec error: ${error}`);
-            res.status(500).send('Server error');
-            return;
-        }
-
-        console.log(stdout)
-        console.log("Smart contracts deployed successfully")
-        //processStatus.textContent = 'Smart contracts deployed successfully'
-    })
+    const deployResult = spawnSync('yarn', ['deploy']);
+    if (deployResult.status === 0) {
+        console.log('Smart contracts deployed successfully');
+    } else {
+        console.error(`Deploy error: ${deployResult.stderr.toString()}`);
+        res.status(500).send('Server error');
+        return;
+    }
 
     res.status(200).send('Deploy completed successfully');
 })
 
 app.post('/startUI'), async (req, res) => {
-    exec('yarn start', (error, stdout, stderr) => {
-        //processStatus.textContent = 'Starting the UI..'
-        if (error) {
-          console.error(`exec error: ${error}`);
-          res.status(500).send('Server error');
-          return;
-        }
-
-        console.log(stdout)
+    const result = spawnSync('yarn', ['start']);
+    if (result.status === 0) {
+        console.log('UI started successfully');
         res.status(200).send('UI started successfully');
-    })
+    } else {
+        console.error(`UI error: ${result.stderr.toString()}`);
+        res.status(500).send('Server error');
 }
 
 // Handlers must be called after all other middleware (app.use)
