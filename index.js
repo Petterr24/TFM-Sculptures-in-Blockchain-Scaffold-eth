@@ -9,8 +9,6 @@ var app = express()
 
 app.use(express.urlencoded({ extended: true })) // Needed to retrieve html form fields (it's a requirement of the local strategy)
 
-app.use(passport.initialize()) // We load the passport auth middleware to our express application. It should be loaded before any route.
-
 app.post('/provideContractAddresses', async (req, res) => {
     const { UserAuthorisationAddress, SculptureFactoryAddress } = req.body;
 
@@ -57,6 +55,7 @@ app.post('/handleDeploy', async (req, res) => {
           return;
         }
  
+        console.log(stdout)
         console.log("Chain started successfully")
         //processStatus.textContent = 'Chain started successfully'
     })
@@ -69,8 +68,9 @@ app.post('/handleDeploy', async (req, res) => {
             return;
         }
 
-      console.log("Smart contracts deployed successfully")
-      //processStatus.textContent = 'Smart contracts deployed successfully'
+        console.log(stdout)
+        console.log("Smart contracts deployed successfully")
+        //processStatus.textContent = 'Smart contracts deployed successfully'
     })
 
     res.status(200).send('Deploy completed successfully');
@@ -85,6 +85,7 @@ app.post('/startUI'), async (req, res) => {
           return;
         }
 
+        console.log(stdout)
         res.status(200).send('UI started successfully');
     })
 }
@@ -96,16 +97,6 @@ app.use(function (err, req, res, next) {
   res.status(500).send('Something broke!')
 })
 
-const server = https.createServer(httpsOptions, app)
-
-server.listen(PORT)
-
-function onListening() {
-  const addr = server.address();
-  const bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  console.log(`IAS app listening at https://localhost:${PORT}`)
-}
-
-server.on('listening', onListening)
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
