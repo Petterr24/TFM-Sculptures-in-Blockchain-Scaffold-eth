@@ -47,7 +47,7 @@ app.get('/home', (req, res) => {
 })
 
 app.post('/handleDeploy', async (req, res) => {
-    exec('yarn chain', (error, stdout, stderr) => {
+    exec(`gnome-terminal -- bash -c "yarn chain; exec bash"`, (error, stdout, stderr) => {
         //processStatus.textContent = 'Starting the chain..'
         if (error) {
           console.error(`exec error: ${error}`);
@@ -60,24 +60,26 @@ app.post('/handleDeploy', async (req, res) => {
         //processStatus.textContent = 'Chain started successfully'
     })
 
-    exec('yarn deploy', (error, stdout, stderr) => {
-        //processStatus.textContent = 'Deploying the SmartContracts..'
-        if (error) {
-            console.error(`exec error: ${error}`);
-            res.status(500).send('Server error');
-            return;
-        }
-
-        console.log(stdout)
-        console.log("Smart contracts deployed successfully")
-        //processStatus.textContent = 'Smart contracts deployed successfully'
-    })
-
-    res.status(200).send('Deploy completed successfully');
+    setTimeout(() => {
+        exec(`gnome-terminal -- bash -c "yarn deploy; exec bash"`, (error, stdout, stderr) => {
+            //processStatus.textContent = 'Deploying the SmartContracts..'
+            if (error) {
+                console.error(`exec error: ${error}`);
+                res.status(500).send('Server error');
+                return;
+            }
+    
+            console.log(stdout)
+            console.log("Smart contracts deployed successfully")
+            //processStatus.textContent = 'Smart contracts deployed successfully'
+        })
+    
+        res.status(200).send('Deploy completed successfully');
+    }, 25000); // wait for 25 seconds before running the next command
 })
 
 app.post('/startUI'), async (req, res) => {
-    exec('yarn start', (error, stdout, stderr) => {
+    exec(`gnome-terminal -- bash -c "yarn start; exec bash"`, (error, stdout, stderr) => {
         //processStatus.textContent = 'Starting the UI..'
         if (error) {
           console.error(`exec error: ${error}`);
