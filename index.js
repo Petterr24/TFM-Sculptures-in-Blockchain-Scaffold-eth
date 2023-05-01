@@ -1,7 +1,7 @@
 const express = require('express')
 const https = require('https')
 const fs = require('fs');
-const { exec } = require('child_process');
+const { exec, spawn } = require('child_process');
 //const processStatus = document.getElementById("processStatus");
 const PORT = 5000
 
@@ -32,13 +32,13 @@ app.post('/provideContractAddresses', async (req, res) => {
     fs.writeFile(hardhatContractsPath, JSON.stringify(hardhatContractsJson, null, 2), err => {
         if (err) {
             console.error(err);
-            res.status(500).send('Error updating contract addresses');
+            res.status(500).send('Error updating contract addresses')
             //processStatus.textContent = 'Error updating contract addresses'
             return;
         }
 
         //processStatus.textContent = 'Contract addresses updated successfully'
-        res.status(200).send('Contract addresses updated successfully');
+        console.log('Contract addresses updated successfully')
     })
 })
 
@@ -55,7 +55,6 @@ app.post('/handleDeploy', async (req, res) => {
           return;
         }
  
-        console.log(stdout)
         console.log("Chain started successfully")
         //processStatus.textContent = 'Chain started successfully'
     })
@@ -68,13 +67,12 @@ app.post('/handleDeploy', async (req, res) => {
                 res.status(500).send('Server error');
                 return;
             }
-    
-            console.log(stdout)
+
             console.log("Smart contracts deployed successfully")
             //processStatus.textContent = 'Smart contracts deployed successfully'
         })
     
-        res.status(200).send('Deploy completed successfully');
+        console.log('Deploy completed successfully');
     }, 25000); // wait for 25 seconds before running the next command
 })
 
@@ -88,7 +86,7 @@ app.post('/startUI'), async (req, res) => {
         }
 
         console.log(stdout)
-        res.status(200).send('UI started successfully');
+        console.log('UI started successfully');
     })
 }
 
@@ -100,5 +98,7 @@ app.use(function (err, req, res, next) {
 })
 
 app.listen(PORT, () => {
+  const url = `http://localhost:${PORT}/home`;
   console.log(`Server running on port ${PORT}`);
+  spawn('open', [url]);
 });
