@@ -2,7 +2,7 @@ const express = require('express')
 const https = require('https')
 const fs = require('fs');
 const { exec } = require('child_process');
-const processStatus = document.getElementById("processStatus");
+//const processStatus = document.getElementById("processStatus");
 const PORT = 5000
 
 var app = express()
@@ -19,7 +19,7 @@ app.post('/provideContractAddresses', async (req, res) => {
 
     if (!fs.existsSync(hardhatContractsPath)) {
         res.status(500).send('Before updating addresses, you shall deploy the SmartContracts in your machine');
-        processStatus.textContent = 'Before updating addresses, you shall deploy the SmartContracts in your machine'
+        //processStatus.textContent = 'Before updating addresses, you shall deploy the SmartContracts in your machine'
         return
     }
 
@@ -35,11 +35,11 @@ app.post('/provideContractAddresses', async (req, res) => {
         if (err) {
             console.error(err);
             res.status(500).send('Error updating contract addresses');
-            processStatus.textContent = 'Error updating contract addresses'
+            //processStatus.textContent = 'Error updating contract addresses'
             return;
         }
 
-        processStatus.textContent = 'Contract addresses updated successfully'
+        //processStatus.textContent = 'Contract addresses updated successfully'
         res.status(200).send('Contract addresses updated successfully');
     })
 })
@@ -50,7 +50,7 @@ app.get('/home', (req, res) => {
 
 app.post('/handleDeploy', async (req, res) => {
     exec('yarn chain', (error, stdout, stderr) => {
-        processStatus.textContent = 'Starting the chain..'
+        //processStatus.textContent = 'Starting the chain..'
         if (error) {
           console.error(`exec error: ${error}`);
           res.status(500).send('Server error');
@@ -58,11 +58,11 @@ app.post('/handleDeploy', async (req, res) => {
         }
  
         console.log("Chain started successfully")
-        processStatus.textContent = 'Chain started successfully'
+        //processStatus.textContent = 'Chain started successfully'
     })
 
     exec('yarn deploy', (error, stdout, stderr) => {
-        processStatus.textContent = 'Deploying the SmartContracts..'
+        //processStatus.textContent = 'Deploying the SmartContracts..'
         if (error) {
             console.error(`exec error: ${error}`);
             res.status(500).send('Server error');
@@ -70,7 +70,7 @@ app.post('/handleDeploy', async (req, res) => {
         }
 
       console.log("Smart contracts deployed successfully")
-      processStatus.textContent = 'Smart contracts deployed successfully'
+      //processStatus.textContent = 'Smart contracts deployed successfully'
     })
 
     res.status(200).send('Deploy completed successfully');
@@ -78,7 +78,7 @@ app.post('/handleDeploy', async (req, res) => {
 
 app.post('/startUI'), async (req, res) => {
     exec('yarn start', (error, stdout, stderr) => {
-        processStatus.textContent = 'Starting the UI..'
+        //processStatus.textContent = 'Starting the UI..'
         if (error) {
           console.error(`exec error: ${error}`);
           res.status(500).send('Server error');
