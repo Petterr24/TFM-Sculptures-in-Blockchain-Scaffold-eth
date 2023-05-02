@@ -12,17 +12,22 @@ app.use(express.urlencoded({ extended: true })) // Needed to retrieve html form 
 
 app.post('/provideContractAddresses', async (req, res) => {
     const { UserAuthorisationAddress, SculptureFactoryAddress } = req.body;
+    const addressRegex = /^0x[0-9a-fA-F]{40}$/;
 
-    // Update the contract addresses in the json files
-    const hardhatContractsPath = path.join(__dirname, "packages/react-app/src/contracts/hardhat_contracts.json")
-    console.log(`Hardhat path ${hardhatContractsPath}`)
-    if (!fs.existsSync(hardhatContractsPath)) {
-        res.status(500).send('Before updating addresses, you shall deploy the SmartContracts in your machine');
-        //processStatus.textContent = 'Before updating addresses, you shall deploy the SmartContracts in your machine'
-        return
+    if (!UserAuthorisationAddress || !SculptureFactoryAddress || !addressRegex.test(UserAuthorisationAddress) || !addressRegex.test(SculptureFactoryAddress)) {
+        res.status(400).send('Invalid Smart Contract address(es)');
+        return;
     }
 
-    const hardhatContractsJson = JSON.parse(fs.readFileSync(hardhatContractsPath, "utf-8"))
+    // Check if the hardhatContractsPath exists before updating the contract addresses
+    const hardhatContractsPath = path.join(__dirname, "packages/react-app/src/contracts/hardhat_contracts.json");
+    if (!fs.existsSync(hardhatContractsPath)) {
+        res.status(500).send('Before updating addresses, you shall deploy the SmartContracts in your machine');
+        return;
+    }
+
+    // Update the contract addresses in the json files
+    const hardhatContractsJson = JSON.parse(fs.readFileSync(hardhatContractsPath, "utf-8"));
     // 31337 is the localChain, this should be modified to the Testnet
     // Update the addresses
     hardhatContractsJson['31337'][0]['contracts']['UserAuthorisation']['address'] = UserAuthorisationAddress;
@@ -32,15 +37,15 @@ app.post('/provideContractAddresses', async (req, res) => {
     fs.writeFile(hardhatContractsPath, JSON.stringify(hardhatContractsJson, null, 2), err => {
         if (err) {
             console.error(err);
-            res.status(500).send('Error updating contract addresses')
-            //processStatus.textContent = 'Error updating contract addresses'
+            res.status(500).send('Error updating contract addresses');
             return;
         }
 
-        //processStatus.textContent = 'Contract addresses updated successfully'
-        console.log('Contract addresses updated successfully')
-    })
+        console.log('Contract addresses updated successfully');
+        res.send('Contract addresses updated successfully');
+    });
 })
+
 
 app.get('/home', (req, res) => {
     res.sendFile('./packages/home-page/home.html', { root: __dirname })
@@ -75,16 +80,23 @@ app.post('/deploy', async (req, res) => {
 })
 
 app.post('/startUI', async (req, res) => {
+    // Check if the hardhatContractsPath exists before starting the UI
+    const hardhatContractsPath = path.join(__dirname, "packages/react-app/src/contracts/hardhat_contracts.json");
+    if (!fs.existsSync(hardhatContractsPath)) {
+        res.status(500).send('Before starting the UI, you shall deploy the SmartContracts in your machine');
+        return;
+    }
+
     exec(`gnome-terminal -- bash -c "yarn start; exec bash"`, (error, stdout, stderr) => {
-        //processStatus.textContent = 'Starting the UI..'
         if (error) {
-          console.error(`exec error: ${error}`);
-          res.status(500).send('Server error');
-          return;
+            console.error(`exec error: ${error}`);
+            res.status(500).send('Server error');
+            return;
         }
     })
     console.log('Starting the SCs UI..');
 })
+
 
 // Handlers must be called after all other middleware (app.use)
 // and all routing
