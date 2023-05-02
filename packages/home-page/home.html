@@ -4,58 +4,96 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 700px;
+        margin: auto;
+        margin-top: 64px;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+      }
+      .section {
+        margin-top: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+      }
+      .section h2 {
+        margin-top: 0;
+        font-size: 28px;
+        font-weight: bold;
+      }
+      .section p {
+        margin-top: 10px;
+        font-size: 16px;
+        color: #666;
+      }
+      .form {
+        margin-top: 20px;
+      }
+      .form input[type="text"] {
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        width: 100%;
+      }
+      .form input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 4px;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      .form input[type="submit"]:hover {
+        background-color: #0062cc;
+      }
+    </style>
   </head>
   <body>
-    <div style="border: 1px solid #cccccc; padding: 16px; width: 500px; margin: auto; margin-top: 64px;">
-    <hr />
-    <h2 style="font-weight: bold; font-size: 28px;">Start local chain</h2>
-    <hr />
-        <form action="/startLocalChain" method="post">  <!-- when the formulary is submitted, it will be POSTed to /handleDeploy-->
-            <div>
-                <input type="submit" value="Start local chain" />
-            </div>
+    <div class="container">
+      <div class="section">
+        <h2>Start local chain</h2>
+        <form class="form" action="/startLocalChain" method="post">
+          <input type="submit" value="Start local chain" />
         </form>
-    </div>
-    <div style="border: 1px solid #cccccc; padding: 16px; width: 500px; margin: auto; margin-top: 10px;">
-        <hr />
-        <h2 style="font-weight: bold; font-size: 28px;">Deploy Smart Contracts</h2>
-        <hr />
-            <form action="/deploy" method="post">  <!-- when the formulary is submitted, it will be POSTed to /handleDeploy-->
-                <div>
-                    <input type="submit" value="Deploy SCs" />
-                </div>
-            </form>
-        </div>
-    <div style="border: 1px solid #cccccc; padding: 16px; width: 500px; margin: auto; margin-top: 10px;">
-        <h2 style="font-weight: bold; font-size: 28px;">Provide Contract Addresses</h2>
+      </div>
+      <div class="section">
+        <h2>Deploy Smart Contracts</h2>
+        <form class="form" action="/deploy" method="post">
+          <input type="submit" value="Deploy SCs" />
+        </form>
+      </div>
+      <div class="section">
+        <h2>Provide Contract Addresses</h2>
         <p>Enter the addresses of the deployed contracts:</p>
-        <div style="margin-bottom: 16px;">
-        <form action="/provideContractAddresses" method="post">  <!-- when the formulary is submitted, it will be POSTed to /provideContractAddresses-->
-            <div>
-                <label>UserAuthorisation Address:</label>
-                <input type="text" name="UserAuthorisationAddress" />
-            </div>
-            <div>
-                <label>SculptureFactory address:</label>
-                <input type="text" name="SculptureFactoryAddress" />
-            </div>
-            <div>
-                <input type="submit" value="Submit" />
-            </div>
+        <form class="form" action="/provideContractAddresses" method="post">
+          <div>
+            <label>UserAuthorisation Address:</label>
+            <input type="text" name="UserAuthorisationAddress" />
+          </div>
+          <div>
+            <label>SculptureFactory address:</label>
+            <input type="text" name="SculptureFactoryAddress" />
+          </div>
+          <div>
+            <input type="submit" value="Submit" />
+          </div>
         </form>
-    </div>
-    </div>
-    <div style="border: 1px solid #cccccc; padding: 16px; width: 500px; margin: auto; margin-top: 10px;">
-        <h2 style="font-weight: bold; font-size: 28px;">START SmartContract UI</h2>
-        <div style="margin-bottom: 16px;">
-        <form action="/startUI" method="post">  <!-- when the formulary is submitted, it will be POSTed to /startUI-->
-            <div>
-                <input type="submit" value="Start SmartContract UI" />
-            </div>
+      </div>
+      <div class="section">
+        <h2>START SmartContract UI</h2>
+        <form class="form" action="/startUI" method="post">
+          <input type="submit" value="Start SmartContract UI" />
         </form>
+      </div>
     </div>
-    </div>
-    <!--<div style="border: 1px solid #cccccc; padding: 16px; width: 500px; margin: auto; margin-top: 10px;">
-        <label>Process status: </label>
-        <span id="processStatus"></span>
-    </div>-->
+  </body>
+</html>
