@@ -2,7 +2,6 @@ const express = require('express')
 const https = require('https')
 const fs = require('fs');
 const { exec, spawn } = require('child_process');
-//const processStatus = document.getElementById("processStatus");
 const PORT = 5000
 const path = require('path')
 
@@ -15,14 +14,23 @@ app.post('/provideContractAddresses', async (req, res) => {
     const addressRegex = /^0x[0-9a-fA-F]{40}$/;
 
     if (!UserAuthorisationAddress || !SculptureFactoryAddress || !addressRegex.test(UserAuthorisationAddress) || !addressRegex.test(SculptureFactoryAddress)) {
-        res.status(400).send('Invalid Smart Contract address(es)');
+        console.log('Error: Invalid Smart Contract address(es)');
+        res.status(400).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Invalid Smart Contract address(es)</strong></p>'
+            + '<hr/><p>Please try again by selecting "Home-page" to go back to:</p>'
+            + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
+
+
         return;
     }
 
     // Check if the hardhatContractsPath exists before updating the contract addresses
     const hardhatContractsPath = path.join(__dirname, "packages/react-app/src/contracts/hardhat_contracts.json");
     if (!fs.existsSync(hardhatContractsPath)) {
-        res.status(500).send('Before updating addresses, you shall deploy the SmartContracts in your machine');
+        console.log('Error: Smart Contracts not deployed to be able to update the addresses');
+        res.status(400).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Before updating addresses, you shall deploy the SmartContracts in your machine</strong></p>'
+            + '<hr/><p>Please try again by selecting "Home-page" to go back to:</p>'
+            + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
+
         return;
     }
 
@@ -36,13 +44,18 @@ app.post('/provideContractAddresses', async (req, res) => {
     // Write the updated JSON back to the file
     fs.writeFile(hardhatContractsPath, JSON.stringify(hardhatContractsJson, null, 2), err => {
         if (err) {
+            console.log('Error: Error when updating JSON');
             console.error(err);
-            res.status(500).send('Error updating contract addresses');
+            res.status(500).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Error when updating contract addresses</strong></p>'
+                + '<hr/><p>Please try again by selecting "Home-page" to go back to:</p>'
+                + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
+
             return;
         }
 
-        console.log('Contract addresses updated successfully');
-        res.send('Contract addresses updated successfully');
+        res.send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: green;"><strong>Contract addresses updated successfully </strong></p>'
+            + '<hr/><p>Please select "Home-page" to go back to:</p>'
+            + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
     });
 })
 
@@ -53,48 +66,59 @@ app.get('/home', (req, res) => {
 
 app.post('/startLocalChain', async (req, res) => {
     exec(`gnome-terminal -- bash -c "yarn chain; exec bash"`, (error, stdout, stderr) => {
-        //processStatus.textContent = 'Starting the chain..'
         if (error) {
-          console.error(`exec error: ${error}`);
-          res.status(500).send('Server error');
-          return;
+            console.log('Error: Error when starting Local Chain');
+            console.error(`exec error: ${error}`);
+            res.status(500).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Server error</strong></p>'
+                + '<hr/><p>Please try again by selecting "Home-page" to go back to:</p>'
+                + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
+
+            return;
         }
- 
-        console.log("Starting local chain...")
-        //processStatus.textContent = 'Chain started successfully'
     })
 })
 
 app.post('/deploy', async (req, res) => {
     exec("yarn deploy", (error, stdout, stderr) => {
-        //processStatus.textContent = 'Deploying the SmartContracts..'
         if (error) {
+            console.log('Error: When deploying SmartContracts. Try to connect to an existing chain');
             console.error(`exec error: ${error}`);
-            res.status(500).send('Server error');
+            res.status(500).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Server error</strong></p>'
+                + '<hr/><p>Please try again by selecting "Home-page" to go back to:</p>'
+                + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
+
             return;
         }
-        //processStatus.textContent = 'Smart contracts deployed successfully'
-    })
 
-    console.log('Deploying the Smart Contracts..');
+        res.send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: green;"><strong>Smart Contracts deployed successfully </strong></p>'
+            + '<hr/><p>Please select "Home-page" to go back to:</p>'
+            + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
+    })
 })
 
 app.post('/startUI', async (req, res) => {
     // Check if the hardhatContractsPath exists before starting the UI
     const hardhatContractsPath = path.join(__dirname, "packages/react-app/src/contracts/hardhat_contracts.json");
     if (!fs.existsSync(hardhatContractsPath)) {
-        res.status(500).send('Before starting the UI, you shall deploy the SmartContracts in your machine');
+        console.log('Error: When starting UI');
+        res.status(400).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Before starting the UI, you shall deploy the SmartContracts in your machine</strong></p>'
+            + '<hr/><p>Please try again by selecting "Home-page" to go back to:</p>'
+            + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
+
         return;
     }
 
     exec(`gnome-terminal -- bash -c "yarn start; exec bash"`, (error, stdout, stderr) => {
         if (error) {
+            console.log('Error: When starting UI');
             console.error(`exec error: ${error}`);
-            res.status(500).send('Server error');
+            res.status(500).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Server error</strong></p>'
+                + '<hr/><p>Please try again by selecting "Home-page" to go back to:</p>'
+                + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
+
             return;
         }
     })
-    console.log('Starting the SCs UI..');
 })
 
 
