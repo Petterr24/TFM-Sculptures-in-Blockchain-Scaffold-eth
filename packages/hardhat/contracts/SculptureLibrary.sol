@@ -53,7 +53,7 @@ library SculptureLibrary {
     }
 
     function isCategorizationLabelValid(uint8 _label) internal pure returns (bool) {
-        return (_label >= uint8(CategorizationLabel.AUTHORISED_UNIQUE_WORK) && _label <= uint8(CategorizationLabel.AUTHORISED_DIGITAL_COPY));
+        return (_label >= uint8(CategorizationLabel.NONE) && _label <= uint8(CategorizationLabel.AUTHORISED_DIGITAL_COPY));
     }
 
     function isEditionDataValid(uint8 _categorizationLabel, EditionData memory _editionData) internal pure returns (bool) {

@@ -199,6 +199,25 @@ export default function SculptureUI({
     return false;
   }
 
+  function isDimensionsFieldCorrect(data) {
+    const regex = /^\s*\d+\s*x\s*\d+\s*x\s*\d+\s*$/; // Dimensions pattern : "LENGTH x WIDTH x HEIGHT" (cm)
+
+    if (regex.test(data)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  function isCorrectCategLabelForEdition() {
+    // One of the following categorization labels is required to store information in the edition fields:
+    // 'AUTHORISED REPRODUCTION'
+    // 'AUTHORISED EXHIBITION COPY'
+    // 'AUTHORISED TECHNICAL COPY'
+    // 'AUTHORISED DIGITAL COPY'
+    return ((categorizationTagUpdate > 7) && (categorizationTagUpdate < 12))
+  }
+
   function setData(data) {
     setSculptureName(data[PERSISTENT_DATA][PERSISTENT_SCULPTURE_NAME]);
     setArtist(data[PERSISTENT_DATA][PERSISTENT_ARTIST]);
@@ -415,6 +434,13 @@ export default function SculptureUI({
             conservationDataUpdate[CONSV_CONSERVATION_LABEL] = conservationLabelValue;
             break;
 
+          case 'Sculpture Dimensions':
+            if (isDimensionsFieldCorrect(dimensions)) {
+              setCreationStatus("Invalid dimensions format. Please provide the dimensions following this format 'LENGTH x WIDTH x HEIGHT'");
+
+              return false;
+            }
+
           default:
             // Do nothing for the other cases
             // Set to false the String Length check as it means that the current field is a string
@@ -440,9 +466,29 @@ export default function SculptureUI({
       setUpdateDataStatus("Conservation labels cannot be selected or stored when conservation is set to 'NO'");
 
       return false;
+    } else if (conservationDataUpdate[CONSV_CONSERVATION] && miscellaneousDataUpdate[MISC_CATEGORIZATION_LABEL] != 0) {
+      // Fails if the conservation option is set to 'YES' and the Categorization Label is different than NONE
+      setUpdateDataStatus("Conservation labels cannot be selected or stored when conservation is set to 'NO'");
+
+      return false;
+    } else if (!conservationDataUpdate[CONSV_CONSERVATION] && miscellaneousDataUpdate[MISC_CATEGORIZATION_LABEL] == 0) {
+      // Fails if the categorization label is set to 'NONE' and the Conservation option is set to 'NO'. 
+      // When the conservation option is 'NO' it is required to select one of the available categorization labels
+
+      setUpdateDataStatus("It is required to provide any Categorization Labels when the Conservation option is set to 'NO'");
+
+      return false;
     }
 
-    // TODO: There is no restrictions for Edition fields depending on the categorization labels. Same for conservation maybe
+    if ((editionDataUpdate[EDITION_EDITION] != 0) || (editionDataUpdate[EDITION_EDITION_NUMBER] != 0) || (editionDataUpdate[EDITION_EDITION_EXECUTOR] != '-')) {
+      // Checks if the categorization label is correct according to the Edition requirements
+      if (!isCorrectCategLabelForEdition()) {
+        setCreationStatus(`Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.`);
+
+        return false;
+      }
+    }
+
     try {
       const transaction = await tx(sculptureInstance.updateSculpture(
         miscellaneousDataUpdate,
@@ -614,7 +660,7 @@ export default function SculptureUI({
         <Divider />
         <p style={{ marginTop: 8 }}><strong>Date:</strong> {date}</p>
         <p style={{ marginTop: 8 }}><strong>Technique:</strong> {technique}</p>
-        <p style={{ marginTop: 8 }}><strong>Dimensions:</strong> {dimensions}</p>
+        <p style={{ marginTop: 8 }}><strong>Dimensions (cm):</strong> {dimensions}</p>
         <p style={{ marginTop: 8 }}><strong>Location:</strong> {location}</p>
         <p style={{ marginTop: 8 }}><strong>Sculpture owner:</strong> {sculptureOwner}</p>
         <p style={{ marginTop: 8 }}><strong>Categorization Label:</strong> {categorizationLabelOption ? categorizationLabelOption.label : ''}</p>

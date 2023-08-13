@@ -21,6 +21,7 @@ export default function SculptureFactoryUI({
   // Categorization label options
   const categorizationLabel = [
     { value: null, label: 'Select the categorization label', disabled: true },
+    { value: 0, label: 'NONE' },
     { value: 1, label: 'AUTHORISED UNIQUE WORK' },
     { value: 2, label: 'AUTHORISED UNIQUE WORK VARIATION' },
     { value: 3, label: 'AUTHORISED WORK' },
@@ -129,6 +130,16 @@ export default function SculptureFactoryUI({
     return false;
   }
 
+  function isDimensionsFieldCorrect(data) {
+    const regex = /^\s*\d+\s*x\s*\d+\s*x\s*\d+\s*$/; // Dimensions pattern : "LENGTH x WIDTH x HEIGHT" (cm)
+
+    if (regex.test(data)) {
+      return true;
+    }
+
+    return false;
+  }
+
   function checkMaxLength(str) {
     return str.length <= 64;
   }
@@ -146,10 +157,17 @@ export default function SculptureFactoryUI({
     // Check that the following fields are provided
     for (const field of fields) {
       if (field.name != 'Conservation options') {
-        if ((field.name == 'Categorization Labels') && (!field.value)) {
-          setCreationStatus(`Please choose any of the ${field.name}`);
+        if ((field.name == 'Categorization Labels') && (!field.value) && ) {
+          // This categorization labels list does not include the Conservation labels, so if the Conservation option is set to "YES", then this field shall be empty
+          // because the categorization label for that scecific sculpture shall be selected from the Conservation labels
+          if (!isConservation) {
+            setCreationStatus(`Please choose any of the ${field.name}`);
 
-          return false;
+            return false;
+          } else {
+            // Set automatically the NONE option when the Conservation option is set to 'YES? as this field is not necessary
+            setCategorizationTag(0);
+          }
         } else if ((field.name == 'Edition') || (field.name == 'Edition number')) {
           if (field.value != 0 && !isCorrectCategLabelForEdition) {
             setCreationStatus(`Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.`);
@@ -180,9 +198,14 @@ export default function SculptureFactoryUI({
       }
     }
 
-    // TODO: Once the doubt are solved. Implement the restriction to provide Edition data and verify the max string length for the Edition executor
     if (!isValidDate(date)) {
       setCreationStatus("Invalid date format. Please provide a valid year in the format '1990', 'c.1990', '1990-1992' or '1990 - 1992'");
+
+      return false;
+    }
+
+    if (isDimensionsFieldCorrect(dimensions)) {
+      setCreationStatus("Invalid dimensions format. Please provide the dimensions following this format 'LENGTH x WIDTH x HEIGHT'");
 
       return false;
     }
@@ -193,6 +216,10 @@ export default function SculptureFactoryUI({
       return false;
     } else if (!isConservation && conservationCategory != null && conservationCategory != 0) {
       setCreationStatus("You cannot choose a conservation label if you select the conservation option as 'NO'");
+
+      return false;
+    } else if (isConservation && conservationCategory != null && conservationCategory != 0 && categorizationTag != null) {
+      setCreationStatus("You cannot choose any of the categorization labels if you select the conservation option as 'YES'. You can only select one of the possible conservation labels.");
 
       return false;
     }
@@ -302,7 +329,7 @@ export default function SculptureFactoryUI({
           />
         </div>
         <div>
-          <label>Dimensions:</label>
+          <label>Dimensions (cm):</label>
           <Input
               value={dimensions}
               onChange={e => {
