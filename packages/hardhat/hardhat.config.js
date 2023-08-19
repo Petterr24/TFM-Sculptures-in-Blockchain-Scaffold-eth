@@ -2,6 +2,7 @@ require("dotenv").config();
 const { utils } = require("ethers");
 const fs = require("fs");
 const chalk = require("chalk");
+const path = require('path');
 
 require("@nomicfoundation/hardhat-chai-matchers");
 require("@tenderly/hardhat-tenderly");
@@ -22,9 +23,13 @@ const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 */
 
 //
-// Select the network you want to deploy to here:
+// Process to read the network from the JSON file which is updated by using the First Frontend.
+// localhost network is selected by default, in case of not having the 'defaultNetwork' in the JSON file
 //
-const defaultNetwork = "localhost";
+const networkConfigPath = path.join(__dirname, 'network_config.json');
+const networkConfig = JSON.parse(fs.readFileSync(networkConfigPath, 'utf8'));
+
+const defaultNetwork = networkConfig.defaultNetwork || "localhost";
 
 function mnemonic() {
   try {
