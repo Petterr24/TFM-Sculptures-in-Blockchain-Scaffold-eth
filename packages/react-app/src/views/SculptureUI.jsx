@@ -454,18 +454,18 @@ export default function SculptureUI({
         }
       }
 
-      if (rejectUpdateIfNoData) {
-        resetUpdateFields();
-        setUpdateDataStatus(`Please provide any field to update the record.`);
-
-        return false;
-      }
-
       if (!skipStringLengthCheck && !checkMaxLength(field.newValue)) {
         setUpdateDataStatus(`The ${field.name} field exceeds the maximum string length of 64 characters`);
 
         return false;
       }
+    }
+
+    if (rejectUpdateIfNoData) {
+      resetUpdateFields();
+      setUpdateDataStatus(`Please provide any field to update the record.`);
+
+      return false;
     }
 
     // It is necessary to have a conservation label when the conservation option is set to TRUE ('YES')
