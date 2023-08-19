@@ -99,7 +99,7 @@ export default function SculptureUI({
 
   // Get the selected option based on the categorizationTag state
   const categorizationLabelOption = categorizationLabel.find(
-    (option) => option.value !== '' && option.value === categorizationTag
+    (option) => option.value !== '' && option.value !== '0' && option.value === categorizationTag
   );
 
   // Edition data
@@ -241,20 +241,25 @@ export default function SculptureUI({
     setSculptureOwner(data[OWNER]);
   }
 
+  function resetUpdateFields() {
+    setDateUpdate("");
+    setTechniqueUpdate("");
+    setDimensionsUpdate("");
+    setLocationUpdate("");
+    setCategorizationTagUpdate(null);
+    setEditionUpdate(null);
+    setEditionExecutorUpdate("");
+    setEditionNumberUpdate(null);
+    setIsConservationUpdate(null);
+    setConservationCategoryUpdate(null);
+    setSculptureOwnerUpdate("");
+  }
+
   async function updateSculpture() {
     if (!verifiedSculptureAddress) {
       setUpdateDataStatus(`Please first enter the address of the Sculpture record you want to update the data`);
-      setDateUpdate("");
-      setTechniqueUpdate("");
-      setDimensionsUpdate("");
-      setLocationUpdate("");
-      setCategorizationTagUpdate(null);
-      setEditionUpdate(null);
-      setEditionExecutorUpdate("");
-      setEditionNumberUpdate(null);
-      setIsConservationUpdate(null);
-      setConservationCategoryUpdate(null);
-      setSculptureOwnerUpdate("");
+      resetUpdateFields();
+
       setGetDataStatus("");
       setDateUpdateUI("");
       setTechniqueUpdateUI("");
@@ -292,6 +297,7 @@ export default function SculptureUI({
 
     let sculptureOwnerData = sculptureOwnerUpdate;
 
+    let rejectUpdateIfNoData = true;
     // Check that the following fields are provided
     for (const field of fields) {
       let skipStringLengthCheck = false;
@@ -385,6 +391,11 @@ export default function SculptureUI({
             // Do nothing
         }
       } else {
+        // Set to false the rejection flag when any field has been provided
+        if (rejectUpdateIfNoData) {
+          rejectUpdateIfNoData = false;
+        }
+
         // Convert the non string fields to the corresponding type (int or boolean) using the UI states which are strings
         skipStringLengthCheck = true;
         switch (field.name) {
@@ -397,12 +408,7 @@ export default function SculptureUI({
             break;
 
           case 'Categorization Labels':
-            // If the choosen field is 'NONE', recover the old value to send to the SC
-            // This would mean that the user would have regretted choosing a new label and the only way to deselect would be choosing NONE
             let categorizationTagValue = parseInt(field.newValue);
-            if (categorizationTagValue == '0') {
-              categorizationTagValue = parseInt(field.oldValue);
-            }
             setCategorizationTagUpdate(categorizationTagValue);
             miscellaneousDataUpdate[MISC_CATEGORIZATION_LABEL] = categorizationTagValue;
             break;
@@ -448,6 +454,13 @@ export default function SculptureUI({
         }
       }
 
+      if (rejectUpdateIfNoData) {
+        resetUpdateFields();
+        setUpdateDataStatus(`Please provide any field to update the record.`);
+
+        return false;
+      }
+
       if (!skipStringLengthCheck && !checkMaxLength(field.newValue)) {
         setUpdateDataStatus(`The ${field.name} field exceeds the maximum string length of 64 characters`);
 
@@ -463,12 +476,12 @@ export default function SculptureUI({
       return false;
     } else if (!conservationDataUpdate[CONSV_CONSERVATION] && conservationDataUpdate[CONSV_CONSERVATION_LABEL] != 0) {
       // Fails if the isConservation value is false and the Conservation label is different than 'NONE'
-      setUpdateDataStatus("Conservation labels cannot be selected or stored when conservation is set to 'NO'");
+      setUpdateDataStatus("Conservation labels cannot be selected when conservation is set to 'NO'");
 
       return false;
     } else if (conservationDataUpdate[CONSV_CONSERVATION] && miscellaneousDataUpdate[MISC_CATEGORIZATION_LABEL] != 0) {
       // Fails if the conservation option is set to 'YES' and the Categorization Label is different than NONE
-      setUpdateDataStatus("Conservation labels cannot be selected or stored when conservation is set to 'NO'");
+      setUpdateDataStatus("Conservation labels cannot be selected when Categorization Label is already stored. Therefore, set the Categorization label to NONE.");
 
       return false;
     } else if (!conservationDataUpdate[CONSV_CONSERVATION] && miscellaneousDataUpdate[MISC_CATEGORIZATION_LABEL] == 0) {

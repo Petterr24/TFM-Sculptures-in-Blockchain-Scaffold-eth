@@ -62,7 +62,8 @@ export default function SculptureFactoryUI({
   const [technique, setTechnique] = useState("");
   const [dimensions, setDimensions] = useState("");
   const [location, setLocation] = useState("");
-  const [categorizationTag, setCategorizationTag] = useState(null);
+  const [categorizationTag, setCategorizationTag] = useState(0);
+  const [categorizationTagUI, setCategorizationTagUI] = useState(null);
 
   // Edition data
   const [edition, setEdition] = useState(0);
@@ -99,6 +100,19 @@ export default function SculptureFactoryUI({
     { name: 'Conservation options', value: isConservation },
     { name: 'Sculpture owner', value: sculptureOwner }
   ];
+
+  /**
+   * Using this useEffect to update the Categorization Tag since we want to show an empty value for the Selection (it means null to display "Select the categorization label")
+   * And we have to set a defualt value '0' in case of not selecting any Categorization Tag when selecting Conservation.
+   * If we try to set to '0' the 'categorizationTag' once the Create button is selected, then it would be necessary to click on that button again because the first loop would be to update this value
+   * to '0', since we are using React. The same functionality is used for Edition parameters.
+   */
+  useEffect(() => {
+    // Whenever categorizationTagUI changes, update categorizationTag based on its value
+    if (categorizationTagUI != null) {
+      setCategorizationTag(categorizationTagUI);
+    }
+  }, [categorizationTagUI]);
 
   async function getExistingSculptureAddresses() {
     try {
@@ -160,13 +174,11 @@ export default function SculptureFactoryUI({
         if ((field.name == 'Categorization Labels') && (!field.value)) {
           // This categorization labels list does not include the Conservation labels, so if the Conservation option is set to "YES", then this field shall be empty
           // because the categorization label for that scecific sculpture shall be selected from the Conservation labels
+          // The NONE option is set by default as it shall be the option sent when the Conservation option is set to 'YES'
           if (!isConservation) {
             setCreationStatus(`Please choose any of the ${field.name}`);
 
             return false;
-          } else {
-            // Set automatically the NONE option when the Conservation option is set to 'YES? as this field is not necessary
-            setCategorizationTag(0);
           }
         } else if ((field.name == 'Edition') || (field.name == 'Edition number')) {
           if (field.value != 0 && !isCorrectCategLabelForEdition()) {
@@ -191,7 +203,7 @@ export default function SculptureFactoryUI({
         return false;
       }
 
-      if ((field.name != 'Edition') && (field.name != 'Edition number') && !checkMaxLength(field.value.toString())) {
+      if ((field.name != 'Edition') && (field.name != 'Edition number') && (field.name != 'Categorization Labels') && !checkMaxLength(field.value.toString())) {
         setCreationStatus(`The ${field.name} field exceeds the maximum string length of 64 characters`);
 
         return false;
@@ -218,7 +230,7 @@ export default function SculptureFactoryUI({
       setCreationStatus("You cannot choose a conservation label if you select the conservation option as 'NO'");
 
       return false;
-    } else if (isConservation && conservationCategory != null && conservationCategory != 0 && categorizationTag != null) {
+    } else if (isConservation && conservationCategory != null && conservationCategory != 0 && categorizationTag != null && categorizationTag != 0) {
       setCreationStatus("You cannot choose any of the categorization labels if you select the conservation option as 'YES'. You can only select one of the possible conservation labels.");
 
       return false;
@@ -357,7 +369,7 @@ export default function SculptureFactoryUI({
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <label style={{ marginTop: 10 }}>Categorization Label:</label>
-          <Select style={{ marginTop: 5 }} value={categorizationTag} onChange={setCategorizationTag}>
+          <Select style={{ marginTop: 5 }} value={categorizationTagUI} onChange={setCategorizationTagUI}>
             {categorizationLabel.map((option) => (
               <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
@@ -431,7 +443,8 @@ export default function SculptureFactoryUI({
                 setTechnique("");
                 setDimensions("");
                 setLocation("");
-                setCategorizationTag(null);
+                setCategorizationTag(0);
+                setCategorizationTagUI(null);
                 setEdition(0);
                 setEditionUI(null);
                 setEditionExecutor('-');
