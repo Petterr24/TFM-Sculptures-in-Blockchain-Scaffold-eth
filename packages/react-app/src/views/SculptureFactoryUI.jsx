@@ -145,7 +145,8 @@ export default function SculptureFactoryUI({
   }
 
   function isDimensionsFieldCorrect(data) {
-    const regex = /^\s*\d+\s*x\s*\d+\s*x\s*\d+\s*$/; // Dimensions pattern : "LENGTH x WIDTH x HEIGHT" (cm)
+    // Dimensions pattern : "LENGTH x WIDTH x HEIGHT" (cm), considering also decimal values
+    const regex = /^\s*(\d+(\.\d+)?|\.\d+)\s*x\s*(\d+(\.\d+)?|\.\d+)\s*x\s*(\d+(\.\d+)?|\.\d+)\s*$/;
 
     if (regex.test(data)) {
       return true;

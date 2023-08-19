@@ -200,7 +200,8 @@ export default function SculptureUI({
   }
 
   function isDimensionsFieldCorrect(data) {
-    const regex = /^\s*\d+\s*x\s*\d+\s*x\s*\d+\s*$/; // Dimensions pattern : "LENGTH x WIDTH x HEIGHT" (cm)
+    // Dimensions pattern : "LENGTH x WIDTH x HEIGHT" (cm), considering also decimal values
+    const regex = /^\s*(\d+(\.\d+)?|\.\d+)\s*x\s*(\d+(\.\d+)?|\.\d+)\s*x\s*(\d+(\.\d+)?|\.\d+)\s*$/;
 
     if (regex.test(data)) {
       return true;
@@ -302,6 +303,7 @@ export default function SculptureUI({
     for (const field of fields) {
       let skipStringLengthCheck = false;
       if (!field.newValue) {
+        // When no data has been provided for a field, use the oldValue (the value stored in the SC/record) in order to send it again to the SC just to no fail the transaction by sending empty fields
         switch (field.name) {
           case 'Date':
             setDateUpdate(field.oldValue);
@@ -391,6 +393,9 @@ export default function SculptureUI({
             // Do nothing
         }
       } else {
+        // Condition when new field has been provided. Some checks are necessary depending on the field
+        // Some of them must be converted from Strings to Int values
+
         // Set to false the rejection flag when any field has been provided
         if (rejectUpdateIfNoData) {
           rejectUpdateIfNoData = false;
