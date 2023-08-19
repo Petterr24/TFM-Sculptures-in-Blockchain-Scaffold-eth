@@ -157,7 +157,7 @@ export default function SculptureFactoryUI({
     // Check that the following fields are provided
     for (const field of fields) {
       if (field.name != 'Conservation options') {
-        if ((field.name == 'Categorization Labels') && (!field.value) && ) {
+        if ((field.name == 'Categorization Labels') && (!field.value)) {
           // This categorization labels list does not include the Conservation labels, so if the Conservation option is set to "YES", then this field shall be empty
           // because the categorization label for that scecific sculpture shall be selected from the Conservation labels
           if (!isConservation) {
@@ -169,13 +169,13 @@ export default function SculptureFactoryUI({
             setCategorizationTag(0);
           }
         } else if ((field.name == 'Edition') || (field.name == 'Edition number')) {
-          if (field.value != 0 && !isCorrectCategLabelForEdition) {
+          if (field.value != 0 && !isCorrectCategLabelForEdition()) {
             setCreationStatus(`Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.`);
 
             return false;
           }
         } else if ((field.name == 'Edition executor')) {
-          if ((field.value != '-') && !isCorrectCategLabelForEdition) {
+          if ((field.value != '-') && !isCorrectCategLabelForEdition()) {
             setCreationStatus(`Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.`);
 
             return false;
@@ -204,7 +204,7 @@ export default function SculptureFactoryUI({
       return false;
     }
 
-    if (isDimensionsFieldCorrect(dimensions)) {
+    if (!isDimensionsFieldCorrect(dimensions)) {
       setCreationStatus("Invalid dimensions format. Please provide the dimensions following this format 'LENGTH x WIDTH x HEIGHT'");
 
       return false;

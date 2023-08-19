@@ -435,8 +435,8 @@ export default function SculptureUI({
             break;
 
           case 'Sculpture Dimensions':
-            if (isDimensionsFieldCorrect(dimensions)) {
-              setCreationStatus("Invalid dimensions format. Please provide the dimensions following this format 'LENGTH x WIDTH x HEIGHT'");
+            if (!isDimensionsFieldCorrect(field.newValue)) {
+              setUpdateDataStatus("Invalid dimensions format. Please provide the dimensions following this format 'LENGTH x WIDTH x HEIGHT'");
 
               return false;
             }
@@ -483,7 +483,7 @@ export default function SculptureUI({
     if ((editionDataUpdate[EDITION_EDITION] != 0) || (editionDataUpdate[EDITION_EDITION_NUMBER] != 0) || (editionDataUpdate[EDITION_EDITION_EXECUTOR] != '-')) {
       // Checks if the categorization label is correct according to the Edition requirements
       if (!isCorrectCategLabelForEdition()) {
-        setCreationStatus(`Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.`);
+        setUpdateDataStatus(`Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.`);
 
         return false;
       }
