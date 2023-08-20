@@ -30,6 +30,7 @@ const networkConfigPath = path.join(__dirname, 'network_config.json');
 const networkConfig = JSON.parse(fs.readFileSync(networkConfigPath, 'utf8'));
 
 const defaultNetwork = networkConfig.defaultNetwork || "localhost";
+const goerliInfuraProjectId = networkConfig.networks.goerli.infuraUrl;
 
 function mnemonic() {
   try {
@@ -102,7 +103,7 @@ module.exports = {
       },
     },
     goerli: {
-      url: "https://goerli.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
+      url: goerliInfuraProjectId,
       accounts: {
         mnemonic: mnemonic(),
       },
