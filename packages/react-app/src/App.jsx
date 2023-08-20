@@ -53,8 +53,6 @@ const { ethers } = require("ethers");
     (and then use the `useExternalContractLoader()` hook!)
 */
 
-/// 📡 What chain are your contracts deployed to?
-const initialNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, goerli, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
@@ -74,7 +72,23 @@ const providers = [
 function App(props) {
   // specify all the chains your app is available on. Eg: ['localhost', 'mainnet', ...otherNetworks ]
   // reference './constants.js' for other networks
-  const networkOptions = [initialNetwork.name, "mainnet", "goerli"];
+  
+  //const [network, setNetwork] = useState("");
+
+  /*fetch('../../hardhat/network_config.json')
+    .then(response => response.json())
+    .then(data => {
+      setNetwork(data.defaultNetwork);
+    })
+    .catch(error => {
+      console.error('Error fetching JSON:', error);
+  });
+  console.log(`NETWORK ${network}`)*/
+
+  // TODO: implement a kind of switch to change the network via UI
+  // Also it is necessary to set the Infura ID in the .env file... so we should consider another way to do that without changing directly to that file (.env)
+  //const networkOptions = [network, "mainnet", "goerli"];
+  const networkOptions = ["goerli", "mainnet"];
 
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();

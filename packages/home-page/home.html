@@ -33,6 +33,12 @@
         font-size: 16px;
         color: #666;
       }
+      /* Custom styles for the example */
+      .example {
+        font-family: "Arial", sans-serif;
+        font-size: 18px;
+        color: #007bff;
+      }
       .form {
         margin-top: 20px;
       }
@@ -58,11 +64,32 @@
     </style>
   </head>
   <body>
-    <div class="container">
+      <div class="container">
+        <div class="section">
+          <h2>Start local chain</h2>
+          <form class="form" action="/startLocalChain" method="post">
+            <input type="submit" value="Start local chain" />
+          </form>
+        </div>
+      <!-- Section for Introducing Goerli Infura ID -->
       <div class="section">
-        <h2>Start local chain</h2>
-        <form class="form" action="/startLocalChain" method="post">
-          <input type="submit" value="Start local chain" />
+        <h2>Goerli Infura ID (url)</h2>
+        <p>
+          To interact with the Goerli Testnet, you need an Infura Project ID.
+          This ID allows your application to connect to the Goerli network.
+          Obtain your Infura Project ID from your Infura account and use it in your network configuration.
+        </p>
+        <p class="example">
+          Example URL: <code>https://goerli.infura.io/v3/YOUR_INFURA_PROJECT_ID</code>
+        </p>
+        <form class="form" action="/provideGoerliInfuraID" method="post">
+          <div>
+            <label>Goerli Infura ID:</label>
+            <input type="text" name="goerliInfuraID" />
+          </div>
+          <div>
+            <input type="submit" value="Submit" />
+          </div>
         </form>
       </div>
       <div class="section">
