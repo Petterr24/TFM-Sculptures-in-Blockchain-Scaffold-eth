@@ -279,73 +279,73 @@ export default function SculptureFactoryUI({
         <div>
           <label>Name of the Sculpture:</label>
           <Input
-              value={sculptureName}
-              onChange={e => {
-                setSculptureName(e.target.value);
-              }}
+            value={sculptureName}
+            onChange={e => {
+              setSculptureName(e.target.value);
+            }}
           />
         </div>
         <div>
           <label>Artist:</label>
           <Input
-              value={artist}
-              onChange={e => {
-                setArtist(e.target.value);
-              }}
+            value={artist}
+            onChange={e => {
+              setArtist(e.target.value);
+            }}
           />
         </div>
         <div>
           <label>Critical catalog number:</label>
           <Input
-              value={criticalCatalogNumber}
-              onChange={e => {
-                setCriticalCatalogNumber(e.target.value);
-              }}
+            value={criticalCatalogNumber}
+            onChange={e => {
+              setCriticalCatalogNumber(e.target.value);
+            }}
           />
         </div>
         <div>
           <label>Date:</label>
           <Input
-              value={date}
-              onChange={e => {
-                setDate(e.target.value);
-              }}
+            value={date}
+            onChange={e => {
+              setDate(e.target.value);
+            }}
           />
         </div>
         <div>
           <label>Technique:</label>
           <Input
-              value={technique}
-              onChange={e => {
-                setTechnique(e.target.value);
-              }}
+            value={technique}
+            onChange={e => {
+              setTechnique(e.target.value);
+            }}
           />
         </div>
         <div>
           <label>Dimensions (cm):</label>
           <Input
-              value={dimensions}
-              onChange={e => {
-                setDimensions(e.target.value);
-              }}
+            value={dimensions}
+            onChange={e => {
+              setDimensions(e.target.value);
+            }}
           />
         </div>
         <div>
           <label>Location:</label>
           <Input
-              value={location}
-              onChange={e => {
-                setLocation(e.target.value);
-              }}
+            value={location}
+            onChange={e => {
+              setLocation(e.target.value);
+            }}
           />
         </div>
         <div>
           <label>Owner:</label>
           <Input
-              value={sculptureOwner}
-              onChange={e => {
-                setSculptureOwner(e.target.value);
-              }}
+            value={sculptureOwner}
+            onChange={e => {
+              setSculptureOwner(e.target.value);
+            }}
           />
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -361,37 +361,37 @@ export default function SculptureFactoryUI({
         <div>
           <label>Edition:</label>
           <Input
-              value={editionUI}
-              onChange={e => {
-                setEdition(e.target.value);
-                setEditionUI(e.target.value);
-              }}
+            value={editionUI}
+            onChange={e => {
+              setEdition(e.target.value);
+              setEditionUI(e.target.value);
+            }}
           />
         </div>
         <div>
           <label>Edition Executor:</label>
           <Input
-              value={editionExecutorUI}
-              onChange={e => {
-                setEditionExecutor(e.target.value);
-                setEditionExecutorUI(e.target.value);
-              }}
+            value={editionExecutorUI}
+            onChange={e => {
+              setEditionExecutor(e.target.value);
+              setEditionExecutorUI(e.target.value);
+            }}
           />
         </div>
         <div>
           <label>Edition Number:</label>
           <Input
-              value={editionNumberUI}
-              onChange={e => {
-                setEditionNumber(e.target.value);
-                setEditionNumberUI(e.target.value);
-              }}
+            value={editionNumberUI}
+            onChange={e => {
+              setEditionNumber(e.target.value);
+              setEditionNumberUI(e.target.value);
+            }}
           />
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label style={{ marginTop: 10 }}>Conservation:</label>
           <Select style={{ marginTop: 5 }} value={isConservation} onChange={setIsConservation}>
-            {conversationOptions.map((option) => (
+            {conversationOptions.map(option => (
               <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
               </Option>
@@ -402,7 +402,7 @@ export default function SculptureFactoryUI({
           <label style={{ marginTop: 10 }}>Conservation Label:</label>
           <Select style={{ marginTop: 5 }} value={conservationCategoryUI}
             onChange={value => {
-              setConservationCategory(value); 
+              setConservationCategory(value);
               setConservationCategoryUI(value);
             }}>
             {conservationLabel.map((option) => (
@@ -412,38 +412,38 @@ export default function SculptureFactoryUI({
             ))}
           </Select>
         </div>
-        <Button 
+        <Button
           style={{ marginTop: 10 }}
           onClick={() => {
             createSculpture().then(result => {
-              if (result) {
-                setSculptureName("");
-                setArtist("");
-                setCriticalCatalogNumber("");
-                setDate("");
-                setTechnique("");
-                setDimensions("");
-                setLocation("");
-                setCategorizationTag(0);
-                setCategorizationTagUI(null);
-                setEdition(0);
-                setEditionUI(null);
-                setEditionExecutor("-");
-                setEditionExecutorUI("");
-                setEditionNumber(0);
-                setEditionNumberUI(null);
-                setIsConservation(null);
-                setConservationCategory(0);
-                setConservationCategoryUI(null);
-                setSculptureOwner("");
-              }
-            }).catch(error => {
-              console.log(error);
-            })
-          }}>
+                if (result) {
+                  setSculptureName("");
+                  setArtist("");
+                  setCriticalCatalogNumber("");
+                  setDate("");
+                  setTechnique("");
+                  setDimensions("");
+                  setLocation("");
+                  setCategorizationTag(0);
+                  setCategorizationTagUI(null);
+                  setEdition(0);
+                  setEditionUI(null);
+                  setEditionExecutor("-");
+                  setEditionExecutorUI("");
+                  setEditionNumber(0);
+                  setEditionNumberUI(null);
+                  setIsConservation(null);
+                  setConservationCategory(0);
+                  setConservationCategoryUI(null);
+                  setSculptureOwner("");
+                }
+              }).catch(error => {
+                console.log(error);
+              })
+            }}>
           Create Sculpture Record
         </Button>
-          <p style={{ marginTop: 8 }}>Transcation status: {creationStatus}</p>
+        <p style={{ marginTop: 8 }}>Transcation status: {creationStatus}</p>
         <Divider />
           User Address:
           <Address address={address} ensProvider={mainnetProvider} fontSize={16} />
@@ -462,7 +462,7 @@ export default function SculptureFactoryUI({
       <List
         bordered
         dataSource={sculptureAddresses}
-        renderItem={(address) => {
+        renderItem={address => {
           return (
             <List.Item key={address}>
               <div>

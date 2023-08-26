@@ -15,7 +15,6 @@ export default function SculptureUI({
   writeContracts,
   sculptureRecords,
 }) {
-
   // Sculpture address
   const [sculptureInstance, setSculptureInstance] = useState(null);
 
@@ -99,7 +98,7 @@ export default function SculptureUI({
 
   // Get the selected option based on the categorizationTag state
   const categorizationLabelOption = categorizationLabel.find(
-    option => option.value !== '' && option.value !== '0' && option.value === categorizationTag
+    option => option.value !== '' && option.value !== '0' && option.value === categorizationTag,
   );
 
   // Edition data
@@ -118,7 +117,7 @@ export default function SculptureUI({
 
   // Get the selected option based on the conservationCategory state
   const conservationCategoryOption = conservationLabel.find(
-    option => option.value !== "" && option.value !== "0" && option.value === conservationCategory
+    option => option.value !== "" && option.value !== "0" && option.value === conservationCategory,
   );
 
   // Sculpture owner
@@ -179,7 +178,7 @@ export default function SculptureUI({
     { name: "Edition Executor", oldValue: editionExecutor, newValue: editionExecutorUpdate },
     { name: "Edition Number", oldValue: editionNumber, newValue: editionNumberUpdateUI },
     { name: "Conservation options", oldValue: isConservation, newValue: isConservationUpdateUI },
-    { name: "Conservation labels", oldValue: conservationCategory, newValue: conservationCategoryUpdateUI }
+    { name: "Conservation labels", oldValue: conservationCategory, newValue: conservationCategoryUpdateUI },
   ];
 
   function checkMaxLength(str) {
@@ -332,7 +331,7 @@ export default function SculptureUI({
             if (field.oldValue !== "") {
               editionExecutorValue = field.oldValue;
             }
-            setEditionExecutorUpdate(editionExecutorValue)
+            setEditionExecutorUpdate(editionExecutorValue);
             editionDataUpdate[EDITION_EDITION_EXECUTOR] = editionExecutorValue;
             break;
 
@@ -374,7 +373,7 @@ export default function SculptureUI({
             break;
 
           default:
-            // Do nothing
+          // Do nothing
         }
       } else {
         // Condition when new field has been provided. Some checks are necessary depending on the field
@@ -474,7 +473,7 @@ export default function SculptureUI({
 
       return false;
     } else if (!conservationDataUpdate[CONSV_CONSERVATION] && miscellaneousDataUpdate[MISC_CATEGORIZATION_LABEL] === 0) {
-      // Fails if the categorization label is set to 'NONE' and the Conservation option is set to 'NO'. 
+      // Fails if the categorization label is set to 'NONE' and the Conservation option is set to 'NO'
       // When the conservation option is 'NO' it is required to select one of the available categorization labels
 
       setUpdateDataStatus("It is required to provide any Categorization Labels when the Conservation option is set to 'NO'");
@@ -496,7 +495,7 @@ export default function SculptureUI({
         miscellaneousDataUpdate,
         editionDataUpdate,
         conservationDataUpdate,
-        sculptureOwnerData
+        sculptureOwnerData,
       ));
 
       await transaction.wait();
@@ -570,7 +569,7 @@ export default function SculptureUI({
       */}
       <div style={{ border: "1px solid #cccccc", padding: 16, width: 500, margin: "auto", marginTop: 64 }}>
         <Divider />
-        <h2 style={{ fontWeight: 'bold', fontSize: '28px' }}>Sculpture</h2>
+        <h2 style={{ fontWeight: "bold", fontSize: "28px" }}>Sculpture</h2>
         <Divider />
         <label>SmartContract Address:</label>
         <Address
@@ -585,10 +584,10 @@ export default function SculptureUI({
         <div>
           <label>Sculpture Address:</label>
           <Input
-              value={sculptureAddress}
-              onChange={e => {
-                setSculptureAddress(e.target.value);
-              }}
+            value={sculptureAddress}
+            onChange={e => {
+              setSculptureAddress(e.target.value);
+            }}
           />
         </div>
         <Button 
