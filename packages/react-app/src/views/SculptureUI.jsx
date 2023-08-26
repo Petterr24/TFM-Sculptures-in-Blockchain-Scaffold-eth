@@ -2,7 +2,7 @@ import { Button, Divider, Input, Select } from "antd";
 import React, { useState } from "react";
 import { utils } from "ethers";
 
-import { Address, Balance, Events } from "../components";
+import { Address, Balance } from "../components";
 
 export default function SculptureUI({
   address,
@@ -55,7 +55,7 @@ export default function SculptureUI({
     { value: "8", label: "AUTHORISED REPRODUCTION" },
     { value: "9", label: "AUTHORISED EXHIBITION COPY" },
     { value: "10", label: "AUTHORISED TECHNICAL COPY" },
-    { value: "11", label: "AUTHORISED DIGITAL COPY" }
+    { value: "11", label: "AUTHORISED DIGITAL COPY" },
   ];
 
   // Categorization label options
@@ -64,7 +64,7 @@ export default function SculptureUI({
     { value: "0", label: "NONE" },
     { value: "1", label: "AUTHORISED RECONSTRUCTION" },
     { value: "2", label: "AUTHORISED RESTORATION" },
-    { value: "3", label: "AUTHORISED EPHEMERAL WORK" }
+    { value: "3", label: "AUTHORISED EPHEMERAL WORK" },
   ];
 
   // Conservation options
@@ -99,7 +99,7 @@ export default function SculptureUI({
 
   // Get the selected option based on the categorizationTag state
   const categorizationLabelOption = categorizationLabel.find(
-    (option) => option.value !== '' && option.value !== '0' && option.value === categorizationTag
+    option => option.value !== '' && option.value !== '0' && option.value === categorizationTag
   );
 
   // Edition data
@@ -113,12 +113,12 @@ export default function SculptureUI({
 
   // Get the selected option based on the isConservation state
   const conservationOption = conversationOptions.find(
-    (option) => option.value !== "" && option.value === isConservation
+    option => option.value !== "" && option.value === isConservation
   );
 
   // Get the selected option based on the conservationCategory state
   const conservationCategoryOption = conservationLabel.find(
-    (option) => option.value !== "" && option.value !== "0" && option.value === conservationCategory
+    option => option.value !== "" && option.value !== "0" && option.value === conservationCategory
   );
 
   // Sculpture owner
@@ -139,7 +139,7 @@ export default function SculptureUI({
   const [editionUpdate, setEditionUpdate] = useState(null);
   const [editionExecutorUpdate, setEditionExecutorUpdate] = useState("");
   const [editionNumberUpdate, setEditionNumberUpdate] = useState(null);
-  
+
   // Sculpture owner
   const [sculptureOwnerUpdate, setSculptureOwnerUpdate] = useState("");
 
@@ -159,7 +159,7 @@ export default function SculptureUI({
   const [editionUpdateUI, setEditionUpdateUI] = useState("");
   const [editionExecutorUpdateUI, setEditionExecutorUpdateUI] = useState("");
   const [editionNumberUpdateUI, setEditionNumberUpdateUI] = useState("");
-  
+
   // Sculpture owner
   const [sculptureOwnerUpdateUI, setSculptureOwnerUpdateUI] = useState("");
 
@@ -277,25 +277,9 @@ export default function SculptureUI({
       return false;
     }
 
-    const miscellaneousDataUpdate = [
-      dateUpdate,
-      techniqueUpdate,
-      dimensionsUpdate,
-      locationUpdate,
-      categorizationTagUpdate
-    ];
-
-    const editionDataUpdate = [
-      editionUpdate,
-      editionExecutorUpdate,
-      editionNumberUpdate 
-    ];
-
-    const conservationDataUpdate = [
-      isConservationUpdate,
-      conservationCategoryUpdate
-    ];
-
+    const miscellaneousDataUpdate = [dateUpdate, techniqueUpdate, dimensionsUpdate, locationUpdate, categorizationTagUpdate];
+    const editionDataUpdate = [editionUpdate, editionExecutorUpdate, editionNumberUpdate];
+    const conservationDataUpdate = [isConservationUpdate, conservationCategoryUpdate];
     let sculptureOwnerData = sculptureOwnerUpdate;
 
     let rejectUpdateIfNoData = true;
@@ -498,7 +482,7 @@ export default function SculptureUI({
       return false;
     }
 
-    if ((editionDataUpdate[EDITION_EDITION] != 0) || (editionDataUpdate[EDITION_EDITION_NUMBER] != 0) || (editionDataUpdate[EDITION_EDITION_EXECUTOR] != '-')) {
+    if ((editionDataUpdate[EDITION_EDITION] !== 0) || (editionDataUpdate[EDITION_EDITION_NUMBER] !== 0) || (editionDataUpdate[EDITION_EDITION_EXECUTOR] !== "-")) {
       // Checks if the categorization label is correct according to the Edition requirements
       if (!isCorrectCategLabelForEdition()) {
         setUpdateDataStatus("Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.");
@@ -512,7 +496,8 @@ export default function SculptureUI({
         miscellaneousDataUpdate,
         editionDataUpdate,
         conservationDataUpdate,
-        sculptureOwnerData));
+        sculptureOwnerData
+      ));
 
       await transaction.wait();
       setUpdateDataStatus("Sculpture record updated successfully");
@@ -666,29 +651,29 @@ export default function SculptureUI({
           Get Sculpture Record
         </Button>
         <Divider />
-        <p style={{ marginTop: 8 }}><strong>Transaction status:</strong> {getDataStatus}</p>
+          <p style={{ marginTop: 8 }}><strong>Transaction status:</strong> {getDataStatus}</p>
         <Divider />
         <Divider />
         <Divider style={{ fontWeight: "bold", fontSize: "20px" }}>Sculpture Data</Divider>
         <Divider />
         <Divider />
-        <p style={{ marginTop: 8 }}><strong>Sculpture name:</strong> {sculptureName}</p>
-        <p style={{ marginTop: 8 }}><strong>Artist:</strong> {artist}</p>
-        <p style={{ marginTop: 8 }}><strong>Critical catalog number:</strong> {criticalCatalogNumber}</p>
+          <p style={{ marginTop: 8 }}><strong>Sculpture name:</strong> {sculptureName}</p>
+          <p style={{ marginTop: 8 }}><strong>Artist:</strong> {artist}</p>
+          <p style={{ marginTop: 8 }}><strong>Critical catalog number:</strong> {criticalCatalogNumber}</p>
         <Divider />
-        <p style={{ marginTop: 8 }}><strong>Date:</strong> {date}</p>
-        <p style={{ marginTop: 8 }}><strong>Technique:</strong> {technique}</p>
-        <p style={{ marginTop: 8 }}><strong>Dimensions (cm):</strong> {dimensions}</p>
-        <p style={{ marginTop: 8 }}><strong>Location:</strong> {location}</p>
-        <p style={{ marginTop: 8 }}><strong>Sculpture owner:</strong> {sculptureOwner}</p>
-        <p style={{ marginTop: 8 }}><strong>Categorization Label:</strong> {categorizationLabelOption ? categorizationLabelOption.label : ''}</p>
+          <p style={{ marginTop: 8 }}><strong>Date:</strong> {date}</p>
+          <p style={{ marginTop: 8 }}><strong>Technique:</strong> {technique}</p>
+          <p style={{ marginTop: 8 }}><strong>Dimensions (cm):</strong> {dimensions}</p>
+          <p style={{ marginTop: 8 }}><strong>Location:</strong> {location}</p>
+          <p style={{ marginTop: 8 }}><strong>Sculpture owner:</strong> {sculptureOwner}</p>
+          <p style={{ marginTop: 8 }}><strong>Categorization Label:</strong> {categorizationLabelOption ? categorizationLabelOption.label : ''}</p>
         <Divider />
-        <p style={{ marginTop: 8 }}><strong>Edition:</strong> {edition}</p>
-        <p style={{ marginTop: 8 }}><strong>Edition Executor:</strong> {editionExecutor}</p>
-        <p style={{ marginTop: 8 }}><strong>Edition Number:</strong> {editionNumber}</p>
+          <p style={{ marginTop: 8 }}><strong>Edition:</strong> {edition}</p>
+          <p style={{ marginTop: 8 }}><strong>Edition Executor:</strong> {editionExecutor}</p>
+          <p style={{ marginTop: 8 }}><strong>Edition Number:</strong> {editionNumber}</p>
         <Divider />
-        <p style={{ marginTop: 8 }}><strong>Conservation:</strong> {conservationOption ? conservationOption.label : ''}</p>
-        <p style={{ marginTop: 8 }}><strong>Conservation Label:</strong> {conservationCategoryOption ? conservationCategoryOption.label : ''}</p>
+          <p style={{ marginTop: 8 }}><strong>Conservation:</strong> {conservationOption ? conservationOption.label : ''}</p>
+          <p style={{ marginTop: 8 }}><strong>Conservation Label:</strong> {conservationCategoryOption ? conservationCategoryOption.label : ''}</p>
         <Divider />
         <Divider />
         <Divider style={{ fontWeight: "bold", fontSize: "20px" }}>Update Sculpture:</Divider>

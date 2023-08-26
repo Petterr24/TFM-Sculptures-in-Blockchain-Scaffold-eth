@@ -94,7 +94,7 @@ export default function UserAuthorisationUI({
       */}
       <div style={{ border: "1px solid #cccccc", padding: 16, width: 500, margin: "auto", marginTop: 64 }}>
         <Divider />
-        <h2 style={{ fontWeight: "bold", fontSize: "28px" }}>User Authorisation</h2>
+          <h2 style={{ fontWeight: "bold", fontSize: "28px" }}>User Authorisation</h2>
         <Divider />
         <label>SmartContract Address:</label>
         <Address

@@ -53,7 +53,6 @@ const { ethers } = require("ethers");
     (and then use the `useExternalContractLoader()` hook!)
 */
 
-
 // 😬 Sorry for all the console logging
 const DEBUG = true;
 const NETWORKCHECK = true;
@@ -72,7 +71,7 @@ const providers = [
 function App(props) {
   // specify all the chains your app is available on. Eg: ['localhost', 'mainnet', ...otherNetworks ]
   // reference './constants.js' for other networks
-  
+
   //const [network, setNetwork] = useState("");
 
   /*fetch('../../hardhat/network_config.json')
@@ -201,16 +200,12 @@ function App(props) {
         const newSculptureRecords = {};
         for (const address of existingSculptureAddresses) {
           if (!sculptureRecords[address]) {
-            newSculptureRecords[address] = new ethers.Contract(
-              address,
-              SculptureArtifact.abi,
-              provider.getSigner()
-            );
+            newSculptureRecords[address] = new ethers.Contract(address, SculptureArtifact.abi, provider.getSigner());
           }
         }
 
         if (Object.keys(newSculptureRecords).length > 0) {
-          setSculptureRecords((sculptureRecords) => ({ ...sculptureRecords, ...newSculptureRecords }));
+          setSculptureRecords(sculptureRecords => ({ ...sculptureRecords, ...newSculptureRecords }));
         }
       } catch (error) {
         console.error(error);
@@ -222,10 +217,10 @@ function App(props) {
       getExistingSculptureContracts();
 
       // listen for the NewSculpture event
-      readContracts.SculptureFactory.on("NewSculpture", (sculptureAddress) => {
+      readContracts.SculptureFactory.on("NewSculpture", sculptureAddress => {
         listenerActive = true;
         const provider = new ethers.providers.JsonRpcProvider();
-        setSculptureRecords((sculptureRecords) => ({
+        setSculptureRecords(sculptureRecords => ({
           ...sculptureRecords,
           [sculptureAddress]: new ethers.Contract(sculptureAddress, SculptureArtifact.abi, provider.getSigner()),
         }));

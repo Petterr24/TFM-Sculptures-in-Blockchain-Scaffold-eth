@@ -1,9 +1,9 @@
-import { Button, Divider, Input, Select} from "antd";
+import { Button, Divider, Input, Select } from "antd";
 import React, { useState, useEffect } from "react";
 import { utils } from "ethers";
 import { List } from "antd";
 
-import { Address, Balance, Events } from "../components";
+import { Address, Balance } from "../components";
 
 export default function SculptureFactoryUI({
   address,
@@ -31,7 +31,7 @@ export default function SculptureFactoryUI({
     { value: 8, label: "AUTHORISED REPRODUCTION" },
     { value: 9, label: "AUTHORISED EXHIBITION COPY" },
     { value: 10, label: "AUTHORISED TECHNICAL COPY" },
-    { value: 11, label: "AUTHORISED DIGITAL COPY" }
+    { value: 11, label: "AUTHORISED DIGITAL COPY" },
   ];
 
   // Conservation label options
@@ -40,7 +40,7 @@ export default function SculptureFactoryUI({
     { value: 0, label: "NONE" },
     { value: 1, label: "AUTHORISED RECONSTRUCTION" },
     { value: 2, label: "AUTHORISED RESTORATION" },
-    { value: 3, label: "AUTHORISED EPHEMERAL WORK" }
+    { value: 3, label: "AUTHORISED EPHEMERAL WORK" },
   ];
 
   // Conservation options
@@ -98,7 +98,7 @@ export default function SculptureFactoryUI({
     { name: "Edition executor", value: editionExecutor },
     { name: "Edition number", value: editionNumber },
     { name: "Conservation options", value: isConservation },
-    { name: "Sculpture owner", value: sculptureOwner }
+    { name: "Sculpture owner", value: sculptureOwner },
   ];
 
   /**
@@ -165,14 +165,14 @@ export default function SculptureFactoryUI({
     // 'AUTHORISED EXHIBITION COPY'
     // 'AUTHORISED TECHNICAL COPY'
     // 'AUTHORISED DIGITAL COPY'
-    return (categorizationTag > 7 && categorizationTag < 12)
+    return (categorizationTag > 7 && categorizationTag < 12);
   }
 
   async function createSculpture() {
     // Check that the following fields are provided
     for (const field of fields) {
       if (field.name !== "Conservation options") {
-        if ((field.name === "Categorization Labels") && (!field.value)) {
+        if (field.name === "Categorization Labels" && !field.value) {
           // This categorization labels list does not include the Conservation labels, so if the Conservation option is set to "YES", then this field shall be empty
           // because the categorization label for that scecific sculpture shall be selected from the Conservation labels
           // The NONE option is set by default as it shall be the option sent when the Conservation option is set to 'YES'
@@ -188,7 +188,7 @@ export default function SculptureFactoryUI({
             return false;
           }
         } else if (field.name === "Edition executor") {
-          if ((field.value !== "-") && !isCorrectCategLabelForEdition()) {
+          if (field.value !== "-" && !isCorrectCategLabelForEdition()) {
             setCreationStatus("Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.");
 
             return false;
@@ -204,7 +204,7 @@ export default function SculptureFactoryUI({
         return false;
       }
 
-      if ((field.name !== "Edition") && (field.name !== "Edition number") && (field.name !== "Categorization Labels") && !checkMaxLength(field.value.toString())) {
+      if (field.name !== "Edition" && field.name !== "Edition number" && field.name !== "Categorization Labels" && !checkMaxLength(field.value.toString())) {
         setCreationStatus(`The ${field.name} field exceeds the maximum string length of 64 characters`);
 
         return false;
@@ -223,7 +223,7 @@ export default function SculptureFactoryUI({
       return false;
     }
 
-    if (isConservation && ((conservationCategory === null) || (conservationCategory === 0))) {
+    if (isConservation && (conservationCategory === null || conservationCategory === 0)) {
       setCreationStatus("Please choose any of the conservation label. NONE is not a valid option if conservation option is 'YES'");
 
       return false;
@@ -237,30 +237,10 @@ export default function SculptureFactoryUI({
       return false;
     }
 
-    const persistentData = [
-      sculptureName,
-      artist,
-      criticalCatalogNumber
-    ];
-
-    const miscellaneousData = [
-      date,
-      technique,
-      dimensions,
-      location,
-      categorizationTag
-    ];
-
-    const editionData = [
-      edition,
-      editionExecutor,
-      editionNumber 
-    ];
-
-    const conservationData = [
-      isConservation,
-      conservationCategory
-    ];
+    const persistentData = [sculptureName, artist, criticalCatalogNumber];
+    const miscellaneousData = [ date, technique, dimensions, location, categorizationTag];
+    const editionData = [edition, editionExecutor, editionNumber];
+    const conservationData = [isConservation, conservationCategory];
 
     try {
       const transaction = await tx(writeContracts.SculptureFactory.createSculpture(persistentData, miscellaneousData, editionData, conservationData, sculptureOwner));
@@ -371,7 +351,7 @@ export default function SculptureFactoryUI({
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label style={{ marginTop: 10 }}>Categorization Label:</label>
           <Select style={{ marginTop: 5 }} value={categorizationTagUI} onChange={setCategorizationTagUI}>
-            {categorizationLabel.map((option) => (
+            {categorizationLabel.map(option => (
               <Option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
               </Option>
@@ -463,10 +443,10 @@ export default function SculptureFactoryUI({
           }}>
           Create Sculpture Record
         </Button>
-        <p style={{ marginTop: 8 }}>Transcation status: {creationStatus}</p>
+          <p style={{ marginTop: 8 }}>Transcation status: {creationStatus}</p>
         <Divider />
-        User Address:
-        <Address address={address} ensProvider={mainnetProvider} fontSize={16} />
+          User Address:
+          <Address address={address} ensProvider={mainnetProvider} fontSize={16} />
         <Divider />
         {/* use utils.formatEther to display a BigNumber: */}
         <h2>Your Balance: {yourLocalBalance ? utils.formatEther(yourLocalBalance) : "..."}</h2>
