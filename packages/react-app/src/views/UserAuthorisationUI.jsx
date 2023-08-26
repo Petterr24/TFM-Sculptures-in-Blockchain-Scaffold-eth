@@ -1,7 +1,6 @@
-import { Button, Card, DatePicker, Divider, Input, Select, Progress, Slider, Spin, Switch } from "antd";
+import { Button,Divider, Input, Select } from "antd";
 import React, { useState } from "react";
 import { utils } from "ethers";
-import { SyncOutlined } from "@ant-design/icons";
 
 import { Address, Balance, Events } from "../components";
 
@@ -18,10 +17,10 @@ export default function UserAuthorisationUI({
 
   // Privileges options
   const privileges = [
-    { value: null, label: 'Select the privilege', disabled: true },
-    { value: 0, label: 'NONE' },
-    { value: 1, label: 'USER' },
-    { value: 2, label: 'ADMIN' },
+    { value: null, label: "Select the privilege", disabled: true },
+    { value: 0, label: "NONE" },
+    { value: 1, label: "USER" },
+    { value: 2, label: "ADMIN" },
   ]
   const { Option } = Select;
 
@@ -95,7 +94,7 @@ export default function UserAuthorisationUI({
       */}
       <div style={{ border: "1px solid #cccccc", padding: 16, width: 500, margin: "auto", marginTop: 64 }}>
         <Divider />
-        <h2 style={{ fontWeight: 'bold', fontSize: '28px' }}>User Authorisation</h2>
+        <h2 style={{ fontWeight: "bold", fontSize: "28px" }}>User Authorisation</h2>
         <Divider />
         <label>SmartContract Address:</label>
         <Address
@@ -116,7 +115,7 @@ export default function UserAuthorisationUI({
               }}
           />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <label style={{ marginTop: 10 }}>Privilege Level:</label>
           <Select style={{ marginTop: 5 }} value={privilegeLevel} onChange={setPrivilegeLevel}>
             {privileges.map((option) => (
@@ -149,7 +148,7 @@ export default function UserAuthorisationUI({
               }}
           />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <label style={{ marginTop: 10 }}>Old Privilege Level:</label>
           <Select style={{ marginTop: 5 }} value={oldPrivilegeLevel} onChange={setOldPrivilegeLevel}>
             {privileges.map((option) => (
@@ -159,7 +158,7 @@ export default function UserAuthorisationUI({
             ))}
           </Select>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <label style={{ marginTop: 10 }}>New Privilege Level:</label>
           <Select style={{ marginTop: 5 }} value={newPrivilegeLevel} onChange={setNewPrivilegeLevel}>
             {privileges.map((option) => (

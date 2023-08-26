@@ -1,7 +1,6 @@
-import { Button, Card, DatePicker, Divider, Input, Select, Progress, Slider, Spin, Switch } from "antd";
+import { Button, Divider, Input, Select} from "antd";
 import React, { useState, useEffect } from "react";
 import { utils } from "ethers";
-import { SyncOutlined } from "@ant-design/icons";
 import { List } from "antd";
 
 import { Address, Balance, Events } from "../components";
@@ -20,36 +19,37 @@ export default function SculptureFactoryUI({
 
   // Categorization label options
   const categorizationLabel = [
-    { value: null, label: 'Select the categorization label', disabled: true },
-    { value: 0, label: 'NONE' },
-    { value: 1, label: 'AUTHORISED UNIQUE WORK' },
-    { value: 2, label: 'AUTHORISED UNIQUE WORK VARIATION' },
-    { value: 3, label: 'AUTHORISED WORK' },
-    { value: 4, label: 'AUTHORISED MULTIPLE' },
-    { value: 5, label: 'AUTHORISED CAST' },
-    { value: 6, label: 'POSTHUMOUS WORK AUTHORISED BY THE ARTIST' },
-    { value: 7, label: 'POSTHUMOUS WORK AUTHORISED BY THE RIGHTSHOLDERS' },
-    { value: 8, label: 'AUTHORISED REPRODUCTION' },
-    { value: 9, label: 'AUTHORISED EXHIBITION COPY' },
-    { value: 10, label: 'AUTHORISED TECHNICAL COPY' },
-    { value: 11, label: 'AUTHORISED DIGITAL COPY' }
-  ]
+    { value: null, label: "Select the categorization label', disabled: true" },
+    { value: 0, label: "NONE" },
+    { value: 1, label: "AUTHORISED UNIQUE WORK" },
+    { value: 2, label: "AUTHORISED UNIQUE WORK VARIATION" },
+    { value: 3, label: "AUTHORISED WORK" },
+    { value: 4, label: "AUTHORISED MULTIPLE" },
+    { value: 5, label: "AUTHORISED CAST" },
+    { value: 6, label: "POSTHUMOUS WORK AUTHORISED BY THE ARTIST" },
+    { value: 7, label: "POSTHUMOUS WORK AUTHORISED BY THE RIGHTSHOLDERS" },
+    { value: 8, label: "AUTHORISED REPRODUCTION" },
+    { value: 9, label: "AUTHORISED EXHIBITION COPY" },
+    { value: 10, label: "AUTHORISED TECHNICAL COPY" },
+    { value: 11, label: "AUTHORISED DIGITAL COPY" }
+  ];
 
   // Conservation label options
   const conservationLabel = [
-    { value: null, label: 'Select the conservation label', disabled: true },
-    { value: 0, label: 'NONE' },
-    { value: 1, label: 'AUTHORISED RECONSTRUCTION' },
-    { value: 2, label: 'AUTHORISED RESTORATION' },
-    { value: 3, label: 'AUTHORISED EPHEMERAL WORK' }
-  ]
+    { value: null, label: "Select the conservation label", disabled: true },
+    { value: 0, label: "NONE" },
+    { value: 1, label: "AUTHORISED RECONSTRUCTION" },
+    { value: 2, label: "AUTHORISED RESTORATION" },
+    { value: 3, label: "AUTHORISED EPHEMERAL WORK" }
+  ];
 
   // Conservation options
   const conversationOptions = [
-    { value: null, label: 'Select the conservation option', disabled: true },
-    { value: false, label: 'NO' },
-    { value: true, label: 'YES' },
-  ]
+    { value: null, label: "Select the conservation option", disabled: true },
+    { value: false, label: "NO" },
+    { value: true, label: "YES" },
+  ];
+
   const { Option } = Select;
 
   // Persisten data
@@ -86,19 +86,19 @@ export default function SculptureFactoryUI({
 
   // Some input fields
   const fields = [
-    { name: 'Sculpture Name', value: sculptureName },
-    { name: 'Artist Name', value: artist },
-    { name: 'Critical Catalog Number', value: criticalCatalogNumber },
-    { name: 'Date', value: date },
-    { name: 'Technique', value: technique },
-    { name: 'Sculpture Dimensions', value: dimensions },
-    { name: 'Location', value: location },
-    { name: 'Categorization Labels', value: categorizationTag },
-    { name: 'Edition', value: edition },
-    { name: 'Edition executor', value: editionExecutor },
-    { name: 'Edition number', value: editionNumber },
-    { name: 'Conservation options', value: isConservation },
-    { name: 'Sculpture owner', value: sculptureOwner }
+    { name: "Sculpture Name", value: sculptureName },
+    { name: "Artist Name", value: artist },
+    { name: "Critical Catalog Number", value: criticalCatalogNumber },
+    { name: "Date", value: date },
+    { name: "Technique", value: technique },
+    { name: "Sculpture Dimensions", value: dimensions },
+    { name: "Location", value: location },
+    { name: "Categorization Labels", value: categorizationTag },
+    { name: "Edition", value: edition },
+    { name: "Edition executor", value: editionExecutor },
+    { name: "Edition number", value: editionNumber },
+    { name: "Conservation options", value: isConservation },
+    { name: "Sculpture owner", value: sculptureOwner }
   ];
 
   /**
@@ -165,14 +165,14 @@ export default function SculptureFactoryUI({
     // 'AUTHORISED EXHIBITION COPY'
     // 'AUTHORISED TECHNICAL COPY'
     // 'AUTHORISED DIGITAL COPY'
-    return ((categorizationTag > 7) && (categorizationTag < 12))
+    return (categorizationTag > 7 && categorizationTag < 12)
   }
 
   async function createSculpture() {
     // Check that the following fields are provided
     for (const field of fields) {
-      if (field.name != 'Conservation options') {
-        if ((field.name == 'Categorization Labels') && (!field.value)) {
+      if (field.name !== "Conservation options") {
+        if ((field.name === "Categorization Labels") && (!field.value)) {
           // This categorization labels list does not include the Conservation labels, so if the Conservation option is set to "YES", then this field shall be empty
           // because the categorization label for that scecific sculpture shall be selected from the Conservation labels
           // The NONE option is set by default as it shall be the option sent when the Conservation option is set to 'YES'
@@ -181,15 +181,15 @@ export default function SculptureFactoryUI({
 
             return false;
           }
-        } else if ((field.name == 'Edition') || (field.name == 'Edition number')) {
-          if (field.value != 0 && !isCorrectCategLabelForEdition()) {
-            setCreationStatus(`Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.`);
+        } else if (field.name === "Edition" || field.name === "Edition number") {
+          if (field.value !== 0 && !isCorrectCategLabelForEdition()) {
+            setCreationStatus("Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.");
 
             return false;
           }
-        } else if ((field.name == 'Edition executor')) {
-          if ((field.value != '-') && !isCorrectCategLabelForEdition()) {
-            setCreationStatus(`Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.`);
+        } else if (field.name === "Edition executor") {
+          if ((field.value !== "-") && !isCorrectCategLabelForEdition()) {
+            setCreationStatus("Edition data can only be provided when using Authorisation reproduction, exhibition copy, technical copy or digital copy for categorization labels.");
 
             return false;
           }
@@ -198,13 +198,13 @@ export default function SculptureFactoryUI({
 
           return false;
         }
-      } else if ((field.name == 'Conservation options') && (field.value == null)) {
+      } else if (field.name === "Conservation options" && field.value == null) {
         setCreationStatus(`Please choose any of the ${field.name}`);
 
         return false;
       }
 
-      if ((field.name != 'Edition') && (field.name != 'Edition number') && (field.name != 'Categorization Labels') && !checkMaxLength(field.value.toString())) {
+      if ((field.name !== "Edition") && (field.name !== "Edition number") && (field.name !== "Categorization Labels") && !checkMaxLength(field.value.toString())) {
         setCreationStatus(`The ${field.name} field exceeds the maximum string length of 64 characters`);
 
         return false;
@@ -223,15 +223,15 @@ export default function SculptureFactoryUI({
       return false;
     }
 
-    if (isConservation && ((conservationCategory == null) || (conservationCategory == 0))) {
+    if (isConservation && ((conservationCategory === null) || (conservationCategory === 0))) {
       setCreationStatus("Please choose any of the conservation label. NONE is not a valid option if conservation option is 'YES'");
 
       return false;
-    } else if (!isConservation && conservationCategory != null && conservationCategory != 0) {
+    } else if (!isConservation && conservationCategory !== null && conservationCategory !== 0) {
       setCreationStatus("You cannot choose a conservation label if you select the conservation option as 'NO'");
 
       return false;
-    } else if (isConservation && conservationCategory != null && conservationCategory != 0 && categorizationTag != null && categorizationTag != 0) {
+    } else if (isConservation && conservationCategory !== null && conservationCategory !== 0 && categorizationTag !== null && categorizationTag !== 0) {
       setCreationStatus("You cannot choose any of the categorization labels if you select the conservation option as 'YES'. You can only select one of the possible conservation labels.");
 
       return false;
@@ -241,7 +241,7 @@ export default function SculptureFactoryUI({
       sculptureName,
       artist,
       criticalCatalogNumber
-    ]
+    ];
 
     const miscellaneousData = [
       date,
@@ -249,18 +249,18 @@ export default function SculptureFactoryUI({
       dimensions,
       location,
       categorizationTag
-    ]
+    ];
 
     const editionData = [
       edition,
       editionExecutor,
       editionNumber 
-    ]
+    ];
 
     const conservationData = [
       isConservation,
       conservationCategory
-    ]
+    ];
 
     try {
       const transaction = await tx(writeContracts.SculptureFactory.createSculpture(persistentData, miscellaneousData, editionData, conservationData, sculptureOwner));
@@ -284,7 +284,7 @@ export default function SculptureFactoryUI({
       */}
       <div style={{ border: "1px solid #cccccc", padding: 16, width: 500, margin: "auto", marginTop: 64 }}>
         <Divider />
-        <h2 style={{ fontWeight: 'bold', fontSize: '28px' }}>Sculpture Factory</h2>
+        <h2 style={{ fontWeight: "bold", fontSize: "28px" }}>Sculpture Factory</h2>
         <Divider />
         <label>SmartContract Address:</label>
         <Address
@@ -368,7 +368,7 @@ export default function SculptureFactoryUI({
               }}
           />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <label style={{ marginTop: 10 }}>Categorization Label:</label>
           <Select style={{ marginTop: 5 }} value={categorizationTagUI} onChange={setCategorizationTagUI}>
             {categorizationLabel.map((option) => (
@@ -408,7 +408,7 @@ export default function SculptureFactoryUI({
               }}
           />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <label style={{ marginTop: 10 }}>Conservation:</label>
           <Select style={{ marginTop: 5 }} value={isConservation} onChange={setIsConservation}>
             {conversationOptions.map((option) => (
@@ -418,7 +418,7 @@ export default function SculptureFactoryUI({
             ))}
           </Select>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <label style={{ marginTop: 10 }}>Conservation Label:</label>
           <Select style={{ marginTop: 5 }} value={conservationCategoryUI}
             onChange={value => {
@@ -448,7 +448,7 @@ export default function SculptureFactoryUI({
                 setCategorizationTagUI(null);
                 setEdition(0);
                 setEditionUI(null);
-                setEditionExecutor('-');
+                setEditionExecutor("-");
                 setEditionExecutorUI("");
                 setEditionNumber(0);
                 setEditionNumberUI(null);
