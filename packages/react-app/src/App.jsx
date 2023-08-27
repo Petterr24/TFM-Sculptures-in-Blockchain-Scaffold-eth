@@ -153,8 +153,6 @@ function App(props) {
 
   // The transactor wraps transactions and provides notificiations
   const tx = Transactor(userSigner, gasPrice);
-  if (DEBUG) console.log(`Transactor userSigner: ${userSigner}`);
-  if (DEBUG) console.log(`Transactor gasPrice: ${gasPrice}`);
 
   // 🏗 scaffold-eth is full of handy hooks like this one to get your balance:
   const yourLocalBalance = useBalance(localProvider, address, localProviderPollingTime);
@@ -198,11 +196,10 @@ function App(props) {
     async function getExistingSculptureContracts() {
       try {
         const existingSculptureAddresses = await readContracts.SculptureFactory.getSculptures();
-        const provider = new ethers.providers.JsonRpcProvider();
         const newSculptureRecords = {};
         for (const address of existingSculptureAddresses) {
           if (!sculptureRecords[address]) {
-            newSculptureRecords[address] = new ethers.Contract(address, SculptureArtifact.abi, provider.getSigner());
+            newSculptureRecords[address] = new ethers.Contract(address, SculptureArtifact.abi, userSigner);
           }
         }
 
@@ -221,10 +218,9 @@ function App(props) {
       // listen for the NewSculpture event
       readContracts.SculptureFactory.on("NewSculpture", sculptureAddress => {
         listenerActive = true;
-        const provider = new ethers.providers.JsonRpcProvider();
         setSculptureRecords(sculptureRecords => ({
           ...sculptureRecords,
-          [sculptureAddress]: new ethers.Contract(sculptureAddress, SculptureArtifact.abi, provider.getSigner()),
+          [sculptureAddress]: new ethers.Contract(sculptureAddress, SculptureArtifact.abi, userSigner),
         }));
       });
     }
