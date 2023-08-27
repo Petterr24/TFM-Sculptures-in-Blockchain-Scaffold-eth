@@ -153,6 +153,8 @@ function App(props) {
 
   // The transactor wraps transactions and provides notificiations
   const tx = Transactor(userSigner, gasPrice);
+  if (DEBUG) console.log(`Transactor userSigner: ${userSigner}`);
+  if (DEBUG) console.log(`Transactor gasPrice: ${gasPrice}`);
 
   // 🏗 scaffold-eth is full of handy hooks like this one to get your balance:
   const yourLocalBalance = useBalance(localProvider, address, localProviderPollingTime);

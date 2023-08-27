@@ -129,7 +129,7 @@ export default function SculptureFactoryUI({
     if (readContracts && readContracts.SculptureFactory) {
       getExistingSculptureAddresses();
     }
-  }, [readContracts.SculptureFactory]);
+  }, [readContracts, getExistingSculptureAddresses, readContracts.SculptureFactory]);
 
   function isValidDate(value) {
     const regexFormat1 = /^\d{4}$/; // Regex pattern to match the data format like "1990"
