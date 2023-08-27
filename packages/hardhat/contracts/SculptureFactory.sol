@@ -154,7 +154,7 @@ contract Sculpture {
         SculptureLibrary.EditionData memory _editionData,
         SculptureLibrary.ConservationData memory _conservationData,
         string memory _sculptureOwner
-    ) public {
+    ) external payable {
         // Checks if the user has privileges to update the data
         require(userAuthorisationInstance.isAuthorisedToUpdate(msg.sender) == true, "Your are not authorised to update a record.");
 
