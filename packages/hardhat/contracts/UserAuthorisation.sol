@@ -55,7 +55,7 @@ contract UserAuthorisation {
     function authoriseUser(
         address _userAddress,
         uint8 _privilegeLevel
-    ) public isAdmin isValidPrivilege(_privilegeLevel) {
+    ) external payable isAdmin isValidPrivilege(_privilegeLevel) {
         // Checks if the user is already authorised
         require(users[_userAddress].userAddress == address(0), "User is already created and authorised");
 
@@ -75,7 +75,7 @@ contract UserAuthorisation {
         address _userAddress,
         uint8 _oldPrivilegeLevel,
         uint8 _newPrivilegeLevel
-    ) public isAdmin isAnExistingUser(_userAddress) isValidPrivilege(_newPrivilegeLevel) {
+    ) external payable isAdmin isAnExistingUser(_userAddress) isValidPrivilege(_newPrivilegeLevel) {
         // Checks if the user exists
         require(users[_userAddress].userAddress != address(0), "The user does not exist");
 
@@ -105,7 +105,7 @@ contract UserAuthorisation {
     // Removes an Authorised User
     function removeAuthorisedUser(
         address _userAddress
-    ) public isAdmin isAnExistingUser(_userAddress) {
+    ) external payable isAdmin isAnExistingUser(_userAddress) {
         
         if (isAdminUser(_userAddress)) {
             require(numOfAdmins > 1, "This admin cannot be removed since there must be at least one Admin user");
