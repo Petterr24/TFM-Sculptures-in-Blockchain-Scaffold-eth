@@ -531,7 +531,6 @@ export default function SculptureUI({
   async function getSculptureData() {
     try {
       const sculptureRecordsAddresses = await tx(readContracts.SculptureFactory.getSculptures());
-      await sculptureRecordsAddresses.wait();
 
       for (let i = 0; i < sculptureRecordsAddresses.length; i++) {
         if (sculptureRecordsAddresses[i] === sculptureAddress) {
@@ -541,7 +540,6 @@ export default function SculptureUI({
               setVerifiedSculptureAddress(sculptureAddress);
               setSculptureInstance(contractInstance);
               const data = await tx(contractInstance.getSculptureData());
-              await data.wait();
 
               // Update the state variables with the parsed data
               setData(data);
