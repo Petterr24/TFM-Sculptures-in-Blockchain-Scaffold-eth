@@ -15,6 +15,7 @@ export default function SculptureFactoryUI({
   readContracts,
   writeContracts,
 }) {
+  // Sculptures addresses to be displayed at the end of the UI
   const [sculptureAddresses, setSculptureAddresses] = useState([]);
 
   // Categorization label options
@@ -115,13 +116,9 @@ export default function SculptureFactoryUI({
   }, [categorizationTagUI]);
 
   async function getExistingSculptureAddresses() {
-    try {
-      const addresses = await readContracts.SculptureFactory.getSculptures();
-      if (addresses.length > 0) {
-        setSculptureAddresses(addresses);
-      }
-    } catch (error) {
-      console.error(error);
+    const addresses = await readContracts.SculptureFactory.getSculptures();
+    if (addresses.length > 0) {
+      setSculptureAddresses(addresses);
     }
   }
 
@@ -129,7 +126,7 @@ export default function SculptureFactoryUI({
     if (readContracts && readContracts.SculptureFactory) {
       getExistingSculptureAddresses();
     }
-  }, [readContracts, getExistingSculptureAddresses, readContracts.SculptureFactory]);
+  }, []); // The empty dependency array means this effect only runs once
 
   function isValidDate(value) {
     const regexFormat1 = /^\d{4}$/; // Regex pattern to match the data format like "1990"

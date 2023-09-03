@@ -1,5 +1,5 @@
 import { Button, Divider, Input, Select } from "antd";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { utils } from "ethers";
 
 import { Address, Balance } from "../components";
@@ -15,6 +15,7 @@ export default function SculptureUI({
   writeContracts,
   sculptureRecords,
 }) {
+  const [sculptureAddresses, setSculptureAddresses] = useState([]);
   // Sculpture address
   const [sculptureInstance, setSculptureInstance] = useState(null);
 
@@ -180,6 +181,19 @@ export default function SculptureUI({
     { name: "Conservation options", oldValue: isConservation, newValue: isConservationUpdateUI },
     { name: "Conservation labels", oldValue: conservationCategory, newValue: conservationCategoryUpdateUI },
   ];
+
+  async function getExistingSculptureAddresses() {
+    const addresses = await readContracts.SculptureFactory.getSculptures();
+    if (addresses.length > 0) {
+      setSculptureAddresses(addresses);
+    }
+  }
+
+  useEffect(() => {
+    if (readContracts && readContracts.SculptureFactory) {
+      getExistingSculptureAddresses();
+    }
+  }, []);// The empty dependency array means this effect only runs once
 
   function checkMaxLength(str) {
     return str.length <= 64;
@@ -513,7 +527,7 @@ export default function SculptureUI({
 
   async function getSculptureDataAfterUpdate() {
     try {
-      const data = await tx(sculptureInstance.getSculptureData());
+      const data = await sculptureInstance.getSculptureData();
 
       // Update the state variables with the parsed data
       setData(data);
@@ -530,16 +544,14 @@ export default function SculptureUI({
 
   async function getSculptureData() {
     try {
-      const sculptureRecordsAddresses = await tx(readContracts.SculptureFactory.getSculptures());
-
-      for (let i = 0; i < sculptureRecordsAddresses.length; i++) {
-        if (sculptureRecordsAddresses[i] === sculptureAddress) {
+      for (let i = 0; i < sculptureAddresses.length; i++) {
+        if (sculptureAddresses[i] === sculptureAddress) {
           for (const contractName in sculptureRecords) {
             const contractInstance = sculptureRecords[contractName];
             if (contractInstance && contractInstance.address === sculptureAddress) {
               setVerifiedSculptureAddress(sculptureAddress);
               setSculptureInstance(contractInstance);
-              const data = await tx(contractInstance.getSculptureData());
+              const data = await contractInstance.getSculptureData();
 
               // Update the state variables with the parsed data
               setData(data);
