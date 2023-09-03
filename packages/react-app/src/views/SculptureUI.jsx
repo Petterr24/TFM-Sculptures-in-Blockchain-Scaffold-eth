@@ -255,6 +255,62 @@ export default function SculptureUI({
     setSculptureOwner(data[OWNER]);
   }
 
+  function cleanPage() {
+    // State to display the current Record address
+    setVerifiedSculptureAddress("");
+
+    // States used to display the information stored in the SmartContract record
+    setSculptureName("");
+    setArtist("");
+    setCriticalCatalogNumber("");
+    setDate("");
+    setTechnique("");
+    setDimensions("");
+    setLocation("");
+    setSculptureOwner("");
+    setCategorizationTag("");
+    setEdition("");
+    setEditionExecutor("");
+    setEditionNumber("");
+    setIsConservation("");
+    setConservationCategory("");
+
+    // States used to store the new values that would be supplied to update the exiting record
+    setDateUpdate("");
+    setTechniqueUpdate("");
+    setDimensionsUpdate("");
+    setLocationUpdate("");
+    setSculptureOwnerUpdate("");
+    setCategorizationTagUpdate(null);
+    setEditionUpdate(null);
+    setEditionExecutorUpdate("");
+    setEditionNumberUpdate(null);
+    setIsConservationUpdate(null);
+    setConservationCategoryUpdate(null);
+
+    // States used to store the values provided by the user in the UI fields to be supplied to the record in order to be updated
+    // They are only used to display the value in the Update Sculpture section
+    setDateUpdateUI("");
+    setTechniqueUpdateUI("");
+    setDimensionsUpdateUI("");
+    setLocationUpdateUI("");
+    setSculptureOwnerUpdateUI("");
+    setCategorizationTagUpdateUI("");
+    setEditionUpdateUI("");
+    setEditionExecutorUpdateUI("");
+    setEditionNumberUpdateUI("");
+    setIsConservationUpdateUI("");
+    setConservationCategoryUpdateUI("");
+  }
+
+  // Effect to check when the user has changed the SculptureFactory address
+  useEffect(() => {
+    cleanPage();
+    setUpdateDataStatus("");
+    setGetDataStatus("");
+  }, [readContracts.SculptureFactory]);
+
+
   function resetUpdateFields() {
     setDateUpdate("");
     setTechniqueUpdate("");
@@ -609,51 +665,7 @@ export default function SculptureUI({
               if (result) {
                 setSculptureAddress("");
               } else {
-                // State to display the current Record address
-                setVerifiedSculptureAddress("");
-
-                // States used to display the information stored in the SmartContract record
-                setSculptureName("");
-                setArtist("");
-                setCriticalCatalogNumber("");
-                setDate("");
-                setTechnique("");
-                setDimensions("");
-                setLocation("");
-                setSculptureOwner("");
-                setCategorizationTag("");
-                setEdition("");
-                setEditionExecutor("");
-                setEditionNumber("");
-                setIsConservation("");
-                setConservationCategory("");
-
-                // States used to store the new values that would be supplied to update the exiting record
-                setDateUpdate("");
-                setTechniqueUpdate("");
-                setDimensionsUpdate("");
-                setLocationUpdate("");
-                setSculptureOwnerUpdate("");
-                setCategorizationTagUpdate(null);
-                setEditionUpdate(null);
-                setEditionExecutorUpdate("");
-                setEditionNumberUpdate(null);
-                setIsConservationUpdate(null);
-                setConservationCategoryUpdate(null);
-
-                // States used to store the values provided by the user in the UI fields to be supplied to the record in order to be updated
-                // They are only used to display the value in the Update Sculpture section
-                setDateUpdateUI("");
-                setTechniqueUpdateUI("");
-                setDimensionsUpdateUI("");
-                setLocationUpdateUI("");
-                setSculptureOwnerUpdateUI("");
-                setCategorizationTagUpdateUI("");
-                setEditionUpdateUI("");
-                setEditionExecutorUpdateUI("");
-                setEditionNumberUpdateUI("");
-                setIsConservationUpdateUI("");
-                setConservationCategoryUpdateUI("");
+                cleanPage();
               }
             }).catch(error => {
               console.log(error);

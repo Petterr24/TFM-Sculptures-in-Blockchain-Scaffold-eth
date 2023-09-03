@@ -122,11 +122,12 @@ export default function SculptureFactoryUI({
     }
   }
 
+   // The empty dependency array means this effect only runs once, but we have to consider when the user changes the SculptureFactory address
   useEffect(() => {
     if (readContracts && readContracts.SculptureFactory) {
       getExistingSculptureAddresses();
     }
-  }, []); // The empty dependency array means this effect only runs once
+  }, [readContracts.SculptureFactory]);
 
   function isValidDate(value) {
     const regexFormat1 = /^\d{4}$/; // Regex pattern to match the data format like "1990"
