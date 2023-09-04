@@ -32,6 +32,7 @@ import deployedContracts from "./contracts/hardhat_contracts.json";
 import { getRPCPollTime, Transactor, Web3ModalSetup } from "./helpers";
 import { Home, UserAuthorisationUI, SculptureFactoryUI, SculptureUI, Hints, Subgraph } from "./views";
 import { useStaticJsonRPC, useGasPrice } from "./hooks";
+import networkConfig from "./network_config.json";
 
 const { ethers } = require("ethers");
 /*
@@ -74,24 +75,11 @@ function App(props) {
 
   //const [network, setNetwork] = useState("");
 
-  /*fetch('../../hardhat/network_config.json')
-    .then(response => response.json())
-    .then(data => {
-      setNetwork(data.defaultNetwork);
-    })
-    .catch(error => {
-      console.error('Error fetching JSON:', error);
-  });
-  console.log(`NETWORK ${network}`)*/
-
-  // TODO: implement a kind of switch to change the network via UI
-  // Also it is necessary to set the Infura ID in the .env file... so we should consider another way to do that without changing directly to that file (.env)
-  //const networkOptions = [network, "mainnet", "goerli"];
-  const networkOptions = ["goerli", "mainnet"];
+  const networkOptions = ["localhost", "goerli", "mainnet"];
 
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
-  const [selectedNetwork, setSelectedNetwork] = useState(networkOptions[0]);
+  const [selectedNetwork, setSelectedNetwork] = useState(networkConfig.network);
   const location = useLocation();
 
   const targetNetwork = NETWORKS[selectedNetwork];

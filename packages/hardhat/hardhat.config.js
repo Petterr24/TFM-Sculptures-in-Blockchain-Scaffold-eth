@@ -24,12 +24,12 @@ const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 
 //
 // Process to read the network from the JSON file which is updated by using the First Frontend.
-// localhost network is selected by default, in case of not having the 'defaultNetwork' in the JSON file
+// localhost network is selected by default, in case of not having the 'network' in the JSON file
 //
 const networkConfigPath = path.join(__dirname, 'network_config.json');
 const networkConfig = JSON.parse(fs.readFileSync(networkConfigPath, 'utf8'));
 
-const defaultNetwork = networkConfig.defaultNetwork || "localhost";
+const defaultNetwork = networkConfig.network || "localhost";
 const goerliInfuraProjectId = networkConfig.networks.goerli.infuraUrl;
 
 function mnemonic() {

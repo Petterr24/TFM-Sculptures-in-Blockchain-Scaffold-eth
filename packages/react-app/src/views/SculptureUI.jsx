@@ -310,7 +310,6 @@ export default function SculptureUI({
     setGetDataStatus("");
   }, [readContracts.SculptureFactory]);
 
-
   function resetUpdateFields() {
     setDateUpdate("");
     setTechniqueUpdate("");

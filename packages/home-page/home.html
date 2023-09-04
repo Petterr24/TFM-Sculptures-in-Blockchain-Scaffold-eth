@@ -71,31 +71,20 @@
             <input type="submit" value="Start local chain" />
           </form>
         </div>
-      <!-- Section for Introducing Goerli Infura ID -->
-      <div class="section">
-        <h2>Goerli Infura ID (url)</h2>
-        <p>
-          To interact with the Goerli Testnet, you need an Infura Project ID.
-          This ID allows your application to connect to the Goerli network.
-          Obtain your Infura Project ID from your Infura account and use it in your network configuration.
-        </p>
-        <p class="example">
-          Example URL: <code>https://goerli.infura.io/v3/YOUR_INFURA_PROJECT_ID</code>
-        </p>
-        <form class="form" action="/provideGoerliInfuraID" method="post">
-          <div>
-            <label>Goerli Infura ID:</label>
-            <input type="text" name="goerliInfuraID" />
-          </div>
-          <div>
-            <input type="submit" value="Submit" />
-          </div>
-        </form>
-      </div>
       <div class="section">
         <h2>Deploy Smart Contracts</h2>
         <form class="form" action="/deploy" method="post">
-          <input type="submit" value="Deploy SCs" />
+          <label>
+            <input type="radio" name="network" value="localhost" checked> Local Network
+          </label>
+          <label>
+            <input type="radio" name="network" value="goerli"> Goerli Test Network
+          </label>
+          <!-- Hidden input fields to store the selected network -->
+          <input type="hidden" id="selectedNetworkDeploy" name="selectedNetwork" value="localhost">
+          <div>
+            <input type="submit" value="Deploy SCs" />
+          </div>
         </form>
       </div>
       <div class="section">
@@ -118,9 +107,46 @@
       <div class="section">
         <h2>START SmartContract UI</h2>
         <form class="form" action="/startUI" method="post">
-          <input type="submit" value="Start SmartContract UI" />
+          <label>
+            <input type="radio" name="network" value="localhost" checked> Local Network
+          </label>
+          <label>
+            <input type="radio" name="network" value="goerli"> Goerli Test Network
+          </label>
+          <!-- Hidden input fields to store the selected network -->
+          <input type="hidden" id="selectedNetworkStartUI" name="selectedNetwork" value="localhost">
+          <div>
+            <input type="submit" value="Start SmartContract UI" />
+          </div>
         </form>
       </div>
     </div>
   </body>
 </html>
+
+<!-- JavaScript to update the hidden input field with the selected network -->
+<script>
+  // Function to handle changes in network selection
+  function handleNetworkChange(event, inputId) {
+    const selectedNetworkInput = document.getElementById(inputId);
+    selectedNetworkInput.value = event.target.value;
+  }
+
+  // Get all radio buttons for network selection
+  const networkRadioButtons = document.querySelectorAll('input[name="network"]');
+
+  // Attach change event listeners to all radio buttons
+  networkRadioButtons.forEach((radioButton) => {
+    // Determine the inputId based on the form's action attribute
+    let inputId;
+    if (radioButton.form) {
+      inputId = radioButton.form.getAttribute('action').replace('/', '');
+      inputId = `selectedNetwork${inputId.charAt(0).toUpperCase() + inputId.slice(1)}`;
+    }
+
+    // Attach the event listener
+    radioButton.addEventListener('change', (event) => {
+      handleNetworkChange(event, inputId);
+    });
+  });
+</script>

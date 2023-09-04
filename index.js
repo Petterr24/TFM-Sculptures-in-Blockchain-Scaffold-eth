@@ -1,11 +1,13 @@
 const express = require('express')
-const https = require('https')
 const fs = require('fs');
 const { exec, spawn } = require('child_process');
 const PORT = 5000
 const path = require('path')
+const networkConfigPath1 = path.join(__dirname, "packages/react-app/src/network_config.json");
+const networkConfigPath2 = path.join(__dirname, "packages/hardhat/network_config.json");
 
 var app = express()
+let localChainInitiated = false;
 
 app.use(express.urlencoded({ extended: true })) // Needed to retrieve html form fields (it's a requirement of the local strategy)
 
@@ -69,98 +71,14 @@ app.post('/provideContractAddresses', async (req, res) => {
     });
 })
 
-function isValidInfuraUrl(url) {
-    // Regular expression to match the expected Infura URL format
-    const infuraUrlRegex = /^https:\/\/goerli\.infura\.io\/v3\/[a-fA-F0-9]+$/;
-  
-    return infuraUrlRegex.test(url);
-  }
-
-app.post('/provideGoerliInfuraID', async (req, res) => {
-    // Check if the network_config.json exists before updating the Infura ID
-    const networkConfigPath = path.join(__dirname, "packages/hardhat/network_config.json");
-    if (!fs.existsSync(networkConfigPath)) {
-        console.log('Error: Network config file is missing to update the infura ID');
-        res.status(400).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Please make sure you have the network_config.json file before setting the Goerli infura ID</strong></p>'
-            + '<hr/><p>Please try again after having the config file:</p>'
-            + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
-
-        return;
-    }
-
-    // Getting the Infura ID from the form
-    const newInfuraIDUrl = req.body.goerliInfuraID;
-
-    if (!isValidInfuraUrl(newInfuraIDUrl)) {
-        console.log('Error: Wrong infura IF url format');
-        res.status(500).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Error due to a wrong infura url format</strong></p>'
-            + '<hr/><p>Please try again by providing a correct infura url. Go back to:</p>'
-            + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
-
-        return;
-    }
-
-    // Parse the network config file
-    const networkConfigFileJSON = JSON.parse(fs.readFileSync(networkConfigPath, "utf-8"));
-
-    // Update the defaultNetwork to "goerli"
-    networkConfigFileJSON.defaultNetwork = "goerli";
-
-    // Update the Infura URL for Goerli network
-    networkConfigFileJSON.networks.goerli.infuraUrl = newInfuraIDUrl;
-
-    // Write the updated JSON back to the file
-    fs.writeFileSync(networkConfigPath, JSON.stringify(networkConfigFileJSON, null, 2), err => {
-        if (err) {
-            console.log('Error: Error when updating JSON');
-            console.error(err);
-            res.status(500).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Error when updating Goerli infura ID</strong></p>'
-                + '<hr/><p>Please try again by selecting "Home-page" to go back to:</p>'
-                + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
-
-            return;
-        }
-
-        res.send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: green;"><strong>Goerli Infura ID updated successfully</strong></p>'
-            + '<hr/><p>Please select "Home-page" to go back to:</p>'
-            + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
-    })
-})
-
 app.get('/home', (req, res) => {
     res.sendFile('./packages/home-page/home.html', { root: __dirname })
 })
 
 app.post('/startLocalChain', async (req, res) => {
-    // Check if the network_config.json exists before updating the Infura ID
-    const networkConfigPath = path.join(__dirname, "packages/hardhat/network_config.json");
-    if (!fs.existsSync(networkConfigPath)) {
-        console.log('Error: Network config file is missing to start the localChain');
-        res.status(400).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Please make sure you have the network_config.json file before starting the local chain</strong></p>'
-            + '<hr/><p>Please try again after having the config file:</p>'
-            + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
-
-        return;
-    }
-    // Parse the network config file
-    const networkConfigFileJSON = JSON.parse(fs.readFileSync(networkConfigPath, "utf-8"));
-
-    // Update the defaultNetwork to "localhost". It is not necessary any Infura ID for the localhost
-    networkConfigFileJSON.defaultNetwork = "localhost";
-
-    // Write the updated JSON back to the file
-    fs.writeFileSync(networkConfigPath, JSON.stringify(networkConfigFileJSON, null, 2), err => {
-        // No error should happen
-        if (err) {
-            console.log('Error: Error when updating JSON');
-            console.error(err);
-            res.status(500).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Error when starting the localchain</strong></p>'
-                + '<hr/><p>Please try again by selecting "Home-page" to go back to:</p>'
-                + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
-
-            return;
-        }
-    })
+    updateNetworkConfig("localhost");
+    // Set the flag to true when the local chain is initiated
+    localChainInitiated = true;
 
     exec(`gnome-terminal -- bash -c "yarn chain; exec bash"`, (error, stdout, stderr) => {
         if (error) {
@@ -176,11 +94,23 @@ app.post('/startLocalChain', async (req, res) => {
 })
 
 app.post('/deploy', async (req, res) => {
+    // Checks if the local chain has been initiated
+    let network = req.body.selectedNetwork;
+    if (network === "localhost" && !localChainInitiated) {
+        console.log('Error: When starting UI because the local chain has not been started');
+        res.status(400).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Before starting the UI, you shall start the Local Chain</strong></p>'
+            + '<hr/><p>Please try again by selecting "Home-page" to go back to:</p>'
+            + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
+
+        return;
+    }
+    updateNetworkConfig(network);
+
     exec("yarn deploy", (error, stdout, stderr) => {
         if (error) {
             console.log('Error: When deploying SmartContracts. Try to connect to an existing chain');
             console.error(`exec error: ${error}`);
-            res.status(500).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Server error</strong></p>'
+            res.status(500).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Server error. First run a local chain.</strong></p>'
                 + '<hr/><p>Please try again by selecting "Home-page" to go back to:</p>'
                 + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
 
@@ -194,6 +124,19 @@ app.post('/deploy', async (req, res) => {
 })
 
 app.post('/startUI', async (req, res) => {
+    // Checks if the local chain has been initiated
+    let network = req.body.selectedNetwork;
+    if (network === "localhost" && !localChainInitiated) {
+        console.log('Error: When starting UI because the local chain has not been started');
+        res.status(400).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Before starting the UI, you shall start the Local Chain</strong></p>'
+            + '<hr/><p>Please try again by selecting "Home-page" to go back to:</p>'
+            + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
+
+        return;
+    }
+
+    updateNetworkConfig(network);
+
     // Check if the hardhatContractsPath exists before starting the UI
     const hardhatContractsPath = path.join(__dirname, "packages/react-app/src/contracts/hardhat_contracts.json");
     if (!fs.existsSync(hardhatContractsPath)) {
@@ -218,6 +161,25 @@ app.post('/startUI', async (req, res) => {
     })
 })
 
+function updateNetworkConfig(network) {
+  try {
+    // Parse the network config files
+    const networkConfigFileJSON1 = JSON.parse(fs.readFileSync(networkConfigPath1, "utf-8"));
+    const networkConfigFileJSON2 = JSON.parse(fs.readFileSync(networkConfigPath2, "utf-8"));
+
+    networkConfigFileJSON1.network = network;
+    networkConfigFileJSON2.network = network;
+
+    // Write the updated data back to the file
+    fs.writeFileSync(networkConfigPath1, JSON.stringify(networkConfigFileJSON1, null, 2));
+    fs.writeFileSync(networkConfigPath2, JSON.stringify(networkConfigFileJSON2, null, 2));
+
+    return true;
+  } catch (error) {
+    console.error('Error updating JSON file:', error);
+    return false;
+  }
+}
 
 // Handlers must be called after all other middleware (app.use)
 // and all routing
