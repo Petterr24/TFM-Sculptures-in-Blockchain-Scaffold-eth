@@ -148,7 +148,7 @@ app.post('/startUI', async (req, res) => {
         return;
     }
 
-    exec(`gnome-terminal -- bash -c "yarn start; exec bash"`, (error, stdout, stderr) => {
+    exec("yarn start", (error, stdout, stderr) => {
         if (error) {
             console.log('Error: When starting UI');
             console.error(`exec error: ${error}`);
