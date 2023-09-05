@@ -20,7 +20,7 @@ export default function SculptureFactoryUI({
 
   // Categorization label options
   const categorizationLabel = [
-    { value: null, label: "Select the categorization label', disabled: true" },
+    { value: null, label: "Select the categorization label", disabled: true },
     { value: 0, label: "NONE" },
     { value: 1, label: "AUTHORISED UNIQUE WORK" },
     { value: 2, label: "AUTHORISED UNIQUE WORK VARIATION" },

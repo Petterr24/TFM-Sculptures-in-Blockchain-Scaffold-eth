@@ -6,43 +6,13 @@ const fs = require("fs");
 
 const localChainId = "31337";
 
-// Specify the paths to the folders you want to remove
-const foldersToRemove = [
-  'artifacts',
-  'deployments',
-];
-
-// const sleep = (ms) =>
-//   new Promise((r) =>
-//     setTimeout(() => {
-//       console.log(`waited for ${(ms / 1000).toFixed(3)} seconds`);
-//       r();
-//     }, ms)
-//   );
-
 module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
-  // Use a loop to call fs.rmdir() for each folder. Not necessary for now. Keep it just in case
-  /*foldersToRemove.forEach(folderPath => {
-    fs.rmdir(path.join(__dirname, '..', folderPath), { recursive: true }, (err) => {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log(`Folder ${folderPath} has been successfully removed!`);
-      }
-    });
-  });*/
-
   // Compile the contracts
   await run("compile");
 
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
-
-  // Deploy the SculptureLibrary. Check if necessary
-  //const libraryFactory = await ethers.getContractFactory("SculptureLibrary");
-  //const library = await libraryFactory.deploy();
-  //await library.deployed();
 
   console.log(`Deployer: ${deployer}`);
 
