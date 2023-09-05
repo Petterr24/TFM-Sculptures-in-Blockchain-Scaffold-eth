@@ -106,9 +106,9 @@ app.post('/deploy', async (req, res) => {
     }
     updateNetworkConfig(network);
 
-    exec("yarn deploy", (error, stdout, stderr) => {
+    exec(`gnome-terminal -- bash -c "yarn deploy; exec bash"`, (error, stdout, stderr) => {
         if (error) {
-            console.log('Error: When deploying SmartContracts. Try to connect to an existing chain');
+            console.log('Error: When deploying SmartContracts.');
             console.error(`exec error: ${error}`);
             res.status(500).send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: red;"><strong>Server error. First run a local chain.</strong></p>'
                 + '<hr/><p>Please try again by selecting "Home-page" to go back to:</p>'
