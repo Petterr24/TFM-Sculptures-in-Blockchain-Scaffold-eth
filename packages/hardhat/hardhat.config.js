@@ -103,9 +103,7 @@ module.exports = {
     },
     goerli: {
       url: `https://goerli.infura.io/v3/${process.env.GOERLI_INFURA_KEY}`,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
+      accounts:[process.env.GOERLI_DEPLOYER_PRIV_KEY],
     },
     sepolia: {
       url: "https://rpc.sepolia.org",
