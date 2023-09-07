@@ -28,6 +28,11 @@ const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 //
 const networkConfigPath = path.join(__dirname, 'network_config.json');
 const networkConfig = JSON.parse(fs.readFileSync(networkConfigPath, 'utf8'));
+const deployerPrivateKey = process.env.GOERLI_DEPLOYER_PRIV_KEY;
+// Concatenate "0x" prefix to the private key
+const deployerPrivateKeyWithPrefix = "0x" + deployerPrivateKey;
+// Computes a SHA256 by using the Private Key to store the deployment data for each deployer
+const privateKeyHash = utils.sha256 (deployerPrivateKeyWithPrefix);
 
 const defaultNetwork = networkConfig.network || "localhost";
 
@@ -57,6 +62,10 @@ module.exports = {
     enabled: true,
   },
 
+  paths: {
+    // Creates a folder linked to the deployer's wallet using a SHA256 of its private key in order to classify the deployment data
+    deployments: `deployments/${privateKeyHash}`,
+  },
   // if you want to deploy to a testnet, mainnet, or xdai, you will need to configure:
   // 1. An Infura key (or similar)
   // 2. A private key for the deployer
@@ -103,7 +112,7 @@ module.exports = {
     },
     goerli: {
       url: `https://goerli.infura.io/v3/${process.env.GOERLI_INFURA_KEY}`,
-      accounts:[process.env.GOERLI_DEPLOYER_PRIV_KEY],
+      accounts:[deployerPrivateKey],
     },
     sepolia: {
       url: "https://rpc.sepolia.org",

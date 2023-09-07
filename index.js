@@ -3,8 +3,8 @@ const fs = require('fs');
 const { exec, spawn } = require('child_process');
 const PORT = 5000
 const path = require('path')
-const networkConfigPath1 = path.join(__dirname, "packages/react-app/src/network_config.json");
-const networkConfigPath2 = path.join(__dirname, "packages/hardhat/network_config.json");
+const reactNetworkConfigPath = path.join(__dirname, "packages/react-app/src/network_config.json");
+const hardhatNetworkConfigPath = path.join(__dirname, "packages/hardhat/network_config.json");
 
 var app = express()
 let localChainInitiated = false;
@@ -104,6 +104,7 @@ app.post('/deploy', async (req, res) => {
 
         return;
     }
+
     updateNetworkConfig(network);
 
     exec(`gnome-terminal -- bash -c "yarn deploy; exec bash"`, (error, stdout, stderr) => {
@@ -116,10 +117,6 @@ app.post('/deploy', async (req, res) => {
 
             return;
         }
-
-        res.send('<div style="text-align: center; padding: 20px;"><p style="font-size: 20px; color: green;"><strong>Smart Contracts deployed successfully </strong></p>'
-            + '<hr/><p>Please select "Home-page" to go back to:</p>'
-            + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
     })
 })
 
@@ -164,15 +161,15 @@ app.post('/startUI', async (req, res) => {
 function updateNetworkConfig(network) {
   try {
     // Parse the network config files
-    const networkConfigFileJSON1 = JSON.parse(fs.readFileSync(networkConfigPath1, "utf-8"));
-    const networkConfigFileJSON2 = JSON.parse(fs.readFileSync(networkConfigPath2, "utf-8"));
+    const reactNetworkConfigJSON = JSON.parse(fs.readFileSync(reactNetworkConfigPath, "utf-8"));
+    const hardhatNetworkConfigJSON = JSON.parse(fs.readFileSync(hardhatNetworkConfigPath, "utf-8"));
 
-    networkConfigFileJSON1.network = network;
-    networkConfigFileJSON2.network = network;
+    reactNetworkConfigJSON.network = network;
+    hardhatNetworkConfigJSON.network = network;
 
     // Write the updated data back to the file
-    fs.writeFileSync(networkConfigPath1, JSON.stringify(networkConfigFileJSON1, null, 2));
-    fs.writeFileSync(networkConfigPath2, JSON.stringify(networkConfigFileJSON2, null, 2));
+    fs.writeFileSync(reactNetworkConfigPath, JSON.stringify(reactNetworkConfigJSON, null, 2));
+    fs.writeFileSync(hardhatNetworkConfigPath, JSON.stringify(hardhatNetworkConfigJSON, null, 2));
 
     return true;
   } catch (error) {

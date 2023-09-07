@@ -86,6 +86,15 @@
       <div class="section">
         <h2>Deploy Smart Contracts</h2>
         <form class="form" action="/deploy" method="post">
+          <p>
+            To interact with the Goerli Testnet, you need to provide the following fields in the .env file 'packages/hardhat/.env'. For instance:
+          </p>
+          <p class="example">
+            GOERLI_INFURA_KEY: a2672e..
+          </p>
+          <p class="example">
+            GOERLI_DEPLOYER_PRIV_KEY: 870a..
+          </p>
           <label>
             <input type="radio" name="network" value="localhost" checked> Local Network
           </label>
