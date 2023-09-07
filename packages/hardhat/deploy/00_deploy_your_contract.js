@@ -20,9 +20,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const userAuthorisationInstance = await deploy("UserAuthorisation", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    // args: [ "Hello", ethers.utils.parseEther("1.5") ],
     log: true,
-    //waitConfirmations: 5,
   });
 
   // Deploy the SculptureFactory
@@ -31,7 +29,6 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     from: deployer,
     args: [ userAuthorisationInstance.address ],
     log: true,
-    //waitConfirmations: 5,
   });
 
   // Creating a copy of the Sculpture json file (ABI)

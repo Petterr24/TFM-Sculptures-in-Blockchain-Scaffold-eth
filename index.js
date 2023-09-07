@@ -89,6 +89,8 @@ app.post('/startLocalChain', async (req, res) => {
                 + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
 
             return;
+        } else {
+            res.redirect('/home'); // Redirect to the home page
         }
     })
 })
@@ -116,6 +118,8 @@ app.post('/deploy', async (req, res) => {
                 + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
 
             return;
+        } else {
+            res.redirect('/home'); // Redirect to the home page
         }
     })
 })
@@ -154,6 +158,8 @@ app.post('/startUI', async (req, res) => {
                 + '<button type="button" onclick="location.href=\'/home\'" style="font-size: 24px; background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Home Page</button></div>');
 
             return;
+        } else {
+            res.redirect('/home'); // Redirect to the home page
         }
     })
 })

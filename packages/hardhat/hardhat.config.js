@@ -82,7 +82,8 @@ module.exports = {
 
       */
     },
-    mainnet: {
+    // Skipping the other networks as they are not the focus of this project. Keep them here
+    /*mainnet: {
       url: "https://mainnet.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
       accounts: {
         mnemonic: mnemonic(),
@@ -109,11 +110,12 @@ module.exports = {
       accounts: {
         mnemonic: mnemonic(),
       },
-    },
+    },*/
     goerli: {
       url: `https://goerli.infura.io/v3/${process.env.GOERLI_INFURA_KEY}`,
       accounts:[deployerPrivateKey],
     },
+    /*
     sepolia: {
       url: "https://rpc.sepolia.org",
       // "https://sepolia.infura.io/v3/INFURA_ID",
@@ -284,7 +286,7 @@ module.exports = {
       accounts: {
         mnemonic: mnemonic(),
       },
-    },
+    },*/
   },
   solidity: {
     compilers: [
