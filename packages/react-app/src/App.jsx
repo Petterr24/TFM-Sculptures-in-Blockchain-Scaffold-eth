@@ -347,19 +347,19 @@ function App(props) {
       />
       <Menu style={{ textAlign: "center", marginTop: 20 }} selectedKeys={[location.pathname]} mode="horizontal">
         <Menu.Item key="/">
-          <Link to="/">App Home</Link>
+          <Link to="/">Home</Link>
         </Menu.Item>
         <Menu.Item key="/debug">
           <Link to="/debug">Debug Contracts</Link>
         </Menu.Item>
         <Menu.Item key="/userauthorisationui">
-          <Link to="/userauthorisationui">UserAuthorisationUI</Link>
+          <Link to="/userauthorisation">UserAuthorisation</Link>
         </Menu.Item>
         <Menu.Item key="/sculpturefactory">
-          <Link to="/sculpturefactory">SculptureFactoryUI</Link>
+          <Link to="/sculpturefactory">SculptureFactory</Link>
         </Menu.Item>
         <Menu.Item key="/sculpture">
-          <Link to="/sculpture">SculptureUI</Link>
+          <Link to="/sculpture">Sculpture Record</Link>
         </Menu.Item>
       </Menu>
 
@@ -394,7 +394,7 @@ function App(props) {
             contractConfig={contractConfig}
           />
         </Route>
-        <Route path="/userauthorisationui">
+        <Route path="/userauthorisation">
           <UserAuthorisationUI
             address={address}
             userSigner={userSigner}

@@ -24,7 +24,7 @@ export default function Header({ link, title, subTitle, ...props }) {
 }
 
 Header.defaultProps = {
-  link: "https://github.com/scaffold-eth/scaffold-eth",
-  title: "Scaffold-Eth",
-  subTitle: "Certification of Sculptures in Blockchain",
+  link: "https://github.com/Petterr24/TFM-Sculptures-in-Blockchain-Scaffold-eth/tree/main",
+  title: "Blockchain Sculpture Certification",
+  subTitle: "Scaffold-Eth",
 };
