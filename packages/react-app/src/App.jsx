@@ -352,11 +352,11 @@ function App(props) {
         <Menu.Item key="/debug">
           <Link to="/debug">Debug Contracts</Link>
         </Menu.Item>
-        <Menu.Item key="/userauthorisationui">
-          <Link to="/userauthorisation">UserAuthorisation</Link>
+        <Menu.Item key="/userauthorisation">
+          <Link to="/userauthorisation">User Authorisation</Link>
         </Menu.Item>
         <Menu.Item key="/sculpturefactory">
-          <Link to="/sculpturefactory">SculptureFactory</Link>
+          <Link to="/sculpturefactory">Sculpture Factory</Link>
         </Menu.Item>
         <Menu.Item key="/sculpture">
           <Link to="/sculpture">Sculpture Record</Link>
