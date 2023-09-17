@@ -1,5 +1,6 @@
-# TFM-Sculptures-in-Blockchain-Scaffold-eth
-TFM-Sculptures-in-Blockchain-Scaffold-eth
+# TFM-Blockchain Sculpture Certification
+Repository created and adapted based on Scaffold as a base repository
+- https://github.com/scaffold-eth/scaffold-eth
 
 ## Environment requirements
 - TFM-Sculptures-in-Blockchain-Scaffold-eth repository
