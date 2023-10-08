@@ -46,7 +46,7 @@ Following the project requirements, it is necessary for certain fields to be mut
 
 Additionally, each instance of this Smart Contract has the ability to retrieve the stored data from the corresponding Sculpture record, allowing any user to access this information.
 
-## SculptureLibrary
+### SculptureLibrary
 The SculptureFactory and Sculpture contracts are created in the same Solidity file, each with its respective constructor, which results in the need for both to use common code. This is where SculptureLibrary comes into play. This library provides shared code to be used by both Smart Contracts.
 
 ## Environment requirements
